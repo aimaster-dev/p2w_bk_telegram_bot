@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Bank Counter</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <link rel="stylesheet" href="/static/common/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/common/bootstrap/font/bootstrap-icons.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='common/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/bootstrap/js/popper.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/bootstrap/js/bootstrap.min.js') }}"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        html,body{margin: 0;max-width: 100vw;min-height: 100vh;position: relative;overflow-x: hidden;font: 18px NotoSansSC;}
+        body{background-image: url('/public/world/img/vietnam.jpeg');background-size: cover;}
+        .main{max-width: 1200px;position: relative;overflow: hidden;box-sizing: border-box;margin: auto;text-align: center;}
+        .boxSelect{min-height: 75vh;position: relative;display: block;}
+        .head{position: relative;display: block;overflow: hidden;box-sizing: border-box;margin: 50px auto 30px;color: #FFFFFF;}
+        .head h2{font-size: 4rem;}
+        .head p{font-size: 1.5rem;}
+
+        .sekectList{position: relative;display: flex;justify-content: flex-start;flex-wrap: wrap;}
+        .sekectList .seItem{position: relative; overflow: hidden; box-sizing: border-box; display: inline-block; width: 24%; margin-left: 1%; margin-bottom: 20px;}
+        .sekectList .seItem:nth-child(5n), .sekectList .seItem:first-child{margin-left: 0;}
+
+        .lead {font-size: 1.171875rem;font-weight: 300;}
+        .mlogo{
+            display: block;height: 200px; text-align: center;
+        }
+        @media (max-width: 1200px) {
+            .main{width: 98%;}
+            .boxSelect {min-height: 90vh;}
+        }
+        @media (max-width: 767px) {
+            .boxSelect {min-height: 90vh;}
+            .head h2 {font-size: 1.6rem;}
+            .head p{font-size: .7rem;}
+            .sekectList .seItem{width: 49%;margin-left: 1%;}
+            .sekectList .seItem:nth-child(3n), .sekectList .seItem:first-child{margin-left: 0 !important;}
+            .mlogo{height: 160px;}
+        }
+        
+    </style>
+    <script>
+        $(function () {
+            $(".seItem").on('click', function () {
+                $('.seItem').css('pointer-events', 'none');
+                let purl = $(this).attr('data-purl');
+                window.location.replace(purl);
+            })
+        })
+    </script>
+</head>
+<body>
+
+    <div class="main">
+
+        <div class="boxSelect">
+            <div class="head">
+                <div class="mlogo">
+                    <img src="/public/world/img/logo6.jpeg" alt="" style="display: block; height: 100%; margin: auto;">
+                </div>
+                <h2>Danh sách ngân hàng</h2>
+                <p class="lead">Hãy chọn ngân hàng bạn muốn chuyển đến</p>
+            </div>
+
+            <div class="sekectList">
+                <div class="seItem" data-purl="">
+                    <div class="bankLogo" style="display: flex; align-items: center; justify-content: center; background-color: #FFFFFF; border-radius: 3px; overflow: hidden;">
+                        <img src="/public/world/img/logo6.jpeg" class="figure-img img-fluid rounded mb-0" style="width: 80%;" aria-label="" alt="">
+                    </div>
+                    <button type="button" class="btn btn-block btn-danger mt-1" onclick="">lựa chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    -->
+
+</body>
+</html>

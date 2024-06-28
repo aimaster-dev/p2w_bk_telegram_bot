@@ -1,0 +1,119 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <style>
+        .repeatText{
+            color: red;
+        }
+        .differentText{
+            color: #ca6924;
+        }
+        .notNumberText{
+            color: #FFA500;
+        }
+        .bankcard_different{
+            color: rgb(169, 139, 244);
+        }
+    </style>
+    <script>
+        // 统计信息
+        function getTotalInfo() {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_total_info'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox">'
+                        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>入款总数：</b>'+data.data.rk_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>入款笔数：</b>'+js_format_money(data.data.rk_amount_total)+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>出款总数：</b>'+data.data.ck_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>出款总数：</b>'+js_format_money(data.data.ck_amount_total)+'</p>'
+                        html += '</div></div>'
+                        Swal({
+                            title: '订单数据统计',
+                            width: 550,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+
+{% block alertBox %}
+<div class="alert alert-primary" role="alert">
+    <p style="line-height: 30px; margin-bottom: 0px;">
+        【颜色解释】&emsp;
+        订单重复颜色：<span style="width: 16px; height: 16px; position: relative; display: inline-block; background-color: red;"></span>&emsp;
+        实付不一致颜色：<span style="width: 16px; height: 16px; position: relative; display: inline-block; background-color: #ca6924;"></span>&emsp;
+        找不到订单颜色：<span style="width: 16px; height: 16px; position: relative; display: inline-block; background-color: #FFA500;"></span>&emsp;
+        收款卡与绑定卡不一致颜色：<span style="width: 16px; height: 16px; position: relative; display: inline-block; background-color: rgb(169, 139, 244);"></span>&emsp;
+    </p>
+</div>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="bill_type" aria-label="" style="width: 200px;">
+        <option value="">账单类型</option>
+        <option value="income_order" {% if search_res.bill_type == 'income_order' %}selected{% endif %}>入款</option>
+        <option value="out_order" {% if search_res.bill_type == 'out_order' %}selected{% endif %}>出款</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="amount" value="{{ search_res.amount or '' }}" placeholder="金额" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="bank_bill_id" value="{{ search_res.bank_bill_id or '' }}" placeholder="记录ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="description1" value="{{ search_res.description1 or '' }}" placeholder="账单备注" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="bill_time" value="{{ search_res.bill_time }}" placeholder="日期" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="post_update_statu('export_Data', '666', '确认导出当前订单数据？')">导出订单数据</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="getTotalInfo()">统计</span>
+{% endblock %}
+
+{% block other_info %}
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>银行卡账户【{{ total }}】</td>
+                <td>记录ID</td>
+                <td>账单类型</td>
+                <td>金额</td>
+                <td>账单备注</td>
+                <td>记录时间</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ data.bankacrd_account or '' }}</td>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ data.bank_bill_id or '' }}</td>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ '入款' if data.bill_type == 'income_order' else '出款' }}</td>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ format_money( data.amount) }}</td>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ data.description or '' }}</td>
+                    <td class="{% if data.unusual_type == unusualTypes.REPEAT %}repeatText{% elif data.unusual_type == unusualTypes.DIFFERENT %}differentText{% elif data.unusual_type == unusualTypes.NOT_NUMBER %}notNumberText{% elif data.unusual_type == unusualTypes.BANKCARD_DIFFERENT %}bankcard_different{% endif %}">{{ format_time_func(data.bill_time or '') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

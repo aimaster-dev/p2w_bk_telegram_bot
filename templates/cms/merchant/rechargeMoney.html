@@ -1,0 +1,49 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="operate_user_uuid" value="{{ search_res.operate_user_uuid or '' }}" placeholder="操作人员账户" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_id" value="{{ search_res.merchant_id or '' }}" placeholder="商户ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_name" value="{{ search_res.merchant_name or '' }}" placeholder="商户名称" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="时间" aria-label="">
+    
+{% endblock %}
+
+{% block other_function %}
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+onclick="post_form_html({'action': 'get_statistic_html'}, '统计', 600)">统计</span>
+{% endblock %}
+
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>操作人员</td>
+                <td>商户ID</td>
+                <td>商户名称</td>
+                <td>内充金额</td>
+                <td>手续费</td>
+                <td>时间</td>
+                <td>备注</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.user_data.account }}</td>
+                    <td>{{ data.merchant_data.merchant_id }}</td>
+                    <td>{{ data.merchant_data.merchant_name }}</td>
+                    <td>{{ format_money(data.amount) }}</td>
+                    <td>{{ format_money(data.repay_amount) }}</td>
+                    <td>{{ format_time_func(data.create_time) }}</td>
+                    <td>{{ data.note or '' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

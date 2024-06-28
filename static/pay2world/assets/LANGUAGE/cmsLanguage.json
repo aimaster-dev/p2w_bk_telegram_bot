@@ -1,0 +1,5432 @@
+[
+    {
+        "zh": "登录谷歌验证，需要使用Google Authenticator客户端，扫描二维码，进行获取动态验证码",
+        "en": "Log in with Google authentication, requiring the use of the Google Authenticator client, scan the QR code to get the dynamic verification code",
+        "vi": "Đăng nhập bằng xác thực Google, yêu cầu sử dụng ứng dụng Google Authenticator, quét mã QR để nhận mã xác minh động",
+        "id": "Masuk dengan otentikasi Google, memerlukan penggunaan klien Google Authenticator, memindai kode QR untuk mendapatkan kode verifikasi dinamis",
+        "pt": "Faça login com autenticação do Google, exigindo o uso do cliente Google Authenticator, digitalize o código QR para obter o código de verificação dinâmico",
+        "ja": "Google認証でログインするには、Google Authenticatorクライアントを使用し、ダイナミック認証コードを取得するためにQRコードをスキャンしてください",
+        "ko": "Google 인증으로 로그인하려면 Google Authenticator 클라이언트를 사용하여 QR 코드를 스캔하여 동적 인증 코드를 가져와야 합니다",
+        "ms": "Log masuk dengan pengesahan Google, memerlukan penggunaan pelanggan Google Authenticator, imbas kod QR untuk mendapatkan kod pengesahan dinamik"
+    },
+    {
+        "zh": "网站子域名配置，访问网站的子域名（配置后会重载服务，谨慎填写，只需输入域名即可不用携带前缀）",
+        "en": "Website subdomain configuration, access website subdomains (configuration will reload services after setup, fill in cautiously, only domain name is needed without prefix)",
+        "vi": "Cấu hình phụ phân miền của trang web, truy cập phụ miền của trang web (cấu hình sẽ tải lại dịch vụ sau khi thiết lập, điền vào một cách cẩn thận, chỉ cần tên miền không cần tiền tố)",
+        "id": "Konfigurasi subdomain situs web, akses subdomain situs web (konfigurasi akan memuat ulang layanan setelah setup, isi dengan hati-hati, hanya nama domain yang dibutuhkan tanpa awalan)",
+        "pt": "Configuração de subdomínio do site, acesse subdomínios do site (a configuração recarregará os serviços após a instalação, preencha com cautela, apenas o nome de domínio é necessário sem prefixo)",
+        "ja": "ウェブサイトのサブドメイン構成、ウェブサイトのサブドメインにアクセスします（セットアップ後にサービスをリロードする構成、注意して記入し、接頭辞なしでドメイン名のみが必要です）",
+        "ko": "웹 사이트 서브도메인 구성, 웹 사이트 서브도메인에 액세스합니다 (설정 후 서비스를 다시로드하고, 신중하게 작성하십시오. 접두사없이 도메인 이름 만 필요합니다)",
+        "ms": "Konfigurasi subdomain laman web, akses subdomain laman web (konfigurasi akan muat semula perkhidmatan selepas penubuhan, isikan dengan berhati-hati, hanya nama domain diperlukan tanpa awalan)"
+    },
+    {
+        "en": "Website subdomain configuration, access website's subdomain (configuring will reload the service, fill in with caution, only need to input the domain without prefix",
+        "vi": "Cấu hình phụ tên miền con của trang web, truy cập tên miền con của trang web (cấu hình sẽ tải lại dịch vụ, điền cẩn thận, chỉ cần nhập tên miền mà không có tiền tố",
+        "id": "Konfigurasi subdomain situs web, akses subdomain situs web (mengonfigurasi akan me-reload layanan, isi dengan hati-hati, hanya perlu memasukkan domain tanpa awalan",
+        "pt": "Configuração de subdomínio do site, acesso ao subdomínio do site (a configuração recarregará o serviço, preencha com cuidado, apenas precisa inserir o domínio sem prefixo",
+        "ja": "ウェブサイトのサブドメイン構成、ウェブサイトのサブドメインへのアクセス（構成するとサービスが再読み込みされますので、注意して入力してください。接頭辞なしでドメインを入力するだけです",
+        "ko": "웹 사이트 서브도메인 구성, 웹 사이트의 서브도메인에 액세스합니다 (구성하면 서비스가 다시로드되므로 주의해서 입력하십시오. 접두사없이 도메인 만 입력하면됩니다",
+        "ms": "Konfigurasi subdomain laman web, akses subdomain laman web (mengkonfigurasi akan memuat semula perkhidmatan, isi dengan berhati-hati, hanya perlu memasukkan domain tanpa awalan",
+        "zh": "网站子域名配置，访问网站的子域名（配置后会重载服务，谨慎填写，只需输入域名即可不用携带前缀"
+    },
+    {
+        "zh": "网站登录IP白名单（限制可登录IP，未设置则全部IP可登录）",
+        "en": "Website login IP whitelist (restrict login IP, if not set, all IPs can login)",
+        "vi": "Danh sách trắng IP đăng nhập trang web (hạn chế IP đăng nhập, nếu không được thiết lập, tất cả các IP đều có thể đăng nhập)",
+        "id": "Daftar putih IP login situs web (batasi IP login, jika tidak diatur, semua IP dapat login)",
+        "pt": "Lista branca de IP de login do site (restringe o IP de login, se não definido, todos os IPs podem fazer login)",
+        "ja": "ウェブサイトのログインIPホワイトリスト（ログインIPを制限します。設定されていない場合、すべてのIPがログインできます）",
+        "ko": "웹 사이트 로그인 IP 화이트리스트 (로그인 IP 제한, 설정되지 않은 경우 모든 IP가 로그인할 수 있음)",
+        "ms": "Senarai putih IP log masuk laman web (hadkan log masuk IP, jika tidak ditetapkan, semua IP boleh log masuk)"
+    },
+    {
+        "zh": "银行脚本的开关直接影响，整个项目的首付款功能，请谨慎操作",
+        "en": "The switch of the bank script directly affects the down payment function of the entire project, please operate with caution",
+        "vi": "Công tắc của kịch bản ngân hàng ảnh hưởng trực tiếp đến chức năng thanh toán trước của toàn bộ dự án, vui lòng vận hành cẩn thận",
+        "id": "Switch dari skrip bank secara langsung memengaruhi fungsi pembayaran muka dari seluruh proyek, harap beroperasi dengan hati-hati",
+        "pt": "O interruptor do script do banco afeta diretamente a função de pagamento inicial de todo o projeto, opere com cautela",
+        "ja": "銀行スクリプトのスイッチは、プロジェクト全体の頭金機能に直接影響を与えますので、注意して操作してください",
+        "ko": "은행 스크립트의 스위치는 전체 프로젝트의 계약금 기능에 직접적으로 영향을 미치므로 주의하여 조작하십시오",
+        "ms": "Pemutus skrip bank secara langsung mempengaruhi fungsi bayaran muka keseluruhan projek, sila beroperasi dengan berhati-hati"
+    },
+    {
+        "zh": "项目代付业务总开关，控制整个项目代付功能的运行",
+        "en": "Project proxy payment business master switch, controls the operation of the entire project proxy payment function",
+        "vi": "Công tắc chính của dịch vụ thanh toán ủy quyền dự án, kiểm soát hoạt động của toàn bộ chức năng thanh toán ủy quyền của dự án",
+        "id": "Pemutus master bisnis pembayaran perantara proyek, mengontrol operasi fungsi pembayaran perantara proyek secara keseluruhan",
+        "pt": "Interruptor mestre de negócios de pagamento por procuração do projeto, controla a operação da função de pagamento por procuração do projeto inteiro",
+        "ja": "プロジェクトプロキシ支払い業務マスタースイッチは、プロジェクトプロキシ支払い機能全体の動作を制御します",
+        "ko": "프로젝트 프록시 지불 업무 마스터 스위치는 전체 프로젝트 프록시 지불 기능의 작동을 제어합니다",
+        "ms": "Pemutus utama perniagaan pembayaran wakil projek, mengawal operasi fungsi pembayaran wakil projek keseluruhan"
+    },
+    {
+        "zh": "世界付支付(viettelpay)自定义 利率",
+        "en": "World Payment (viettelpay) Custom Rate",
+        "vi": "Tỷ lệ Thanh toán Thế giới (viettelpay) Tùy chỉnh",
+        "id": "Tarif Kustom Pembayaran Dunia (viettelpay)",
+        "pt": "Taxa Personalizada de Pagamento Mundial (viettelpay)",
+        "ja": "ワールドペイメント（viettelpay）カスタムレート",
+        "ko": "월드페이먼트(viettelpay) 사용자 정의 요금",
+        "mo": "Дэлхийн Төлбөр (viettelpay) Хувь"
+    },
+    {
+        "zh": "平台收款通道总开关，控制平台的全部收款方式",
+        "en": "Platform collection channel master switch, controls all collection methods of the platform",
+        "vi": "Công tắc chính của kênh thu thập nền tảng, kiểm soát tất cả các phương pháp thu thập của nền tảng",
+        "id": "Pemutus master saluran koleksi platform, mengontrol semua metode pengumpulan platform",
+        "pt": "Interruptor mestre do canal de coleta da plataforma, controla todos os métodos de coleta da plataforma",
+        "ja": "プラットフォーム収集チャネルマスタースイッチは、プラットフォームのすべての収集方法を制御します",
+        "ko": "플랫폼 수집 채널 마스터 스위치는 플랫폼의 모든 수집 방법을 제어합니다",
+        "ms": "Pemutus utama saluran koleksi platform, mengawal semua kaedah pengumpulan platform"
+    },
+    {
+        "zh": "自动代付功能总开关，控制自动代付脚本的运行",
+        "en": "Automatic proxy payment function master switch, controls the operation of the automatic proxy payment script",
+        "vi": "Công tắc chính của chức năng thanh toán ủy quyền tự động, kiểm soát hoạt động của kịch bản thanh toán ủy quyền tự động",
+        "id": "Pemutus master fungsi pembayaran perantara otomatis, mengontrol operasi skrip pembayaran perantara otomatis",
+        "pt": "Interruptor mestre da função de pagamento por procuração automática, controla a operação do script de pagamento por procuração automática",
+        "ja": "自動プロキシ支払い機能のマスタースイッチは、自動プロキシ支払いスクリプトの動作を制御します",
+        "ko": "자동 프록시 지불 기능 마스터 스위치는 자동 프록시 지불 스크립트의 작동을 제어합니다",
+        "ms": "Pemutus utama fungsi pembayaran wakil automatik, mengawal operasi skrip pembayaran wakil automatik"
+    },
+    {
+        "zh": "世界付支付(zalopay)自定义 利率",
+        "en": "World Payment (zalopay) Custom Rate",
+        "vi": "Tỷ lệ Thanh toán Thế giới (zalopay) Tùy chỉnh",
+        "id": "Tarif Kustom Pembayaran Dunia (zalopay)",
+        "pt": "Taxa Personalizada de Pagamento Mundial (zalopay)",
+        "ja": "ワールドペイメント（zalopay）カスタムレート",
+        "ko": "월드페이먼트(zalopay) 사용자 정의 요금",
+        "mo": "Дэлхийн Төлбөр (zalopay) Хувь"
+    },
+    {
+        "zh": "世界付支付(momopay)自定义 利率",
+        "en": "World Payment (momopay) Custom Rate",
+        "vi": "Tỷ lệ Thanh toán Thế giới (momopay) Tùy chỉnh",
+        "id": "Tarif Kustom Pembayaran Dunia (momopay)",
+        "pt": "Taxa Personalizada de Pagamento Mundial (momopay)",
+        "ja": "ワールドペイメント（momopay）カスタムレート",
+        "ko": "월드페이먼트(momopay) 사용자 정의 요금",
+        "mo": "Дэлхийн Төлбөр (momopay) Хувь"
+    },
+    {
+        "zh": "世界付支付(网银扫码)自定义 利率",
+        "en": "World Payment (Internet Banking QR Code) Custom Rate",
+        "vi": "Tỷ lệ Tùy chỉnh Thanh toán Thế giới (Mã QR Ngân hàng Internet)",
+        "id": "Tarif Kustom Pembayaran Dunia (Kode QR Perbankan Internet)",
+        "pt": "Taxa Personalizada de Pagamento Mundial (Código QR do Internet Banking)",
+        "ja": "ワールドペイメント（インターネットバンキングQRコード）カスタムレート",
+        "ko": "월드페이먼트(인터넷 뱅킹 QR 코드) 사용자 정의 요금",
+        "mo": "Дэлхийн Төлбөр (Интернэт Банкинг QR код) Хувь"
+    },
+    {
+        "zh": "部分设置保存后，需刷新页面后起效",
+        "en": "After some settings are saved, they need to be refreshed to take effect",
+        "vi": "Sau khi một số cài đặt được lưu, chúng cần được làm mới để có hiệu lực",
+        "id": "Setelah beberapa pengaturan disimpan, mereka perlu disegarkan untuk mulai berlaku",
+        "pt": "Depois que algumas configurações forem salvas, elas precisam ser atualizadas para entrar em vigor",
+        "ja": "一部の設定が保存されると、それらを有効にするために更新する必要があります",
+        "ko": "일부 설정이 저장된 후 새로 고쳐야 적용됩니다",
+        "ms": "Selepas beberapa tetapan disimpan, mereka perlu disegarkan untuk berkuat kuasa"
+    },
+    {
+        "zh": "代付检测收款账户姓名是否一致功能",
+        "en": "Function to detect whether the recipient's account name matches in proxy payment",
+        "vi": "Chức năng để phát hiện xem tên tài khoản của người nhận có khớp trong thanh toán ủy quyền không",
+        "id": "Fungsi untuk mendeteksi apakah nama akun penerima cocok dalam pembayaran perantara",
+        "pt": "Função para detectar se o nome da conta do destinatário corresponde no pagamento por procuração",
+        "ja": "代理支払いで受取人の口座名が一致するかどうかを検出する機能",
+        "ko": "대리 지불에서 수령인의 계좌 이름이 일치하는지 여부를 감지하는 기능",
+        "ms": "Fungsi untuk mengesan sama ada nama akaun penerima sepadan dalam pembayaran wakil"
+    },
+    {
+        "zh": "越南ViettelPay 利率",
+        "en": "Vietnam ViettelPay Rate",
+        "vi": "Tỷ lệ ViettelPay của Việt Nam",
+        "id": "Tarif ViettelPay Vietnam",
+        "pt": "Taxa ViettelPay Vietnam",
+        "ja": "ベトナムViettelPay料金",
+        "ko": "베트남 ViettelPay 요금",
+        "mo": "Вьетнам ViettelPay хувь"
+    },
+    {
+        "zh": "网站登录IP白名单，一行一个",
+        "en": "Website Login IP Whitelist, one per line",
+        "vi": "Danh sách trắng IP Đăng nhập trang web, một dòng một",
+        "id": "Daftar Putih IP Login Situs Web, satu per baris",
+        "pt": "Lista Branca de IP de Login do Site, um por linha",
+        "ja": "ウェブサイトログインIPホワイトリスト、1行ごと",
+        "ko": "웹 사이트 로그인 IP 화이트리스트, 한 줄에 하나",
+        "mo": "Вэбсайт нэвтрэх IP үнэгүй жагсаалт, мөр нэгтээр"
+    },
+    {
+        "zh": "API单次获取交易订单数量",
+        "en": "API retrieves transaction order quantity once",
+        "vi": "API lấy số lượng đơn hàng giao dịch một lần",
+        "id": "API mengambil jumlah pesanan transaksi sekali",
+        "pt": "API recupera quantidade de pedidos de transação uma vez",
+        "ja": "APIは1回だけトランザクション注文数量を取得します",
+        "ko": "API는 한 번에 거래 주문 수를 검색합니다",
+        "ms": "API mendapatkan kuantiti pesanan transaksi sekali"
+    },
+    {
+        "zh": "越南ZALO pay 利率",
+        "en": "Vietnam ZALO pay Rate",
+        "vi": "Tỷ lệ ZALO thanh toán Việt Nam",
+        "id": "Tarif Pembayaran ZALO Vietnam",
+        "pt": "Taxa de pagamento do ZALO Vietnam",
+        "ja": "ベトナムZALOペイ料金",
+        "ko": "베트남 ZALO 페이 요금",
+        "mo": "Вьетнам ZALO төлбөрийн хувь"
+    },
+    {
+        "zh": "越南MOMO pay 利率",
+        "en": "Vietnam MOMO pay Rate",
+        "vi": "Tỷ lệ thanh toán MOMO của Việt Nam",
+        "id": "Tarif Pembayaran MOMO Vietnam",
+        "pt": "Taxa de pagamento do MOMO Vietnam",
+        "ja": "ベトナムMOMOペイ料金",
+        "ko": "베트남 MOMO 페이 요금",
+        "mo": "Вьетнам MOMO төлбөрийн хувь"
+    },
+    {
+        "zh": "API单次请求后休眠/秒",
+        "en": "API sleeps/second after single request",
+        "vi": "API ngủ/giây sau mỗi yêu cầu đơn",
+        "id": "API tidur/detik setelah permintaan tunggal",
+        "pt": "API dorme/segundo após uma única solicitação",
+        "ja": "APIは単一のリクエストの後に/秒眠ります",
+        "ko": "단일 요청 후 API는 /초 동안 잠을 잡니다",
+        "ms": "API tidur/saat selepas permintaan tunggal"
+    },
+    {
+        "zh": "网站子域名配置，一行一个",
+        "en": "Website Subdomain Configuration, one per line",
+        "vi": "Cấu hình tiền tố phụ trang web, một dòng một",
+        "id": "Konfigurasi Subdomain Situs Web, satu per baris",
+        "pt": "Configuração de Subdomínio do Site, um por linha",
+        "ja": "ウェブサイトサブドメイン構成、1行ごと",
+        "ko": "웹 사이트 서브도메인 구성, 한 줄에 하나",
+        "mo": "Вэбсайт дэд домэйн тохиргоо, мөр нэгтээр"
+    },
+    {
+        "zh": "输入Google验证码",
+        "en": "Enter Google verification code",
+        "vi": "Nhập mã xác minh Google",
+        "id": "Masukkan kode verifikasi Google",
+        "pt": "Digite o código de verificação do Google",
+        "ja": "Google認証コードを入力してください",
+        "ko": "Google 인증 코드를 입력하십시오",
+        "ms": "Masukkan kod pengesahan Google"
+    },
+    {
+        "zh": "选择配置维护停用的银行",
+        "en": "Select the bank to configure maintenance and disable",
+        "vi": "Chọn ngân hàng để cấu hình bảo trì và vô hiệu hóa",
+        "id": "Pilih bank untuk konfigurasi pemeliharaan dan nonaktifkan",
+        "pt": "Selecione o banco para configurar manutenção e desativar",
+        "ja": "メンテナンスと無効にする銀行を選択してください",
+        "ko": "유지 보수 및 비활성화를 구성할 은행을 선택하십시오",
+        "ms": "Pilih bank untuk konfigurasi penyelenggaraan dan nyahaktifkan"
+    },
+    {
+        "zh": "欢迎使用！-世界付",
+        "en": "Welcome to use! - World Payment",
+        "vi": "Chào mừng bạn đến với việc sử dụng! - Thế giới thanh toán",
+        "id": "Selamat datang menggunakan! - Pembayaran Dunia",
+        "pt": "Bem-vindo ao uso! - Pagamento Mundial",
+        "ja": "ようこそご利用ください！ - ワールドペイメント",
+        "ko": "사용하신 것을 환영합니다! - 월드 페이먼트",
+        "ms": "Selamat datang ke penggunaan! - Pembayaran Dunia"
+    },
+    {
+        "zh": "订单到回调完成时间",
+        "en": "Order to callback completion time",
+        "vi": "Thời gian hoàn thành từ đơn đến gọi lại",
+        "id": "Waktu penyelesaian dari pesanan ke panggilan kembali",
+        "pt": "Tempo de conclusão do pedido para retorno de chamada",
+        "ja": "注文からコールバック完了時間",
+        "ko": "주문에서 콜백 완료 시간까지",
+        "ms": "Masa penyelesaian pesanan ke panggilan balik"
+    },
+    {
+        "zh": "自动代付功能总开关",
+        "en": "Automatic proxy payment function master switch",
+        "vi": "Công tắc chính của chức năng thanh toán ủy quyền tự động",
+        "id": "Pemutus master fungsi pembayaran perantara otomatis",
+        "pt": "Interruptor mestre da função de pagamento por procuração automática",
+        "ja": "自動プロキシ支払い機能のマスタースイッチ",
+        "ko": "자동 프록시 지불 기능 마스터 스위치",
+        "ms": "Pemutus utama fungsi pembayaran wakil automatik"
+    },
+    {
+        "en": "Google Verification Code",
+        "vi": "Mã Xác Minh Google",
+        "id": "Kode Verifikasi Google",
+        "pt": "Código de Verificação do Google",
+        "ja": "Google認証コード",
+        "ko": "구글 인증 코드",
+        "ms": "Kod Pengesahan Google",
+        "zh": "Google验证码"
+    },
+    {
+        "zh": "商家名称或商家ID",
+        "en": "Merchant Name or Merchant ID",
+        "vi": "Tên Người bán hoặc ID Người bán",
+        "id": "Nama Pedagang atau ID Pedagang",
+        "pt": "Nome do Comerciante ou ID do Comerciante",
+        "ja": "商人名または商人ID",
+        "ko": "상인 이름 또는 상인 ID",
+        "mo": "Худалдагчийн нэр эсвэл худалдагчийн ID"
+    },
+    {
+        "zh": "越南网银扫码 利率",
+        "en": "Vietnam Internet Banking QR Code Rate",
+        "vi": "Tỷ lệ Mã QR Ngân hàng Internet Việt Nam",
+        "id": "Tarif Kode QR Perbankan Internet Vietnam",
+        "pt": "Taxa de Código QR do Internet Banking do Vietnã",
+        "ja": "ベトナムインターネットバンキングQRコード料金",
+        "ko": "베트남 인터넷 뱅킹 QR 코드 요금",
+        "mo": "Вьетнам Интернэт Банкинг QR кодын хөдөлмөрийн хувь"
+    },
+    {
+        "zh": "是否使用系统银行卡",
+        "en": "Whether to Use System Bank Cards",
+        "vi": "Có sử dụng thẻ ngân hàng hệ thống không",
+        "id": "Apakah Menggunakan Kartu Bank Sistem",
+        "pt": "Se deve Usar Cartões Bancários do Sistema",
+        "ja": "システム銀行カードを使用するかどうか",
+        "ko": "시스템 은행 카드를 사용할지 여부",
+        "mo": "Системийн банкны картыг ашиглах эсэх"
+    },
+    {
+        "zh": "银行收款脚本配置",
+        "en": "Bank collection script configuration",
+        "vi": "Cấu hình kịch bản thu tiền của ngân hàng",
+        "id": "Konfigurasi skrip pengumpulan bank",
+        "pt": "Configuração do script de cobrança bancária",
+        "ja": "銀行収集スクリプトの設定",
+        "ko": "은행 수금 스크립트 구성",
+        "ms": "Konfigurasi skrip penerimaan bank"
+    },
+    {
+        "zh": "登录谷歌验证开关",
+        "en": "Log in to Google authentication switch",
+        "vi": "Đăng nhập vào công tắc xác thực Google",
+        "id": "Masuk ke sakelar otentikasi Google",
+        "pt": "Faça login no interruptor de autenticação do Google",
+        "ja": "Google認証スイッチにログインする",
+        "ko": "Google 인증 스위치로 로그인",
+        "ms": "Log masuk ke suis pengesahan Google"
+    },
+    {
+        "zh": "确定删除该数据？",
+        "en": "Are you sure you want to delete this data?",
+        "vi": "Bạn có chắc chắn muốn xóa dữ liệu này không?",
+        "id": "Apakah Anda yakin ingin menghapus data ini?",
+        "pt": "Tem certeza de que deseja excluir esses dados?",
+        "ja": "このデータを削除してもよろしいですか？",
+        "ko": "이 데이터를 삭제하시겠습니까?",
+        "ms": "Adakah anda pasti ingin memadam data ini?"
+    },
+    {
+        "zh": "您想要索取多少钱",
+        "en": "How much money do you want to claim?",
+        "vi": "Bạn muốn yêu cầu bao nhiêu tiền?",
+        "id": "Berapa banyak uang yang ingin Anda klaim?",
+        "pt": "Quanto dinheiro você quer reivindicar?",
+        "ja": "いくらのお金を請求したいですか？",
+        "ko": "얼마나 많은 돈을 청구하시겠습니까?",
+        "ms": "Berapa banyak wang yang anda ingin tuntut?"
+    },
+    {
+        "zh": "确认删除该数据？",
+        "en": "Confirm deletion of this data?",
+        "vi": "Xác nhận xóa dữ liệu này?",
+        "id": "Konfirmasi penghapusan data ini?",
+        "pt": "Confirmar exclusão destes dados?",
+        "ja": "このデータの削除を確認しますか？",
+        "ko": "이 데이터의 삭제를 확인하시겠습니까?",
+        "ms": "Sahkan pemadaman data ini?"
+    },
+    {
+        "zh": "商户审核管理权限",
+        "en": "Merchant audit management authority",
+        "vi": "Quyền quản lý kiểm tra của thương gia",
+        "id": "Otoritas manajemen audit pedagang",
+        "pt": "Autoridade de gerenciamento de auditoria de comerciante",
+        "ja": "商人の監査管理権限",
+        "ko": "상인 감사 관리 권한",
+        "ms": "Kuasa pengurusan audit peniaga"
+    },
+    {
+        "zh": "收款订单管理权限",
+        "en": "Receipt order management authority",
+        "vi": "Quyền quản lý đơn đặt hàng nhận",
+        "id": "Otoritas manajemen pesanan penerimaan",
+        "pt": "Autoridade de gerenciamento de pedidos de recebimento",
+        "ja": "受注管理権限",
+        "ko": "수령 주문 관리 권한",
+        "ms": "Kuasa pengurusan pesanan penerimaan"
+    },
+    {
+        "zh": "提现申请管理权限",
+        "en": "Withdrawal application management authority",
+        "vi": "Quyền quản lý đơn đặt hàng rút tiền",
+        "id": "Otoritas manajemen aplikasi penarikan",
+        "pt": "Autoridade de gerenciamento de solicitações de retirada",
+        "ja": "引き出し申請管理権限",
+        "ko": "출금 신청 관리 권한",
+        "ms": "Kuasa pengurusan permohonan pengeluaran"
+    },
+    {
+        "zh": "回调记录管理权限",
+        "en": "Callback record management authority",
+        "vi": "Quyền quản lý ghi chú gọi lại",
+        "id": "Otoritas manajemen catatan panggilan balik",
+        "pt": "Autoridade de gerenciamento de registros de retorno",
+        "ja": "コールバックレコード管理権限",
+        "ko": "콜백 레코드 관리 권한",
+        "ms": "Kuasa pengurusan rekod panggil balik"
+    },
+    {
+        "zh": "商户通道报表管理",
+        "en": "Merchant channel report management",
+        "vi": "Quản lý báo cáo kênh thương gia",
+        "id": "Manajemen laporan saluran pedagang",
+        "pt": "Gerenciamento de relatórios de canal de comerciante",
+        "ja": "商人のチャネルレポート管理",
+        "ko": "상인 채널 보고서 관리",
+        "ms": "Pengurusan laporan saluran peniaga"
+    },
+    {
+        "zh": "系统账户管理权限",
+        "en": "System account management authority",
+        "vi": "Quyền quản lý tài khoản hệ thống",
+        "id": "Otoritas manajemen akun sistem",
+        "pt": "Autoridade de gerenciamento de contas do sistema",
+        "ja": "システムアカウント管理権限",
+        "ko": "시스템 계정 관리 권한",
+        "ms": "Kuasa pengurusan akaun sistem"
+    },
+    {
+        "zh": "系统设置管理权限",
+        "en": "System settings management authority",
+        "vi": "Quyền quản lý cài đặt hệ thống",
+        "id": "Otoritas manajemen pengaturan sistem",
+        "pt": "Autoridade de gerenciamento de configurações do sistema",
+        "ja": "システム設定管理権限",
+        "ko": "시스템 설정 관리 권한",
+        "ms": "Kuasa pengurusan tetapan sistem"
+    },
+    {
+        "zh": "系统操作日志管理",
+        "en": "System operation log management",
+        "vi": "Quản lý nhật ký hoạt động hệ thống",
+        "id": "Manajemen log operasi sistem",
+        "pt": "Gerenciamento de log de operações do sistema",
+        "ja": "システム操作ログ管理",
+        "ko": "시스템 운영 로그 관리",
+        "ms": "Pengurusan log operasi sistem"
+    },
+    {
+        "zh": "代付银行维护限制",
+        "en": "Proxy payment bank maintenance restrictions",
+        "vi": "Hạn chế bảo trì ngân hàng thanh toán ủy quyền",
+        "id": "Batasan pemeliharaan bank pembayaran perantara",
+        "pt": "Restrições de manutenção de banco de pagamento por procuração",
+        "ja": "プロキシ支払い銀行メンテナンス制限",
+        "ko": "프록시 지불 은행 유지 보수 제한",
+        "ms": "Pembatasan penyelenggaraan bank pembayaran wakil"
+    },
+    {
+        "zh": "每日收款笔数上限",
+        "en": "Daily collection limit",
+        "vi": "Giới hạn thu hàng ngày",
+        "id": "Batasan koleksi harian",
+        "pt": "Limite de coleta diário",
+        "ja": "毎日の収集限度額",
+        "ko": "매일 수금 한도",
+        "ms": "Had pengumpulan harian"
+    },
+    {
+        "en": "Agent's Self-payment Orders",
+        "vi": "Các Đơn Đặt Tự Thanh Toán Của Đại Lý",
+        "id": "Pesanan Pembayaran Diri Agen",
+        "pt": "Pedidos de Auto-pagamento do Agente",
+        "ja": "代理店自己支払い注文",
+        "ko": "에이전트 자체 결제 주문",
+        "ms": "Pesanan Bayaran Sendiri Ejen",
+        "zh": "代理自行支付订单"
+    },
+    {
+        "zh": "您想要索取多少钱",
+        "en": "How much money do you want to claim",
+        "vi": "Bạn muốn yêu cầu bao nhiêu tiền",
+        "id": "Berapa banyak uang yang ingin Anda klaim",
+        "pt": "Quanto dinheiro você quer reivindicar",
+        "ja": "いくらのお金を請求したいですか",
+        "ko": "얼마의 돈을 요청하시겠습니까",
+        "mo": "Та хэдэн мөнгөн илгээхийг хүсч байна уу"
+    },
+    {
+        "zh": "异常自动下架时间",
+        "en": "Abnormal Automatic Dismantling Time",
+        "vi": "Thời gian tháo dỡ tự động bất thường",
+        "id": "Waktu Pembongkaran Otomatis Abnormal",
+        "pt": "Tempo de Desmontagem Automática Anormal",
+        "ja": "異常な自動解体時間",
+        "ko": "비정상 자동 해체 시간",
+        "mo": "Эрсдлийн автомат маслах цаг"
+    },
+    {
+        "zh": "限制余额最大额度",
+        "en": "Limit Maximum Balance Amount",
+        "vi": "Giới hạn Số dư Tối đa",
+        "id": "Batas Jumlah Saldo Maksimum",
+        "pt": "Limite Máximo de Saldo",
+        "ja": "残高の最大金額を制限",
+        "ko": "잔액 최대 금액 제한",
+        "mo": "Үлдэгдэлийн хамгийн их дүнг хязгаарлах"
+    },
+    {
+        "zh": "是否交易日志清零",
+        "en": "Whether to Clear Transaction Logs",
+        "vi": "Có xóa nhật ký giao dịch không",
+        "id": "Apakah Menghapus Log Transaksi",
+        "pt": "Se deve Limpar Logs de Transação",
+        "ja": "取引ログをクリアするかどうか",
+        "ko": "거래 로그를 지울지 여부",
+        "mo": "Гүйлгээний логийг цэвэрлэх эсэх"
+    },
+    {
+        "zh": "是否使用系统代付",
+        "en": "Whether to Use System Payout",
+        "vi": "Có sử dụng thanh toán hệ thống không",
+        "id": "Apakah Menggunakan Pembayaran Sistem",
+        "pt": "Se deve Usar Pagamento do Sistema",
+        "ja": "システム支払いを使用するかどうか",
+        "ko": "시스템 지급을 사용할지 여부",
+        "mo": "Системийн төлбөр ашиглах эсэх"
+    },
+    {
+        "zh": "登录谷歌验证开关",
+        "en": "Login Google Verification Switch",
+        "vi": "Đăng nhập Chuyển đổi Xác minh Google",
+        "id": "Login Google Verifikasi Switch",
+        "pt": "Login Google Verificação Switch",
+        "ja": "Google認証スイッチをログインする",
+        "ko": "로그인 Google 인증 스위치",
+        "mo": "Google баталгаажуулалтыг нээх сулгах"
+    },
+    {
+        "zh": "VPN软件下载",
+        "en": "VPN software download",
+        "vi": "Tải xuống phần mềm VPN",
+        "id": "Unduhan perangkat lunak VPN",
+        "pt": "Download de software VPN",
+        "ja": "VPNソフトウェアのダウンロード",
+        "ko": "VPN 소프트웨어 다운로드",
+        "ms": "Muat turun perisian VPN"
+    },
+    {
+        "zh": "确定关闭该通道",
+        "en": "Confirm closing this channel",
+        "vi": "Xác nhận đóng kênh này",
+        "id": "Konfirmasi menutup saluran ini",
+        "pt": "Confirmar o fechamento deste canal",
+        "ja": "このチャネルを閉じることを確認します",
+        "ko": "이 채널을 닫으시겠습니까?",
+        "ms": "Sahkan menutup saluran ini"
+    },
+    {
+        "zh": "用户账户或姓名",
+        "en": "User account or name",
+        "vi": "Tài khoản hoặc tên người dùng",
+        "id": "Akun pengguna atau nama",
+        "pt": "Conta de usuário ou nome",
+        "ja": "ユーザーアカウントまたは名前",
+        "ko": "사용자 계정 또는 이름",
+        "ms": "Akaun pengguna atau nama"
+    },
+    {
+        "zh": "银行卡管理权限",
+        "en": "Bank card management authority",
+        "vi": "Quyền quản lý thẻ ngân hàng",
+        "id": "Otoritas manajemen kartu bank",
+        "pt": "Autoridade de gerenciamento de cartão bancário",
+        "ja": "銀行カード管理権限",
+        "ko": "은행 카드 관리 권한",
+        "ms": "Kuasa pengurusan kad bank"
+    },
+    {
+        "zh": "银行卡报表管理",
+        "en": "Bank card report management",
+        "vi": "Quản lý báo cáo thẻ ngân hàng",
+        "id": "Manajemen laporan kartu bank",
+        "pt": "Gerenciamento de relatórios de cartão bancário",
+        "ja": "銀行カードレポート管理",
+        "ko": "은행 카드 보고서 관리",
+        "ms": "Pengurusan laporan kad bank"
+    },
+    {
+        "zh": "订单到支付时间",
+        "en": "Order to payment time",
+        "vi": "Thời gian đặt hàng đến lúc thanh toán",
+        "id": "Waktu pesanan ke waktu pembayaran",
+        "pt": "Tempo de pedido para pagamento",
+        "ja": "注文から支払い時間",
+        "ko": "주문에서 결제 시간까지",
+        "ms": "Masa pesanan ke masa pembayaran"
+    },
+    {
+        "zh": "代付业务总开关",
+        "en": "Proxy payment business master switch",
+        "vi": "Công tắc chính của dịch vụ thanh toán ủy quyền",
+        "id": "Pemutus master bisnis pembayaran perantara",
+        "pt": "Interruptor mestre de negócios de pagamento por procuração",
+        "ja": "プロキシ支払い業務マスタースイッチ",
+        "ko": "대리 지불 업무 마스터 스위치",
+        "ms": "Pemutus utama perniagaan pembayaran wakil"
+    },
+    {
+        "zh": "API请求日志",
+        "en": "API request log",
+        "vi": "Nhật ký yêu cầu API",
+        "id": "Log permintaan API",
+        "pt": "Log de solicitação da API",
+        "ja": "APIリクエストログ",
+        "ko": "API 요청 로그",
+        "ms": "Log permintaan API"
+    },
+    {
+        "zh": "手续费    ",
+        "en": "Handling fee    ",
+        "vi": "Phí xử lý    ",
+        "id": "Biaya penanganan    ",
+        "pt": "Taxa de manuseio    ",
+        "ja": "手数料    ",
+        "ko": "수수료    ",
+        "ms": "Yuran pemprosesan    "
+    },
+    {
+        "zh": "内部费用金额 ",
+        "en": "Internal cost amount ",
+        "vi": "Số tiền chi phí nội bộ ",
+        "id": "Jumlah biaya internal ",
+        "pt": "Quantidade de custo interno ",
+        "ja": "内部コスト金額 ",
+        "ko": "내부 비용 금액 ",
+        "ms": "Jumlah kos dalaman "
+    },
+    {
+        "en": "Sort by registration time in reverse order",
+        "vi": "Sắp xếp theo thời gian đăng ký theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan waktu pendaftaran secara terbalik",
+        "pt": "Ordenar por tempo de registro em ordem reversa",
+        "ja": "登録時間を逆順でソート",
+        "ko": "등록 시간을 역순으로 정렬",
+        "ms": "Susun mengikut masa pendaftaran dalam urutan terbalik",
+        "zh": "按注册时间倒序"
+    },
+    {
+        "en": "Sort by registration time in ascending order",
+        "vi": "Sắp xếp theo thời gian đăng ký theo thứ tự tăng dần",
+        "id": "Sortir berdasarkan waktu pendaftaran secara menaik",
+        "pt": "Ordenar por tempo de registro em ordem crescente",
+        "ja": "登録時間で昇順ソート",
+        "ko": "등록 시간을 오름차순으로 정렬",
+        "ms": "Susun mengikut masa pendaftaran dalam urutan menaik",
+        "zh": "按注册时间顺序"
+    },
+    {
+        "en": "Sort by today's turnover in reverse order",
+        "vi": "Sắp xếp theo doanh số hôm nay theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan omset hari ini secara terbalik",
+        "pt": "Ordenar pelo faturamento de hoje em ordem reversa",
+        "ja": "本日の売上高で逆順ソート",
+        "ko": "오늘의 순환을 역순으로 정렬",
+        "ms": "Susun mengikut perputaran hari ini dalam urutan terbalik",
+        "zh": "按今日流水倒序"
+    },
+    {
+        "en": "Sort by registration time in reverse order",
+        "vi": "Sắp xếp theo thời gian đăng ký theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan waktu pendaftaran secara terbalik",
+        "pt": "Ordenar por tempo de registro em ordem reversa",
+        "ja": "登録時間を逆順でソート",
+        "ko": "등록 시간을 역순으로 정렬",
+        "ms": "Susun mengikut masa pendaftaran dalam urutan terbalik",
+        "zh": "按注册时间倒序"
+    },
+    {
+        "en": "Sort by registration time in ascending order",
+        "vi": "Sắp xếp theo thời gian đăng ký theo thứ tự tăng dần",
+        "id": "Sortir berdasarkan waktu pendaftaran secara menaik",
+        "pt": "Ordenar por tempo de registro em ordem crescente",
+        "ja": "登録時間で昇順ソート",
+        "ko": "등록 시간을 오름차순으로 정렬",
+        "ms": "Susun mengikut masa pendaftaran dalam urutan menaik",
+        "zh": "按注册时间顺序"
+    },
+    {
+        "en": "Sort by today's turnover in reverse order",
+        "vi": "Sắp xếp theo doanh số hôm nay theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan omset hari ini secara terbalik",
+        "pt": "Ordenar pelo faturamento de hoje em ordem reversa",
+        "ja": "本日の売上高で逆順ソート",
+        "ko": "오늘의 순환을 역순으로 정렬",
+        "ms": "Susun mengikut perputaran hari ini dalam urutan terbalik",
+        "zh": "按今日流水倒序"
+    },
+    {
+        "en": "Paid and Unsuccessfully Callbacked",
+        "vi": "Đã Thanh Toán và Không Gọi Lại Thành Công",
+        "id": "Dibayar dan Gagal Dikembalikan",
+        "pt": "Pago e Sem Retorno com Sucesso",
+        "ja": "支払いと成功裏にコールバックされませんでした",
+        "ko": "지불 및 성공적으로 콜백되지 않음",
+        "ms": "Dibayar dan Gagal Dipanggil Balik dengan Berjaya",
+        "zh": "已付未回调成功"
+    },
+    {
+        "zh": "将卡添加到列表",
+        "en": "Add Card to List",
+        "vi": "Thêm Thẻ vào Danh sách",
+        "id": "Tambahkan Kartu ke Daftar",
+        "pt": "Adicionar Cartão à Lista",
+        "ja": "カードをリストに追加",
+        "ko": "카드를 목록에 추가",
+        "mo": "Картыг жагсаалтанд нэмэх"
+    },
+    {
+        "zh": "日收款笔数上限",
+        "en": "Daily Collection Number Limit",
+        "vi": "Giới hạn Số lượng Thu Nhận Hàng Ngày",
+        "id": "Batas Jumlah Penerimaan Harian",
+        "pt": "Limite Diário de Número de Recebimentos",
+        "ja": "毎日の収集数制限",
+        "ko": "일일 수금 횟수 제한",
+        "mo": "Өдөрт орлого тоо хязгаар"
+    },
+    {
+        "zh": "是否入款卡清零",
+        "en": "Whether to Clear the Deposit Card",
+        "vi": "Có xóa thẻ gửi tiền không",
+        "id": "Apakah Menghapus Kartu Deposit",
+        "pt": "Se deve Limpar o Cartão de Depósito",
+        "ja": "入金カードをクリアするかどうか",
+        "ko": "입금 카드를 지울지 여부",
+        "mo": "Орлого картыг цэвэрлэх эсэх"
+    },
+    {
+        "zh": "是否出款卡清零",
+        "en": "Whether to Clear the Payout Card",
+        "vi": "Có xóa thẻ thanh toán không",
+        "id": "Apakah Menghapus Kartu Pembayaran",
+        "pt": "Se deve Limpar o Cartão de Pagamento",
+        "ja": "支払いカードをクリアするかどうか",
+        "ko": "지불 카드를 지울지 여부",
+        "mo": "Төлбөрийн картыг цэвэрлэх эсэх"
+    },
+    {
+        "zh": "是否中转卡清零",
+        "en": "Whether to Clear the Transfer Card",
+        "vi": "Có xóa thẻ chuyển khoản không",
+        "id": "Apakah Menghapus Kartu Transfer",
+        "pt": "Se deve Limpar o Cartão de Transferência",
+        "ja": "転送カードをクリアするかどうか",
+        "ko": "이체 카드를 지울지 여부",
+        "mo": "Шилжүүлэг картыг цэвэрлэх эсэх"
+    },
+    {
+        "zh": "是否其他卡清零",
+        "en": "Whether to Clear Other Cards",
+        "vi": "Có xóa thẻ khác không",
+        "id": "Apakah Menghapus Kartu Lainnya",
+        "pt": "Se deve Limpar Outros Cartões",
+        "ja": "他のカードをクリアするかどうか",
+        "ko": "다른 카드를 지울지 여부",
+        "mo": "Бусад картыг цэвэрлэх эсэх"
+    },
+    {
+        "zh": "平均回复时长",
+        "en": "Average response time",
+        "vi": "Thời gian phản hồi trung bình",
+        "id": "Waktu respon rata-rata",
+        "pt": "Tempo médio de resposta",
+        "ja": "平均応答時間",
+        "ko": "평균 응답 시간",
+        "ms": "Masa tindak balas purata"
+    },
+    {
+        "zh": "商户通道报表",
+        "en": "Merchant channel report",
+        "vi": "Báo cáo kênh thương gia",
+        "id": "Laporan saluran pedagang",
+        "pt": "Relatório de canal de comerciante",
+        "ja": "商人のチャネルレポート",
+        "ko": "상인 채널 보고서",
+        "ms": "Laporan saluran peniaga"
+    },
+    {
+        "zh": "系统操作记录",
+        "en": "System operation record",
+        "vi": "Ghi chú hoạt động hệ thống",
+        "id": "Rekam operasi sistem",
+        "pt": "Registro de operação do sistema",
+        "ja": "システム操作記録",
+        "ko": "시스템 운영 기록",
+        "ms": "Rekod operasi sistem"
+    },
+    {
+        "zh": "绑定银行数量",
+        "en": "Number of bound banks",
+        "vi": "Số lượng ngân hàng được ràng buộc",
+        "id": "Jumlah bank terikat",
+        "pt": "Número de bancos vinculados",
+        "ja": "バインドされた銀行の数",
+        "ko": "바인드된 은행 수",
+        "ms": "Bilangan bank yang diikat"
+    },
+    {
+        "zh": "输入您的账户",
+        "en": "Enter your account",
+        "vi": "Nhập tài khoản của bạn",
+        "id": "Masukkan akun Anda",
+        "pt": "Digite sua conta",
+        "ja": "あなたのアカウントを入力してください",
+        "ko": "귀하의 계정을 입력하십시오",
+        "ms": "Masukkan akaun anda"
+    },
+    {
+        "zh": "输入您的密码",
+        "en": "Enter your password",
+        "vi": "Nhập mật khẩu của bạn",
+        "id": "Masukkan kata sandi Anda",
+        "pt": "Digite sua senha",
+        "ja": "あなたのパスワードを入力してください",
+        "ko": "귀하의 비밀번호를 입력하십시오",
+        "ms": "Masukkan kata laluan anda"
+    },
+    {
+        "zh": "今日代收金额",
+        "en": "Today's collection amount",
+        "vi": "Số tiền thu hôm nay",
+        "id": "Jumlah koleksi hari ini",
+        "pt": "Valor da coleta de hoje",
+        "ja": "今日の集金額",
+        "ko": "오늘의 수금액",
+        "ms": "Jumlah kutipan hari ini"
+    },
+    {
+        "zh": "今日代付金额",
+        "en": "Today's proxy payment amount",
+        "vi": "Số tiền thanh toán ủy quyền hôm nay",
+        "id": "Jumlah pembayaran perantara hari ini",
+        "pt": "Valor do pagamento por procuração de hoje",
+        "ja": "今日の代理支払い額",
+        "ko": "오늘의 프록시 지급액",
+        "ms": "Jumlah pembayaran wakil hari ini"
+    },
+    {
+        "zh": "脚本运行状态",
+        "en": "Script running status",
+        "vi": "Trạng thái chạy kịch bản",
+        "id": "Status berjalan skrip",
+        "pt": "Estado de execução do script",
+        "ja": "スクリプトの実行状態",
+        "ko": "스크립트 실행 상태",
+        "ms": "Status penjalanan skrip"
+    },
+    {
+        "zh": "响应Code",
+        "en": "Response Code",
+        "vi": "Mã phản hồi",
+        "id": "Kode respons",
+        "pt": "Código de resposta",
+        "ja": "レスポンスコード",
+        "ko": "응답 코드",
+        "ms": "Kod tindak balas"
+    },
+    {
+        "zh": "卡银行卡账号",
+        "en": "Card bank account number",
+        "vi": "Số tài khoản ngân hàng thẻ",
+        "id": "Nomor rekening bank kartu",
+        "pt": "Número da conta bancária do cartão",
+        "ja": "カード銀行口座番号",
+        "ko": "카드 은행 계좌 번호",
+        "ms": "Nombor akaun bank kad"
+    },
+    {
+        "zh": "账户管理权限",
+        "en": "Account management authority",
+        "vi": "Quyền quản lý tài khoản",
+        "id": "Otoritas manajemen akun",
+        "pt": "Autoridade de gerenciamento de conta",
+        "ja": "アカウント管理権限",
+        "ko": "계정 관리 권한",
+        "ms": "Kuasa pengurusan akaun"
+    },
+    {
+        "zh": "收款银行管理",
+        "en": "Receipt bank management",
+        "vi": "Quản lý ngân hàng nhận",
+        "id": "Manajemen bank penerimaan",
+        "pt": "Gerenciamento de banco de recebimento",
+        "ja": "受信銀行管理",
+        "ko": "수취 은행 관리",
+        "ms": "Pengurusan bank penerimaan"
+    },
+    {
+        "zh": "银行脚本管理",
+        "en": "Bank script management",
+        "vi": "Quản lý kịch bản ngân hàng",
+        "id": "Manajemen skrip bank",
+        "pt": "Gerenciamento de script bancário",
+        "ja": "銀行スクリプト管理",
+        "ko": "은행 스크립트 관리",
+        "ms": "Pengurusan skrip bank"
+    },
+    {
+        "zh": "商户管理权限",
+        "en": "Merchant management authority",
+        "vi": "Quyền quản lý thương gia",
+        "id": "Otoritas manajemen pedagang",
+        "pt": "Autoridade de gerenciamento de comerciante",
+        "ja": "商人管理権限",
+        "ko": "상인 관리 권한",
+        "ms": "Kuasa pengurusan peniaga"
+    },
+    {
+        "zh": "内充管理权限",
+        "en": "Internal charging management authority",
+        "vi": "Quyền quản lý nội bộ",
+        "id": "Otoritas manajemen pengisian internal",
+        "pt": "Autoridade de gerenciamento de cobrança interna",
+        "ja": "内部充電管理権限",
+        "ko": "내부 충전 관리 권한",
+        "ms": "Kuasa pengurusan pemuatan dalaman"
+    },
+    {
+        "zh": "掉单管理权限",
+        "en": "Drop order management authority",
+        "vi": "Quyền quản lý đơn hàng rơi",
+        "id": "Otoritas manajemen pesanan drop",
+        "pt": "Autoridade de gerenciamento de pedidos drop",
+        "ja": "ドロップ注文管理権限",
+        "ko": "드롭 주문 관리 권한",
+        "ms": "Kuasa pengurusan pesanan titik"
+    },
+    {
+        "zh": "对账日报管理",
+        "en": "Reconciliation daily report management",
+        "vi": "Quản lý báo cáo hàng ngày cân đối",
+        "id": "Manajemen laporan harian rekonsiliasi",
+        "pt": "Gerenciamento de relatório diário de reconciliação",
+        "ja": "調整日報告管理",
+        "ko": "조정 일일 보고서 관리",
+        "ms": "Pengurusan laporan harian rekonsiliasi"
+    },
+    {
+        "zh": "不明收入管理",
+        "en": "Unidentified income management",
+        "vi": "Quản lý thu nhập không xác định",
+        "id": "Manajemen pendapatan yang tidak teridentifikasi",
+        "pt": "Gerenciamento de renda não identificada",
+        "ja": "不明な収入の管理",
+        "ko": "신원을 알 수없는 수입 관리",
+        "ms": "Pengurusan pendapatan tidak dikenal"
+    },
+    {
+        "zh": "导出文件管理",
+        "en": "Export file management",
+        "vi": "Quản lý tệp xuất",
+        "id": "Manajemen file ekspor",
+        "pt": "Gerenciamento de arquivo de exportação",
+        "ja": "エクスポートファイル管理",
+        "ko": "내보내기 파일 관리",
+        "ms": "Pengurusan fail eksport"
+    },
+    {
+        "zh": "代付回调记录",
+        "en": "Proxy payment callback record",
+        "vi": "Ghi chú gọi lại thanh toán ủy quyền",
+        "id": "Rekam panggilan balik pembayaran perantara",
+        "pt": "Registro de retorno de pagamento por procuração",
+        "ja": "プロキシ支払いコールバックレコード",
+        "ko": "프록시 지불 콜백 레코드",
+        "ms": "Rekod panggilan balik pembayaran wakil"
+    },
+    {
+        "zh": "代付脚本配置",
+        "en": "Proxy payment script configuration",
+        "vi": "Cấu hình kịch bản thanh toán ủy quyền",
+        "id": "Konfigurasi skrip pembayaran perantara",
+        "pt": "Configuração de script de pagamento por procuração",
+        "ja": "プロキシ支払いスクリプト設定",
+        "ko": "프록시 지불 스크립트 구성",
+        "ms": "Konfigurasi skrip pembayaran wakil"
+    },
+    {
+        "zh": "代付任务列表",
+        "en": "Proxy payment task list",
+        "vi": "Danh sách nhiệm vụ thanh toán ủy quyền",
+        "id": "Daftar tugas pembayaran perantara",
+        "pt": "Lista de tarefas de pagamento por procuração",
+        "ja": "プロキシ支払いタスクリスト",
+        "ko": "프록시 지불 작업 목록",
+        "ms": "Senarai tugas pembayaran wakil"
+    },
+    {
+        "zh": "姓名检测管理",
+        "en": "Name detection management",
+        "vi": "Quản lý phát hiện tên",
+        "id": "Manajemen deteksi nama",
+        "pt": "Gerenciamento de detecção de nome",
+        "ja": "名前検出管理",
+        "ko": "이름 감지 관리",
+        "ms": "Pengurusan pengesanan nama"
+    },
+    {
+        "zh": "交易流程管理",
+        "en": "Transaction process management",
+        "vi": "Quản lý quy trình giao dịch",
+        "id": "Manajemen proses transaksi",
+        "pt": "Gerenciamento de processo de transação",
+        "ja": "トランザクションプロセス管理",
+        "ko": "거래 프로세스 관리",
+        "ms": "Pengurusan proses transaksi"
+    },
+    {
+        "zh": "今日订单数量",
+        "en": "Today's order quantity",
+        "vi": "Số lượng đơn hàng hôm nay",
+        "id": "Jumlah pesanan hari ini",
+        "pt": "Quantidade de pedidos de hoje",
+        "ja": "今日の注文数量",
+        "ko": "오늘의 주문 수량",
+        "ms": "Kuantiti pesanan hari ini"
+    },
+    {
+        "zh": "越南网银扫码",
+        "en": "Vietnam online banking QR code",
+        "vi": "Mã QR ngân hàng trực tuyến Việt Nam",
+        "id": "Kode QR perbankan online Vietnam",
+        "pt": "Código QR de banco online do Vietnã",
+        "ja": "ベトナムオンラインバンキングQRコード",
+        "ko": "베트남 온라인 뱅킹 QR 코드",
+        "ms": "Kod QR perbankan dalam talian Vietnam"
+    },
+    {
+        "zh": "收款金额范围",
+        "en": "Collection amount range",
+        "vi": "Phạm vi số tiền thu",
+        "id": "Rentang jumlah koleksi",
+        "pt": "Faixa de valor da coleção",
+        "ja": "収集額範囲",
+        "ko": "수집 금액 범위",
+        "ms": "Julat jumlah koleksi"
+    },
+    {
+        "zh": "每日收款上限",
+        "en": "Daily collection upper limit",
+        "vi": "Giới hạn thu hàng ngày",
+        "id": "Batasan atas koleksi harian",
+        "pt": "Limite superior de coleta diário",
+        "ja": "毎日の収集上限",
+        "ko": "매일 수금 상한",
+        "ms": "Had atas koleksi harian"
+    },
+    {
+        "zh": "起始商户余额",
+        "en": "Initial merchant balance",
+        "vi": "Số dư ban đầu của thương nhân",
+        "id": "Saldo awal pedagang",
+        "pt": "Saldo inicial do comerciante",
+        "ja": "初期商人の残高",
+        "ko": "초기 상인 잔액",
+        "ms": "Baki peniaga awal"
+    },
+    {
+        "zh": "结尾商户余额",
+        "en": "Ending merchant balance",
+        "vi": "Số dư cuối của thương nhân",
+        "id": "Saldo akhir pedagang",
+        "pt": "Saldo final do comerciante",
+        "ja": "最終的な商人の残高",
+        "ko": "종료 상인 잔액",
+        "ms": "Baki peniaga berakhir"
+    },
+    {
+        "zh": "成功订单金额",
+        "en": "Successful order amount",
+        "vi": "Số tiền đơn hàng thành công",
+        "id": "Jumlah pesanan berhasil",
+        "pt": "Valor do pedido bem-sucedido",
+        "ja": "成功した注文金額",
+        "ko": "성공한 주문 금액",
+        "ms": "Jumlah pesanan yang berjaya"
+    },
+    {
+        "zh": "成功支付金额",
+        "en": "Successful payment amount",
+        "vi": "Số tiền thanh toán thành công",
+        "id": "Jumlah pembayaran berhasil",
+        "pt": "Valor do pagamento bem-sucedido",
+        "ja": "成功した支払い金額",
+        "ko": "성공한 지불 금액",
+        "ms": "Jumlah pembayaran yang berjaya"
+    },
+    {
+        "zh": "成功回调金额",
+        "en": "Successful callback amount",
+        "vi": "Số tiền gọi lại thành công",
+        "id": "Jumlah panggilan balik berhasil",
+        "pt": "Quantidade de retorno bem-sucedida",
+        "ja": "成功したコールバック金額",
+        "ko": "성공한 콜백 금액",
+        "ms": "Jumlah panggilan balik yang berjaya"
+    },
+    {
+        "zh": "爬虫收款金额",
+        "en": "Spider collection amount",
+        "vi": "Số tiền thu của con nhện",
+        "id": "Jumlah koleksi laba-laba",
+        "pt": "Valor da coleção de aranhas",
+        "ja": "スパイダーの集金額",
+        "ko": "거미 수집 금액",
+        "ms": "Jumlah kutipan labah-labah"
+    },
+    {
+        "zh": "爬虫出款金额",
+        "en": "Spider payment amount",
+        "vi": "Số tiền thanh toán của con nhện",
+        "id": "Jumlah pembayaran laba-laba",
+        "pt": "Valor do pagamento de aranha",
+        "ja": "スパイダーの支払い金額",
+        "ko": "거미 지불 금액",
+        "ms": "Jumlah pembayaran labah-labah"
+    },
+    {
+        "en": "Export order data",
+        "vi": "Xuất dữ liệu đơn hàng",
+        "id": "Ekspor data pesanan",
+        "pt": "Exportar dados do pedido",
+        "ja": "注文データのエクスポート",
+        "ko": "주문 데이터 내보내기",
+        "ms": "Eksport data pesanan",
+        "zh": "导出订单数据"
+    },
+    {
+        "en": "Choose search type",
+        "vi": "Chọn loại tìm kiếm",
+        "id": "Pilih jenis pencarian",
+        "pt": "Escolha o tipo de pesquisa",
+        "ja": "検索タイプを選択",
+        "ko": "검색 유형 선택",
+        "ms": "Pilih jenis carian",
+        "zh": "选择搜索类型"
+    },
+    {
+        "en": "Actual payment amount",
+        "vi": "Số tiền thanh toán thực tế",
+        "id": "Jumlah pembayaran sebenarnya",
+        "pt": "Valor real do pagamento",
+        "ja": "実際の支払金額",
+        "ko": "실제 지불 금액",
+        "ms": "Jumlah bayaran sebenar",
+        "zh": "实际支付金额"
+    },
+    {
+        "en": "Generate test order",
+        "vi": "Tạo đơn hàng kiểm tra",
+        "id": "Buat pesanan uji coba",
+        "pt": "Gerar pedido de teste",
+        "ja": "テスト注文を生成する",
+        "ko": "테스트 주문 생성",
+        "ms": "Cipta pesanan ujian",
+        "zh": "生成测试订单"
+    },
+    {
+        "en": "Actual deduction amount",
+        "vi": "Số tiền khấu trừ thực tế",
+        "id": "Jumlah potongan sebenarnya",
+        "pt": "Valor real da dedução",
+        "ja": "実際の差し引き金額",
+        "ko": "실제 공제 금액",
+        "ms": "Jumlah potongan sebenar",
+        "zh": "实际扣除金额"
+    },
+    {
+        "en": "Generate test log",
+        "vi": "Tạo bản ghi kiểm tra",
+        "id": "Buat log uji coba",
+        "pt": "Gerar log de teste",
+        "ja": "テストログを生成する",
+        "ko": "테스트 로그 생성",
+        "ms": "Cipta log ujian",
+        "zh": "生成测试日志"
+    },
+    {
+        "en": "Add script information",
+        "vi": "Thêm thông tin kịch bản",
+        "id": "Tambahkan informasi skrip",
+        "pt": "Adicionar informações do script",
+        "ja": "スクリプト情報を追加",
+        "ko": "스크립트 정보 추가",
+        "ms": "Tambah maklumat skrip",
+        "zh": "添加脚本信息"
+    },
+    {
+        "en": "Execute desktop number",
+        "vi": "Thực hiện số máy tính để bàn",
+        "id": "Jalankan nomor desktop",
+        "pt": "Executar número do desktop",
+        "ja": "デスクトップ番号を実行",
+        "ko": "데스크톱 번호 실행",
+        "ms": "Jalankan nombor desktop",
+        "zh": "执行桌面编号"
+    },
+    {
+        "en": "Unprocessed Order Volume",
+        "vi": "Số Lượng Đơn Đặt Chưa Xử Lý",
+        "id": "Volume Pesanan Belum Diproses",
+        "pt": "Volume de Pedidos Não Processados",
+        "ja": "未処理注文量",
+        "ko": "미처리 주문량",
+        "ms": "Jumlah Pesanan Belum Diproses",
+        "zh": "未处理订单量"
+    },
+    {
+        "en": "System Payer",
+        "vi": "Người Thanh Toán Hệ Thống",
+        "id": "Pembayar Sistem",
+        "pt": "Pagador do Sistema",
+        "ja": "システム支払い者",
+        "ko": "시스템 지불자",
+        "ms": "Pembayar Sistem",
+        "zh": "系统出款人员"
+    },
+    {
+        "en": "System Payment Orders",
+        "vi": "Các Đơn Đặt Thanh Toán Hệ Thống",
+        "id": "Pesanan Pembayaran Sistem",
+        "pt": "Pedidos de Pagamento do Sistema",
+        "ja": "システム支払い注文",
+        "ko": "시스템 결제 주문",
+        "ms": "Pesanan Bayaran Sistem",
+        "zh": "系统支付订单"
+    },
+    {
+        "en": "Bank Card Holder Name",
+        "vi": "Tên Chủ Thẻ Ngân Hàng",
+        "id": "Nama Pemegang Kartu Bank",
+        "pt": "Nome do Titular do Cartão Bancário",
+        "ja": "銀行カード保持者名",
+        "ko": "은행 카드 보유자 이름",
+        "ms": "Nama Pemegang Kad Bank",
+        "zh": "银行卡人姓名"
+    },
+    {
+        "en": "Merchant Name or Merchant",
+        "vi": "Tên Thương Gia hoặc Thương Gia",
+        "id": "Nama Pedagang atau Pedagang",
+        "pt": "Nome do Comerciante ou Comerciante",
+        "ja": "商人の名前または商人",
+        "ko": "상인 이름 또는 상인",
+        "ms": "Nama Peniaga atau Peniaga",
+        "zh": "商户名或商户"
+    },
+    {
+        "en": "Vietnamese Online Banking Scanning",
+        "vi": "Quét Ngân Hàng Trực Tuyến Việt Nam",
+        "id": "Pemindaian Perbankan Online Vietnam",
+        "pt": "Escanear Banco Online Vietnamita",
+        "ja": "ベトナムのオンラインバンキングスキャニング",
+        "ko": "베트남 온라인 뱅킹 스캔",
+        "ms": "Pemindaian Perbankan Dalam Talian Vietnam",
+        "zh": "越南网银扫码"
+    },
+    {
+        "zh": "选择绑定代理",
+        "en": "Select Binding Agent",
+        "vi": "Chọn Đại lý Kết nối",
+        "id": "Pilih Agen Pengikat",
+        "pt": "Selecionar Agente de Ligação",
+        "ja": "バインディングエージェントを選択",
+        "ko": "바인딩 에이전트 선택",
+        "mo": "Холбогдох агент сонгох"
+    },
+    {
+        "zh": "收款最小金额",
+        "en": "Minimum Collection Amount",
+        "vi": "Số Tiền Thu Nhỏ Nhất",
+        "id": "Jumlah Penerimaan Minimum",
+        "pt": "Valor Mínimo de Recebimento",
+        "ja": "最小収集額",
+        "ko": "최소 수취 금액",
+        "mo": "Хамгийн бага орлого дүн"
+    },
+    {
+        "zh": "收款最大金额",
+        "en": "Maximum Collection Amount",
+        "vi": "Số Tiền Thu Lớn Nhất",
+        "id": "Jumlah Penerimaan Maksimum",
+        "pt": "Valor Máximo de Recebimento",
+        "ja": "最大収集額",
+        "ko": "최대 수취 금액",
+        "mo": "Хамгийн их орлого дүн"
+    },
+    {
+        "zh": "订单数据统计",
+        "en": "Order Data Statistics",
+        "vi": "Thống kê Dữ liệu Đơn hàng",
+        "id": "Statistik Data Pesanan",
+        "pt": "Estatísticas de Dados de Pedidos",
+        "ja": "注文データ統計",
+        "ko": "주문 데이터 통계",
+        "mo": "Захиалгын Мэдээллийн Статистик"
+    },
+    {
+        "zh": "已处理订单数",
+        "en": "Number of Processed Orders",
+        "vi": "Số Lượng Đơn hàng Đã Xử lý",
+        "id": "Jumlah Pesanan yang Diproses",
+        "pt": "Número de Pedidos Processados",
+        "ja": "処理された注文数",
+        "ko": "처리된 주문 수",
+        "mo": "Боловсруулсан Захиалгын тоо"
+    },
+    {
+        "zh": "未处理订单数",
+        "en": "Number of Unprocessed Orders",
+        "vi": "Số Lượng Đơn hàng Chưa Xử lý",
+        "id": "Jumlah Pesanan Belum Diproses",
+        "pt": "Número de Pedidos Não Processados",
+        "ja": "未処理の注文数",
+        "ko": "미처리 주문 수",
+        "mo": "Боловсруулаагүй Захиалгын тоо"
+    },
+    {
+        "zh": "选择用户角色",
+        "en": "Select User Role",
+        "vi": "Chọn Vai trò người dùng",
+        "id": "Pilih Peran Pengguna",
+        "pt": "Selecionar Papel do Usuário",
+        "ja": "ユーザーの役割を選択",
+        "ko": "사용자 역할 선택",
+        "mo": "Хэрэглэгчийн гүйцэтгэлийг сонгоно уу"
+    },
+    {
+        "zh": "下发默认利率",
+        "en": "Issue Default Interest Rate",
+        "vi": "Phát hành Lãi suất Mặc định",
+        "id": "Terbitkan Suku Bunga Default",
+        "pt": "Emitir Taxa de Juros Padrão",
+        "ja": "デフォルト金利を発行する",
+        "ko": "기본 이자율 발급",
+        "mo": "Үндсэн хүүхдийг үйлдэх хүү хэвлүүлэх"
+    },
+    {
+        "zh": "银行卡管理",
+        "en": "Bank card management",
+        "vi": "Quản lý thẻ ngân hàng",
+        "id": "Manajemen kartu bank",
+        "pt": "Gerenciamento de cartão bancário",
+        "ja": "銀行カード管理",
+        "ko": "은행 카드 관리",
+        "ms": "Pengurusan kad bank"
+    },
+    {
+        "zh": "银行卡报表",
+        "en": "Bank card report",
+        "vi": "Báo cáo thẻ ngân hàng",
+        "id": "Laporan kartu bank",
+        "pt": "Relatório de cartão bancário",
+        "ja": "銀行カードレポート",
+        "ko": "은행 카드 보고서",
+        "ms": "Laporan kad bank"
+    },
+    {
+        "zh": "出款银行卡",
+        "en": "Payment bank card",
+        "vi": "Thẻ ngân hàng thanh toán",
+        "id": "Kartu bank pembayaran",
+        "pt": "Cartão bancário de pagamento",
+        "ja": "支払い銀行カード",
+        "ko": "결제 은행 카드",
+        "ms": "Kad bank pembayaran"
+    },
+    {
+        "zh": "商户总余额",
+        "en": "Total merchant balance",
+        "vi": "Tổng số dư của thương nhân",
+        "id": "Total saldo pedagang",
+        "pt": "Saldo total do comerciante",
+        "ja": "総商人残高",
+        "ko": "총 상인 잔액",
+        "ms": "Baki peniaga keseluruhan"
+    },
+    {
+        "zh": "订单总数量",
+        "en": "Total order quantity",
+        "vi": "Tổng số lượng đơn hàng",
+        "id": "Total jumlah pesanan",
+        "pt": "Quantidade total de pedidos",
+        "ja": "合計注文数量",
+        "ko": "총 주문 수량",
+        "ms": "Jumlah pesanan keseluruhan"
+    },
+    {
+        "zh": "总代收金额",
+        "en": "Total collection amount",
+        "vi": "Tổng số tiền thu",
+        "id": "Jumlah koleksi total",
+        "pt": "Valor total da coleção",
+        "ja": "合計集金額",
+        "ko": "총 수금액",
+        "ms": "Jumlah kutipan keseluruhan"
+    },
+    {
+        "zh": "总代付金额",
+        "en": "Total proxy payment amount",
+        "vi": "Tổng số tiền thanh toán ủy quyền",
+        "id": "Jumlah pembayaran perantara total",
+        "pt": "Valor total do pagamento por procuração",
+        "ja": "総代理支払額",
+        "ko": "총 프록시 지불 금액",
+        "ms": "Jumlah pembayaran wakil keseluruhan"
+    },
+    {
+        "zh": "添加银行卡",
+        "en": "Add bank card",
+        "vi": "Thêm thẻ ngân hàng",
+        "id": "Tambahkan kartu bank",
+        "pt": "Adicionar cartão bancário",
+        "ja": "銀行カードを追加",
+        "ko": "은행 카드 추가",
+        "ms": "Tambah kad bank"
+    },
+    {
+        "zh": "入款卡清零",
+        "en": "Clearing the payment card",
+        "vi": "Xóa thẻ thanh toán",
+        "id": "Menghapus kartu pembayaran",
+        "pt": "Limpar o cartão de pagamento",
+        "ja": "支払いカードのクリアリング",
+        "ko": "결제 카드 클리어링",
+        "ms": "Penghapusan kad pembayaran"
+    },
+    {
+        "zh": "出款卡清零",
+        "en": "Clearing the withdrawal card",
+        "vi": "Xóa thẻ rút tiền",
+        "id": "Menghapus kartu penarikan",
+        "pt": "Limpar o cartão de saque",
+        "ja": "引き出しカードのクリアリング",
+        "ko": "출금 카드 클리어링",
+        "ms": "Penghapusan kad pengeluaran"
+    },
+    {
+        "zh": "中转卡清零",
+        "en": "Clearing the transit card",
+        "vi": "Xóa thẻ chuyển tiếp",
+        "id": "Menghapus kartu transit",
+        "pt": "Limpar o cartão de transferência",
+        "ja": "転送カードのクリアリング",
+        "ko": "전송 카드 클리어링",
+        "ms": "Penghapusan kad pindahan"
+    },
+    {
+        "zh": "其他卡清零",
+        "en": "Clearing other cards",
+        "vi": "Xóa các thẻ khác",
+        "id": "Menghapus kartu lainnya",
+        "pt": "Limpar outros cartões",
+        "ja": "他のカードのクリアリング",
+        "ko": "기타 카드 클리어링",
+        "ms": "Penghapusan kad lain-lain"
+    },
+    {
+        "zh": "银行卡账号",
+        "en": "Bank card account number",
+        "vi": "Số tài khoản thẻ ngân hàng",
+        "id": "Nomor rekening kartu bank",
+        "pt": "Número da conta do cartão bancário",
+        "ja": "銀行カード口座番号",
+        "ko": "은행 카드 계좌 번호",
+        "ms": "Nombor akaun kad bank"
+    },
+    {
+        "zh": "出款人账号",
+        "en": "Payer account number",
+        "vi": "Số tài khoản người thanh toán",
+        "id": "Nomor rekening pembayar",
+        "pt": "Número da conta do pagador",
+        "ja": "支払人のアカウント番号",
+        "ko": "결제자 계좌 번호",
+        "ms": "Nombor akaun pembayar"
+    },
+    {
+        "zh": "出款卡管理",
+        "en": "Withdrawal card management",
+        "vi": "Quản lý thẻ rút tiền",
+        "id": "Manajemen kartu penarikan",
+        "pt": "Gerenciamento de cartão de saque",
+        "ja": "引き出しカード管理",
+        "ko": "출금 카드 관리",
+        "ms": "Pengurusan kad pengeluaran"
+    },
+    {
+        "zh": "账户人姓名",
+        "en": "Account holder's name",
+        "vi": "Tên chủ tài khoản",
+        "id": "Nama pemegang akun",
+        "pt": "Nome do titular da conta",
+        "ja": "アカウント所有者の名前",
+        "ko": "계정 소유자 이름",
+        "ms": "Nama pemegang akaun"
+    },
+    {
+        "zh": "成功总金额",
+        "en": "Total successful amount",
+        "vi": "Tổng số tiền thành công",
+        "id": "Jumlah total yang berhasil",
+        "pt": "Valor total bem-sucedido",
+        "ja": "合計成功金額",
+        "ko": "총 성공 금액",
+        "ms": "Jumlah keseluruhan yang berjaya"
+    },
+    {
+        "en": "Sort by balance in ascending order",
+        "vi": "Sắp xếp theo số dư tăng dần",
+        "id": "Sortir berdasarkan saldo secara menaik",
+        "pt": "Ordenar por saldo em ordem crescente",
+        "ja": "残高で昇順ソート",
+        "ko": "잔액 오름차순 정렬",
+        "ms": "Susun mengikut baki dalam urutan menaik",
+        "zh": "按余额顺序"
+    },
+    {
+        "en": "Sort by balance in reverse order",
+        "vi": "Sắp xếp theo số dư theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan saldo secara terbalik",
+        "pt": "Ordenar por saldo em ordem reversa",
+        "ja": "残高で逆順ソート",
+        "ko": "잔액 내림차순 정렬",
+        "ms": "Susun mengikut baki dalam urutan terbalik",
+        "zh": "按余额倒序"
+    },
+    {
+        "en": "Add sub-account",
+        "vi": "Thêm tài khoản phụ",
+        "id": "Tambahkan sub-akun",
+        "pt": "Adicionar subconta",
+        "ja": "サブアカウントを追加",
+        "ko": "서브 계정 추가",
+        "ms": "Tambah akaun sub",
+        "zh": "添加子账户"
+    },
+    {
+        "en": "View sub-account",
+        "vi": "Xem tài khoản phụ",
+        "id": "Lihat sub-akun",
+        "pt": "Visualizar subconta",
+        "ja": "サブアカウントを表示",
+        "ko": "서브 계정보기",
+        "ms": "Lihat akaun sub",
+        "zh": "查看子账户"
+    },
+    {
+        "en": "World pay payment",
+        "vi": "Thanh toán thế giới",
+        "id": "Pembayaran dunia",
+        "pt": "Pagamento mundial",
+        "ja": "ワールドペイ支払い",
+        "ko": "월드 페이 결제",
+        "ms": "Bayaran dunia",
+        "zh": "世界付支付"
+    },
+    {
+        "en": "Sort by balance in ascending order",
+        "vi": "Sắp xếp theo số dư tăng dần",
+        "id": "Sortir berdasarkan saldo secara menaik",
+        "pt": "Ordenar por saldo em ordem crescente",
+        "ja": "残高で昇順ソート",
+        "ko": "잔액 오름차순 정렬",
+        "ms": "Susun mengikut baki dalam urutan menaik",
+        "zh": "按余额顺序"
+    },
+    {
+        "en": "Sort by balance in reverse order",
+        "vi": "Sắp xếp theo số dư theo thứ tự ngược lại",
+        "id": "Sortir berdasarkan saldo secara terbalik",
+        "pt": "Ordenar por saldo em ordem reversa",
+        "ja": "残高で逆順ソート",
+        "ko": "잔액 내림차순 정렬",
+        "ms": "Susun mengikut baki dalam urutan terbalik",
+        "zh": "按余额倒序"
+    },
+    {
+        "en": "Merchant order number",
+        "vi": "Số đơn hàng của nhà cung cấp",
+        "id": "Nomor pesanan pedagang",
+        "pt": "Número do pedido do comerciante",
+        "ja": "商人注文番号",
+        "ko": "상인 주문 번호",
+        "ms": "Nombor pesanan peniaga",
+        "zh": "商户订单号"
+    },
+    {
+        "en": "Merchant order number",
+        "vi": "Số đơn hàng của nhà cung cấp",
+        "id": "Nomor pesanan pedagang",
+        "pt": "Número do pedido do comerciante",
+        "ja": "商人注文番号",
+        "ko": "상인 주문 번호",
+        "ms": "Nombor pesanan peniaga",
+        "zh": "商户订单号"
+    },
+    {
+        "en": "Not successfully called back",
+        "vi": "Không gọi lại thành công",
+        "id": "Tidak berhasil dipanggil kembali",
+        "pt": "Não chamado de volta com sucesso",
+        "ja": "コールバックに成功しませんでした",
+        "ko": "다시 호출되지 않음",
+        "ms": "Tidak dipanggil kembali dengan berjaya",
+        "zh": "未回调成功"
+    },
+    {
+        "en": "Merchant order number",
+        "vi": "Số đơn hàng của nhà cung cấp",
+        "id": "Nomor pesanan pedagang",
+        "pt": "Número do pedido do comerciante",
+        "ja": "商人注文番号",
+        "ko": "상인 주문 번호",
+        "ms": "Nombor pesanan peniaga",
+        "zh": "商户订单号"
+    },
+    {
+        "en": "Payee's name",
+        "vi": "Tên người nhận",
+        "id": "Nama penerima",
+        "pt": "Nome do beneficiário",
+        "ja": "受取人の名前",
+        "ko": "수취인 이름",
+        "ms": "Nama penerima",
+        "zh": "收款人姓名"
+    },
+    {
+        "en": "Payee's name",
+        "vi": "Tên người nhận",
+        "id": "Nama penerima",
+        "pt": "Nome do beneficiário",
+        "ja": "受取人の名前",
+        "ko": "수취인 이름",
+        "ms": "Nama penerima",
+        "zh": "收款人姓名"
+    },
+    {
+        "en": "Successful handling fee",
+        "vi": "Phí xử lý thành công",
+        "id": "Biaya penanganan berhasil",
+        "pt": "Taxa de processamento bem-sucedida",
+        "ja": "成功手数料",
+        "ko": "성공적인 수수료",
+        "ms": "Yuran pemprosesan berjaya",
+        "zh": "成功手续费"
+    },
+    {
+        "en": "Successful handling fee",
+        "vi": "Phí xử lý thành công",
+        "id": "Biaya penanganan berhasil",
+        "pt": "Taxa de processamento bem-sucedida",
+        "ja": "成功手数料",
+        "ko": "성공적인 수수료",
+        "ms": "Yuran pemprosesan berjaya",
+        "zh": "成功手续费"
+    },
+    {
+        "en": "Cardholder's name",
+        "vi": "Tên chủ thẻ",
+        "id": "Nama pemegang kartu",
+        "pt": "Nome do titular do cartão",
+        "ja": "カード所有者の名前",
+        "ko": "카드 소지자 이름",
+        "ms": "Nama pemegang kad",
+        "zh": "持卡人姓名"
+    },
+    {
+        "en": "Agent Account",
+        "vi": "Tài Khoản Đại Lý",
+        "id": "Akun Agen",
+        "pt": "Conta do Agente",
+        "ja": "代理店アカウント",
+        "ko": "에이전트 계정",
+        "ms": "Akaun Ejen",
+        "zh": "代理商账户"
+    },
+    {
+        "en": "Agent Sub-account",
+        "vi": "Tài Khoản Con Của Đại Lý",
+        "id": "Akun Sub Agen",
+        "pt": "Subconta do Agente",
+        "ja": "エージェントサブアカウント",
+        "ko": "에이전트 하위 계정",
+        "ms": "Akaun Sub Ejen",
+        "zh": "代理子账户"
+    },
+    {
+        "en": "Normal Administrator",
+        "vi": "Quản Trị Viên Thường",
+        "id": "Administrator Normal",
+        "pt": "Administrador Normal",
+        "ja": "通常の管理者",
+        "ko": "일반 관리자",
+        "ms": "Pentadbir Normal",
+        "zh": "普通管理员"
+    },
+    {
+        "zh": "选择卡类型",
+        "en": "Select Card Type",
+        "vi": "Chọn Loại Thẻ",
+        "id": "Pilih Jenis Kartu",
+        "pt": "Selecionar Tipo de Cartão",
+        "ja": "カードタイプを選択",
+        "ko": "카드 유형 선택",
+        "mo": "Картын төрлийг сонгох"
+    },
+    {
+        "zh": "银行用户名",
+        "en": "Bank Username",
+        "vi": "Tên người dùng ngân hàng",
+        "id": "Nama Pengguna Bank",
+        "pt": "Nome de Usuário do Banco",
+        "ja": "銀行のユーザー名",
+        "ko": "은행 사용자 이름",
+        "mo": "Банкны хэрэглэгчийн нэр"
+    },
+    {
+        "zh": "日收款上限",
+        "en": "Daily Collection Limit",
+        "vi": "Giới hạn Thu Nhận Hàng Ngày",
+        "id": "Batas Penerimaan Harian",
+        "pt": "Limite Diário de Recebimento",
+        "ja": "毎日の集金制限",
+        "ko": "일일 수금 한도",
+        "mo": "Өдөрт орлого хязгаар"
+    },
+    {
+        "zh": "分配出款者",
+        "en": "Assign Payout",
+        "vi": "Giao Dịch Thanh toán",
+        "id": "Assign Pembayaran",
+        "pt": "Atribuir Pagamento",
+        "ja": "支払いを割り当てる",
+        "ko": "지급 지정",
+        "mo": "Төлбөр үйлчлүүлэгчийг захиална"
+    },
+    {
+        "zh": "不明收入",
+        "en": "Unidentified income",
+        "vi": "Thu nhập không xác định",
+        "id": "Pendapatan yang tidak teridentifikasi",
+        "pt": "Renda não identificada",
+        "ja": "不明な収入",
+        "ko": "신원을 알 수없는 수입",
+        "ms": "Pendapatan tidak dikenal"
+    },
+    {
+        "zh": "重置密码",
+        "en": "Reset password",
+        "vi": "Đặt lại mật khẩu",
+        "id": "Atur ulang kata sandi",
+        "pt": "Redefinir senha",
+        "ja": "パスワードをリセットする",
+        "ko": "비밀번호 재설정",
+        "ms": "Tetapkan semula kata laluan"
+    },
+    {
+        "zh": "切换离线",
+        "en": "Switch offline",
+        "vi": "Chuyển đổi ngoại tuyến",
+        "id": "Beralih offline",
+        "pt": "Mudar offline",
+        "ja": "オフライン切り替え",
+        "ko": "오프라인 전환",
+        "ms": "Tukar offline"
+    },
+    {
+        "zh": "退出登录",
+        "en": "Log out",
+        "vi": "Đăng xuất",
+        "id": "Keluar masuk",
+        "pt": "Sair",
+        "ja": "ログアウト",
+        "ko": "로그 아웃",
+        "ms": "Log keluar"
+    },
+    {
+        "zh": "收款管理",
+        "en": "Collection management",
+        "vi": "Quản lý thu tiền",
+        "id": "Manajemen koleksi",
+        "pt": "Gerenciamento de coleção",
+        "ja": "受け取り管理",
+        "ko": "수금 관리",
+        "ms": "Pengurusan koleksi"
+    },
+    {
+        "zh": "收款通道",
+        "en": "Collection channel",
+        "vi": "Kênh thu",
+        "id": "Saluran penerimaan",
+        "pt": "Canal de recebimento",
+        "ja": "収集チャネル",
+        "ko": "수집 채널",
+        "ms": "Saluran penerimaan"
+    },
+    {
+        "zh": "收款银行",
+        "en": "Collection bank",
+        "vi": "Ngân hàng thu",
+        "id": "Bank koleksi",
+        "pt": "Banco de coleção",
+        "ja": "収集銀行",
+        "ko": "수금 은행",
+        "ms": "Bank koleksi"
+    },
+    {
+        "zh": "银行脚本",
+        "en": "Bank script",
+        "vi": "Tập lệnh ngân hàng",
+        "id": "Skrip bank",
+        "pt": "Script bancário",
+        "ja": "銀行スクリプト",
+        "ko": "은행 스크립트",
+        "ms": "Skrip bank"
+    },
+    {
+        "zh": "商家管理",
+        "en": "Merchant management",
+        "vi": "Quản lý thương nhân",
+        "id": "Manajemen pedagang",
+        "pt": "Gerenciamento de comerciante",
+        "ja": "商人管理",
+        "ko": "상인 관리",
+        "ms": "Pengurusan peniaga"
+    },
+    {
+        "zh": "商户列表",
+        "en": "Merchant list",
+        "vi": "Danh sách thương nhân",
+        "id": "Daftar pedagang",
+        "pt": "Lista de comerciantes",
+        "ja": "商人リスト",
+        "ko": "상인 목록",
+        "ms": "Senarai peniaga"
+    },
+    {
+        "zh": "订单列表",
+        "en": "Order list",
+        "vi": "Danh sách đơn hàng",
+        "id": "Daftar pesanan",
+        "pt": "Lista de pedidos",
+        "ja": "注文リスト",
+        "ko": "주문 목록",
+        "ms": "Senarai pesanan"
+    },
+    {
+        "zh": "审核列表",
+        "en": "Audit list",
+        "vi": "Danh sách kiểm toán",
+        "id": "Daftar audit",
+        "pt": "Lista de auditoria",
+        "ja": "監査リスト",
+        "ko": "감사 목록",
+        "ms": "Senarai audit"
+    },
+    {
+        "zh": "内充列表",
+        "en": "Internal charging list",
+        "vi": "Danh sách nạp nội bộ",
+        "id": "Daftar pengisian internal",
+        "pt": "Lista de cobrança interna",
+        "ja": "内部充電リスト",
+        "ko": "내부 충전 목록",
+        "ms": "Senarai pemuatan dalaman"
+    },
+    {
+        "zh": "掉单列表",
+        "en": "Drop list",
+        "vi": "Danh sách thả",
+        "id": "Daftar drop",
+        "pt": "Lista de drop",
+        "ja": "ドロップリスト",
+        "ko": "드롭 목록",
+        "ms": "Senarai jatuh"
+    },
+    {
+        "zh": "提现申请",
+        "en": "Withdrawal application",
+        "vi": "Đơn rút tiền",
+        "id": "Aplikasi penarikan",
+        "pt": "Aplicação de saque",
+        "ja": "引き出し申請",
+        "ko": "인출 신청",
+        "ms": "Permohonan pengeluaran"
+    },
+    {
+        "zh": "回调记录",
+        "en": "Callback record",
+        "vi": "Ghi chú gọi lại",
+        "id": "Catatan panggilan balik",
+        "pt": "Registro de retorno",
+        "ja": "コールバックレコード",
+        "ko": "콜백 레코드",
+        "ms": "Rekod panggilan balik"
+    },
+    {
+        "zh": "财务管理",
+        "en": "Financial management",
+        "vi": "Quản lý tài chính",
+        "id": "Manajemen keuangan",
+        "pt": "Gestão financeira",
+        "ja": "財務管理",
+        "ko": "재무 관리",
+        "ms": "Pengurusan kewangan"
+    },
+    {
+        "zh": "对账日报",
+        "en": "Account day report",
+        "vi": "Báo cáo ngày tài khoản",
+        "id": "Laporan harian rekening",
+        "pt": "Relatório diário de conta",
+        "ja": "アカウント日報",
+        "ko": "계좌 일일 보고서",
+        "ms": "Laporan hari akaun"
+    },
+    {
+        "zh": "商户报表",
+        "en": "Merchant report",
+        "vi": "Báo cáo thương nhân",
+        "id": "Laporan pedagang",
+        "pt": "Relatório do comerciante",
+        "ja": "商人のレポート",
+        "ko": "상인 보고서",
+        "ms": "Laporan peniaga"
+    },
+    {
+        "zh": "代付管理",
+        "en": "Proxy management",
+        "vi": "Quản lý ủy quyền",
+        "id": "Manajemen proksi",
+        "pt": "Gerenciamento de proxy",
+        "ja": "プロキシ管理",
+        "ko": "프록시 관리",
+        "ms": "Pengurusan proksi"
+    },
+    {
+        "zh": "代付配置",
+        "en": "Proxy configuration",
+        "vi": "Cấu hình ủy quyền",
+        "id": "Konfigurasi proksi",
+        "pt": "Configuração de proxy",
+        "ja": "プロキシ設定",
+        "ko": "프록시 구성",
+        "ms": "Konfigurasi proksi"
+    },
+    {
+        "zh": "姓名检测",
+        "en": "Name detection",
+        "vi": "Phát hiện tên",
+        "id": "Deteksi nama",
+        "pt": "Detecção de nome",
+        "ja": "名前の検出",
+        "ko": "이름 감지",
+        "ms": "Pengecaman nama"
+    },
+    {
+        "zh": "代付订单",
+        "en": "Proxy payment order",
+        "vi": "Đơn đặt hàng thanh toán ủy quyền",
+        "id": "Pesanan pembayaran proksi",
+        "pt": "Ordem de pagamento de procuração",
+        "ja": "代理支払注文",
+        "ko": "프록시 지불 주문",
+        "ms": "Pesanan pembayaran proksi"
+    },
+    {
+        "zh": "回调记录",
+        "en": "Callback record",
+        "vi": "Ghi chú gọi lại",
+        "id": "Catatan panggilan balik",
+        "pt": "Registro de retorno",
+        "ja": "コールバックレコード",
+        "ko": "콜백 레코드",
+        "ms": "Rekod panggilan balik"
+    },
+    {
+        "zh": "交易流水",
+        "en": "Transaction flow",
+        "vi": "Dòng giao dịch",
+        "id": "Arus transaksi",
+        "pt": "Fluxo de transações",
+        "ja": "トランザクションフロー",
+        "ko": "거래 흐름",
+        "ms": "Aliran transaksi"
+    },
+    {
+        "zh": "自动脚本",
+        "en": "Automatic script",
+        "vi": "Tập lệnh tự động",
+        "id": "Skrip otomatis",
+        "pt": "Script automático",
+        "ja": "自動スクリプト",
+        "ko": "자동 스크립트",
+        "ms": "Skrip automatik"
+    },
+    {
+        "zh": "任务列表",
+        "en": "Task list",
+        "vi": "Danh sách công việc",
+        "id": "Daftar tugas",
+        "pt": "Lista de tarefas",
+        "ja": "タスクリスト",
+        "ko": "작업 목록",
+        "ms": "Senarai tugas"
+    },
+    {
+        "zh": "账户管理",
+        "en": "Account management",
+        "vi": "Quản lý tài khoản",
+        "id": "Manajemen akun",
+        "pt": "Gerenciamento de conta",
+        "ja": "アカウント管理",
+        "ko": "계정 관리",
+        "ms": "Pengurusan akaun"
+    },
+    {
+        "zh": "系统管理",
+        "en": "System management",
+        "vi": "Quản lý hệ thống",
+        "id": "Manajemen sistem",
+        "pt": "Gerenciamento de sistema",
+        "ja": "システム管理",
+        "ko": "시스템 관리",
+        "ms": "Pengurusan sistem"
+    },
+    {
+        "zh": "系统设置",
+        "en": "System settings",
+        "vi": "Cài đặt hệ thống",
+        "id": "Pengaturan sistem",
+        "pt": "Configurações do sistema",
+        "ja": "システム設定",
+        "ko": "시스템 설정",
+        "ms": "Tetapan sistem"
+    },
+    {
+        "zh": "导出文件",
+        "en": "Export file",
+        "vi": "Xuất tệp",
+        "id": "Ekspor file",
+        "pt": "Exportar arquivo",
+        "ja": "エクスポートファイル",
+        "ko": "내보내기 파일",
+        "ms": "Fail eksport"
+    },
+    {
+        "zh": "请求日志",
+        "en": "Request log",
+        "vi": "Nhật ký yêu cầu",
+        "id": "Log permintaan",
+        "pt": "Log de solicitações",
+        "ja": "リクエストログ",
+        "ko": "요청 로그",
+        "ms": "Log permintaan"
+    },
+    {
+        "zh": "接入指南",
+        "en": "Access guide",
+        "vi": "Hướng dẫn truy cập",
+        "id": "Panduan akses",
+        "pt": "Guia de acesso",
+        "ja": "アクセスガイド",
+        "ko": "액세스 가이드",
+        "ms": "Panduan akses"
+    },
+    {
+        "zh": "账户状态",
+        "en": "Account status",
+        "vi": "Tình trạng tài khoản",
+        "id": "Status akun",
+        "pt": "Status da conta",
+        "ja": "アカウントの状態",
+        "ko": "계정 상태",
+        "ms": "Status akaun"
+    },
+    {
+        "zh": "批量添加",
+        "en": "Batch addition",
+        "vi": "Thêm lô",
+        "id": "Penambahan kelompok",
+        "pt": "Adição em lote",
+        "ja": "一括追加",
+        "ko": "일괄 추가",
+        "ms": "Penambahan berkelompok"
+    },
+    {
+        "zh": "批量检测",
+        "en": "Batch detection",
+        "vi": "Phát hiện lô",
+        "id": "Deteksi kelompok",
+        "pt": "Detecção em lote",
+        "ja": "バッチ検出",
+        "ko": "일괄 검출",
+        "ms": "Pengecaman berkelompok"
+    },
+    {
+        "zh": "绑定数量",
+        "en": "Binding quantity",
+        "vi": "Số lượng ràng buộc",
+        "id": "Jumlah ikatan",
+        "pt": "Quantidade de ligação",
+        "ja": "バインディング数量",
+        "ko": "바인딩 수량",
+        "ms": "Jumlah ikatan"
+    },
+    {
+        "zh": "添加时间",
+        "en": "Add time",
+        "vi": "Thời gian thêm",
+        "id": "Waktu tambahan",
+        "pt": "Tempo de adição",
+        "ja": "追加時間",
+        "ko": "추가 시간",
+        "ms": "Masa tambahan"
+    },
+    {
+        "zh": "银行列表",
+        "en": "Bank list",
+        "vi": "Danh sách ngân hàng",
+        "id": "Daftar bank",
+        "pt": "Lista de bancos",
+        "ja": "銀行リスト",
+        "ko": "은행 목록",
+        "ms": "Senarai bank"
+    },
+    {
+        "zh": "通道名称",
+        "en": "Channel name",
+        "vi": "Tên kênh",
+        "id": "Nama saluran",
+        "pt": "Nome do canal",
+        "ja": "チャネル名",
+        "ko": "채널 이름",
+        "ms": "Nama saluran"
+    },
+    {
+        "zh": "通道状态",
+        "en": "Channel status",
+        "vi": "Tình trạng kênh",
+        "id": "Status saluran",
+        "pt": "Status do canal",
+        "ja": "チャネルステータス",
+        "ko": "채널 상태",
+        "ms": "Status saluran"
+    },
+    {
+        "zh": "暂无数据",
+        "en": "No data",
+        "vi": "Không có dữ liệu",
+        "id": "Tidak ada data",
+        "pt": "Sem dados",
+        "ja": "データなし",
+        "ko": "데이터 없음",
+        "ms": "Tiada data"
+    },
+    {
+        "zh": "操作日期",
+        "en": "Operation date",
+        "vi": "Ngày thực hiện",
+        "id": "Tanggal operasi",
+        "pt": "Data de operação",
+        "ja": "操作日",
+        "ko": "운영 날짜",
+        "ms": "Tarikh operasi"
+    },
+    {
+        "zh": "系统配置",
+        "en": "System configuration",
+        "vi": "Cấu hình hệ thống",
+        "id": "Konfigurasi sistem",
+        "pt": "Configuração do sistema",
+        "ja": "システム構成",
+        "ko": "시스템 구성",
+        "ms": "Konfigurasi sistem"
+    },
+    {
+        "zh": "今日增长",
+        "en": "Today's growth",
+        "vi": "Sự tăng trưởng hôm nay",
+        "id": "Pertumbuhan hari ini",
+        "pt": "Crescimento de hoje",
+        "ja": "今日の成長",
+        "ko": "오늘의 성장",
+        "ms": "Pertumbuhan hari ini"
+    },
+    {
+        "zh": "文件路径",
+        "en": "File path",
+        "vi": "Đường dẫn tệp",
+        "id": "Lokasi file",
+        "pt": "Caminho do arquivo",
+        "ja": "ファイルパス",
+        "ko": "파일 경로",
+        "ms": "Laluan fail"
+    },
+    {
+        "zh": "导出时间",
+        "en": "Export time",
+        "vi": "Thời gian xuất",
+        "id": "Waktu ekspor",
+        "pt": "Hora de exportação",
+        "ja": "エクスポート時間",
+        "ko": "내보내기 시간",
+        "ms": "Masa eksport"
+    },
+    {
+        "zh": "批量删除",
+        "en": "Batch delete",
+        "vi": "Xóa lô",
+        "id": "Penghapusan kelompok",
+        "pt": "Exclusão em lote",
+        "ja": "バッチ削除",
+        "ko": "일괄 삭제",
+        "ms": "Penghapusan berkelompok"
+    },
+    {
+        "zh": "文件大小",
+        "en": "File size",
+        "vi": "Kích thước tập tin",
+        "id": "Ukuran file",
+        "pt": "Tamanho do arquivo",
+        "ja": "ファイルサイズ",
+        "ko": "파일 크기",
+        "ms": "Saiz fail"
+    },
+    {
+        "zh": "导出状态",
+        "en": "Export status",
+        "vi": "Trạng thái xuất",
+        "id": "Status ekspor",
+        "pt": "Status de exportação",
+        "ja": "エクスポートステータス",
+        "ko": "내보내기 상태",
+        "ms": "Status eksport"
+    },
+    {
+        "zh": "导出时间",
+        "en": "Export time",
+        "vi": "Thời gian xuất",
+        "id": "Waktu ekspor",
+        "pt": "Hora de exportação",
+        "ja": "エクスポート時間",
+        "ko": "내보내기 시간",
+        "ms": "Masa eksport"
+    },
+    {
+        "zh": "导出成功",
+        "en": "Export success",
+        "vi": "Xuất khẩu thành công",
+        "id": "Sukses ekspor",
+        "pt": "Exportação bem sucedida",
+        "ja": "エクスポート成功",
+        "ko": "내보내기 성공",
+        "ms": "Berjaya diimport"
+    },
+    {
+        "zh": "导出失败",
+        "en": "Export failed",
+        "vi": "Xuất khẩu không thành công",
+        "id": "Gagal ekspor",
+        "pt": "Exportação falhou",
+        "ja": "エクスポートに失敗しました",
+        "ko": "내보내기 실패",
+        "ms": "Gagal diimport"
+    },
+    {
+        "zh": "银行名称",
+        "en": "Bank name",
+        "vi": "Tên ngân hàng",
+        "id": "Nama bank",
+        "pt": "Nome do banco",
+        "ja": "銀行名",
+        "ko": "은행 이름",
+        "ms": "Nama bank"
+    },
+    {
+        "zh": "运行时间",
+        "en": "Running time",
+        "vi": "Thời gian chạy",
+        "id": "Waktu berjalan",
+        "pt": "Tempo de execução",
+        "ja": "ランニングタイム",
+        "ko": "운영 시간",
+        "ms": "Masa berjalan"
+    },
+    {
+        "zh": "请求模式",
+        "en": "Request mode",
+        "vi": "Chế độ yêu cầu",
+        "id": "Mode permintaan",
+        "pt": "Modo de solicitação",
+        "ja": "リクエストモード",
+        "ko": "요청 모드",
+        "ms": "Mod permintaan"
+    },
+    {
+        "zh": "请求内容",
+        "en": "Request content",
+        "vi": "Nội dung yêu cầu",
+        "id": "Konten permintaan",
+        "pt": "Conteúdo da solicitação",
+        "ja": "リクエストコンテンツ",
+        "ko": "요청 내용",
+        "ms": "Kandungan permintaan"
+    },
+    {
+        "zh": "请求地址",
+        "en": "Request address",
+        "vi": "Địa chỉ yêu cầu",
+        "id": "Alamat permintaan",
+        "pt": "Endereço de solicitação",
+        "ja": "要求アドレス",
+        "ko": "요청 주소",
+        "ms": "Alamat permintaan"
+    },
+    {
+        "zh": "响应备注",
+        "en": "Response note",
+        "vi": "Ghi chú phản hồi",
+        "id": "Catatan tanggapan",
+        "pt": "Nota de resposta",
+        "ja": "応答ノート",
+        "ko": "응답 노트",
+        "ms": "Nota respons"
+    },
+    {
+        "zh": "请求时间",
+        "en": "Request time",
+        "vi": "Thời gian yêu cầu",
+        "id": "Waktu permintaan",
+        "pt": "Tempo de solicitação",
+        "ja": "リクエスト時間",
+        "ko": "요청 시간",
+        "ms": "Masa permintaan"
+    },
+    {
+        "zh": "代理账号",
+        "en": "Proxy account",
+        "vi": "Tài khoản ủy quyền",
+        "id": "Akun proksi",
+        "pt": "Conta de proxy",
+        "ja": "プロキシアカウント",
+        "ko": "프록시 계정",
+        "ms": "Akaun proksi"
+    },
+    {
+        "zh": "银行类型",
+        "en": "Bank type",
+        "vi": "Loại ngân hàng",
+        "id": "Jenis bank",
+        "pt": "Tipo de banco",
+        "ja": "銀行の種類",
+        "ko": "은행 유형",
+        "ms": "Jenis bank"
+    },
+    {
+        "zh": "选择位置",
+        "en": "Choose location",
+        "vi": "Chọn vị trí",
+        "id": "Pilih lokasi",
+        "pt": "Escolha a localização",
+        "ja": "位置を選択",
+        "ko": "위치 선택",
+        "ms": "Pilih lokasi"
+    },
+    {
+        "zh": "代理账号",
+        "en": "Proxy account",
+        "vi": "Tài khoản ủy quyền",
+        "id": "Akun proksi",
+        "pt": "Conta de proxy",
+        "ja": "プロキシアカウント",
+        "ko": "프록시 계정",
+        "ms": "Akaun proksi"
+    },
+    {
+        "zh": "银行类型",
+        "en": "Bank type",
+        "vi": "Loại ngân hàng",
+        "id": "Jenis bank",
+        "pt": "Tipo de banco",
+        "ja": "銀行の種類",
+        "ko": "은행 유형",
+        "ms": "Jenis bank"
+    },
+    {
+        "zh": "银行名字",
+        "en": "Bank name",
+        "vi": "Tên ngân hàng",
+        "id": "Nama bank",
+        "pt": "Nome do banco",
+        "ja": "銀行名",
+        "ko": "은행 이름",
+        "ms": "Nama bank"
+    },
+    {
+        "zh": "初始余额",
+        "en": "Initial balance",
+        "vi": "Số dư ban đầu",
+        "id": "Saldo awal",
+        "pt": "Saldo inicial",
+        "ja": "初期残高",
+        "ko": "초기 잔액",
+        "ms": "Baki awal"
+    },
+    {
+        "zh": "订购金额",
+        "en": "Order amount",
+        "vi": "Số tiền đặt hàng",
+        "id": "Jumlah pesanan",
+        "pt": "Quantidade de pedidos",
+        "ja": "注文額",
+        "ko": "주문 금액",
+        "ms": "Jumlah pesanan"
+    },
+    {
+        "zh": "实时余额",
+        "en": "Real-time balance",
+        "vi": "Số dư thời gian thực",
+        "id": "Saldo real-time",
+        "pt": "Saldo em tempo real",
+        "ja": "リアルタイムバランス",
+        "ko": "실시간 잔액",
+        "ms": "Baki masa sebenar"
+    },
+    {
+        "zh": "其他转入",
+        "en": "Other transfer in",
+        "vi": "Chuyển khoản khác vào",
+        "id": "Transfer lain masuk",
+        "pt": "Outra transferência",
+        "ja": "他の転入",
+        "ko": "기타 전입",
+        "ms": "Pemindahan lain masuk"
+    },
+    {
+        "zh": "其他转出",
+        "en": "Other transfer out",
+        "vi": "Chuyển khoản khác ra",
+        "id": "Transfer lain keluar",
+        "pt": "Outra transferência",
+        "ja": "他の転出",
+        "ko": "기타 이체",
+        "ms": "Pemindahan lain keluar"
+    },
+    {
+        "zh": "其他转出",
+        "en": "Other transfer out",
+        "vi": "Chuyển khoản khác ra",
+        "id": "Transfer lain keluar",
+        "pt": "Outra transferência",
+        "ja": "他の転出",
+        "ko": "기타 이체",
+        "ms": "Pemindahan lain keluar"
+    },
+    {
+        "zh": "银行名字",
+        "en": "Bank name",
+        "vi": "Tên ngân hàng",
+        "id": "Nama bank",
+        "pt": "Nome do banco",
+        "ja": "銀行名",
+        "ko": "은행 이름",
+        "ms": "Nama bank"
+    },
+    {
+        "zh": "先前余额",
+        "en": "Previous balance",
+        "vi": "Số dư trước",
+        "id": "Saldo sebelumnya",
+        "pt": "Saldo anterior",
+        "ja": "前の残高",
+        "ko": "이전 잔액",
+        "ms": "Baki sebelumnya"
+    },
+    {
+        "zh": "当前余额",
+        "en": "Current balance",
+        "vi": "Số dư hiện tại",
+        "id": "Saldo saat ini",
+        "pt": "Saldo atual",
+        "ja": "現在の残高",
+        "ko": "현재 잔액",
+        "ms": "Baki semasa"
+    },
+    {
+        "zh": "要求的钱",
+        "en": "Requested money",
+        "vi": "Tiền được yêu cầu",
+        "id": "Uang yang diminta",
+        "pt": "Dinheiro solicitado",
+        "ja": "要求されたお金",
+        "ko": "요청된 돈",
+        "ms": "Wang yang diminta"
+    },
+    {
+        "zh": "转移金额",
+        "en": "Transfer amount",
+        "vi": "Số tiền chuyển khoản",
+        "id": "Jumlah transfer",
+        "pt": "Quantidade de transferência",
+        "ja": "転送金額",
+        "ko": "이체 금액",
+        "ms": "Jumlah pemindahan"
+    },
+    {
+        "zh": "订单时间",
+        "en": "Order time",
+        "vi": "Thời gian đặt hàng",
+        "id": "Waktu pesanan",
+        "pt": "Tempo de pedido",
+        "ja": "注文時間",
+        "ko": "주문 시간",
+        "ms": "Masa pesanan"
+    },
+    {
+        "zh": "付款时间",
+        "en": "Payment time",
+        "vi": "Thời gian thanh toán",
+        "id": "Waktu pembayaran",
+        "pt": "Tempo de pagamento",
+        "ja": "支払い時間",
+        "ko": "지불 시간",
+        "ms": "Masa pembayaran"
+    },
+    {
+        "zh": "订单状态",
+        "en": "Order status",
+        "vi": "Trạng thái đặt hàng",
+        "id": "Status pesanan",
+        "pt": "Status do pedido",
+        "ja": "注文ステータス",
+        "ko": "주문 상태",
+        "ms": "Status pesanan"
+    },
+    {
+        "zh": "接受状态",
+        "en": "Acceptance status",
+        "vi": "Trạng thái chấp nhận",
+        "id": "Status penerimaan",
+        "pt": "Status de aceitação",
+        "ja": "受入れステータス",
+        "ko": "수용 상태",
+        "ms": "Status penerimaan"
+    },
+    {
+        "zh": "管理权限",
+        "en": "Management authority",
+        "vi": "Quyền quản lý",
+        "id": "Otoritas manajemen",
+        "pt": "Autoridade de gestão",
+        "ja": "管理権限",
+        "ko": "관리 권한",
+        "ms": "Kuasa pengurusan"
+    },
+    {
+        "zh": "总闸管理",
+        "en": "Total gate management",
+        "vi": "Quản lý cổng tổng",
+        "id": "Manajemen pintu total",
+        "pt": "Gerenciamento total do portão",
+        "ja": "トータルゲート管理",
+        "ko": "총 관리 문",
+        "ms": "Pengurusan pintu total"
+    },
+    {
+        "zh": "商家管理",
+        "en": "Merchant management",
+        "vi": "Quản lý thương nhân",
+        "id": "Manajemen pedagang",
+        "pt": "Gerenciamento de comerciantes",
+        "ja": "商人管理",
+        "ko": "상인 관리",
+        "ms": "Pengurusan peniaga"
+    },
+    {
+        "zh": "收款管理",
+        "en": "Collection management",
+        "vi": "Quản lý thu tiền",
+        "id": "Manajemen koleksi",
+        "pt": "Gerenciamento de cobrança",
+        "ja": "収集管理",
+        "ko": "수집 관리",
+        "ms": "Pengurusan koleksi"
+    },
+    {
+        "zh": "商家管理",
+        "en": "Merchant management",
+        "vi": "Quản lý thương nhân",
+        "id": "Manajemen pedagang",
+        "pt": "Gerenciamento de comerciantes",
+        "ja": "商人管理",
+        "ko": "상인 관리",
+        "ms": "Pengurusan peniaga"
+    },
+    {
+        "zh": "财务管理",
+        "en": "Financial management",
+        "vi": "Quản lý tài chính",
+        "id": "Manajemen keuangan",
+        "pt": "Gestão financeira",
+        "ja": "財務管理",
+        "ko": "재무 관리",
+        "ms": "Pengurusan kewangan"
+    },
+    {
+        "zh": "商户报表",
+        "en": "Merchant report",
+        "vi": "Báo cáo thương nhân",
+        "id": "Laporan pedagang",
+        "pt": "Relatório do comerciante",
+        "ja": "商人レポート",
+        "ko": "상인 보고서",
+        "ms": "Laporan peniaga"
+    },
+    {
+        "zh": "账户管理",
+        "en": "Account management",
+        "vi": "Quản lý tài khoản",
+        "id": "Manajemen akun",
+        "pt": "Gerenciamento de contas",
+        "ja": "アカウント管理",
+        "ko": "계정 관리",
+        "ms": "Pengurusan akaun"
+    },
+    {
+        "zh": "系统管理",
+        "en": "System management",
+        "vi": "Quản lý hệ thống",
+        "id": "Manajemen sistem",
+        "pt": "Gestão de sistemas",
+        "ja": "システム管理",
+        "ko": "시스템 관리",
+        "ms": "Pengurusan sistem"
+    },
+    {
+        "zh": "功能开关",
+        "en": "Function switch",
+        "vi": "Chuyển chức năng",
+        "id": "Switch fungsi",
+        "pt": "Interruptor de função",
+        "ja": "機能スイッチ",
+        "ko": "기능 스위치",
+        "ms": "Pemintas fungsi"
+    },
+    {
+        "zh": "管理权限",
+        "en": "Management authority",
+        "vi": "Quyền quản lý",
+        "id": "Otoritas manajemen",
+        "pt": "Autoridade de gestão",
+        "ja": "管理権限",
+        "ko": "관리 권한",
+        "ms": "Kuasa pengurusan"
+    },
+    {
+        "zh": "代付管理",
+        "en": "Payment management",
+        "vi": "Quản lý thanh toán",
+        "id": "Manajemen pembayaran",
+        "pt": "Gerenciamento de pagamento",
+        "ja": "ペイメント管理",
+        "ko": "결제 관리",
+        "ms": "Pengurusan pembayaran"
+    },
+    {
+        "zh": "代付订单",
+        "en": "Payment order",
+        "vi": "Đơn hàng thanh toán",
+        "id": "Pesanan pembayaran",
+        "pt": "Ordem de pagamento",
+        "ja": "ペイメントオーダー",
+        "ko": "결제 주문",
+        "ms": "Pesanan pembayaran"
+    },
+    {
+        "zh": "代付配置",
+        "en": "Payment configuration",
+        "vi": "Cấu hình thanh toán",
+        "id": "Konfigurasi pembayaran",
+        "pt": "Configuração de pagamento",
+        "ja": "ペイメント構成",
+        "ko": "결제 구성",
+        "ms": "Konfigurasi pembayaran"
+    },
+    {
+        "zh": "余额上限",
+        "en": "Balance upper limit",
+        "vi": "Giới hạn số dư trên",
+        "id": "Batas atas saldo",
+        "pt": "Limite superior do saldo",
+        "ja": "残高上限",
+        "ko": "잔액 상한선",
+        "ms": "Had atas baki"
+    },
+    {
+        "zh": "脚本执行",
+        "en": "Script execution",
+        "vi": "Thực hiện kịch bản",
+        "id": "Eksekusi skrip",
+        "pt": "Execução de script",
+        "ja": "スクリプト実行",
+        "ko": "스크립트 실행",
+        "ms": "Pelaksanaan skrip"
+    },
+    {
+        "zh": "付款方式",
+        "en": "Payment method",
+        "vi": "Phương thức thanh toán",
+        "id": "Metode pembayaran",
+        "pt": "Método de pagamento",
+        "ja": "支払い方法",
+        "ko": "지불 방법",
+        "ms": "Kaedah pembayaran"
+    },
+    {
+        "zh": "卡用户名",
+        "en": "Card username",
+        "vi": "Tên người dùng thẻ",
+        "id": "Nama pengguna kartu",
+        "pt": "Nome de usuário do cartão",
+        "ja": "カードユーザー名",
+        "ko": "카드 사용자 이름",
+        "ms": "Nama pengguna kad"
+    },
+    {
+        "zh": "启用脚本",
+        "en": "Enable script",
+        "vi": "Bật kịch bản",
+        "id": "Aktifkan skrip",
+        "pt": "Ativar script",
+        "ja": "スクリプトを有効にする",
+        "ko": "스크립트 활성화",
+        "ms": "Membolehkan skrip"
+    },
+    {
+        "zh": "余额更新",
+        "en": "Balance update",
+        "vi": "Cập nhật số dư",
+        "id": "Pembaruan saldo",
+        "pt": "Atualização do saldo",
+        "ja": "残高更新",
+        "ko": "잔액 업데이트",
+        "ms": "Kemas kini baki"
+    },
+    {
+        "zh": "执行脚本",
+        "en": "Execute script",
+        "vi": "Chạy kịch bản",
+        "id": "Jalankan skrip",
+        "pt": "Executar script",
+        "ja": "スクリプトを実行",
+        "ko": "스크립트 실행",
+        "ms": "Melaksanakan skrip"
+    },
+    {
+        "zh": "脚本日志",
+        "en": "Script log",
+        "vi": "Nhật ký kịch bản",
+        "id": "Log skrip",
+        "pt": "Log do script",
+        "ja": "スクリプトログ",
+        "ko": "스크립트 로그",
+        "ms": "Log skrip"
+    },
+    {
+        "zh": "爬虫明细",
+        "en": "Crawler details",
+        "vi": "Chi tiết crawler",
+        "id": "Rincian crawler",
+        "pt": "Detalhes do rastreador",
+        "ja": "クローラーの詳細",
+        "ko": "크롤러 세부 정보",
+        "ms": "Butiran pengesan"
+    },
+    {
+        "zh": "可用余额",
+        "en": "Available balance",
+        "vi": "Số dư khả dụng",
+        "id": "Saldo tersedia",
+        "pt": "Saldo disponível",
+        "ja": "利用可能残高",
+        "ko": "가용 잔액",
+        "ms": "Baki tersedia"
+    },
+    {
+        "zh": "注册时间",
+        "en": "Registration time",
+        "vi": "Thời gian đăng ký",
+        "id": "Waktu registrasi",
+        "pt": "Tempo de registro",
+        "ja": "登録時間",
+        "ko": "등록 시간",
+        "ms": "Masa pendaftaran"
+    },
+    {
+        "zh": "响应内容",
+        "en": "Response content",
+        "vi": "Nội dung phản hồi",
+        "id": "Konten respons",
+        "pt": "Conteúdo de resposta",
+        "ja": "レスポンスコンテンツ",
+        "ko": "응답 내용",
+        "ms": "Kandungan respons"
+    },
+    {
+        "zh": "商家订单",
+        "en": "Merchant orders",
+        "vi": "Đơn hàng của nhà cung cấp",
+        "id": "Pesanan pedagang",
+        "pt": "Pedidos do comerciante",
+        "ja": "商人注文",
+        "ko": "상인 주문",
+        "ms": "Pesanan peniaga"
+    },
+    {
+        "zh": "回调内容",
+        "en": "Callback content",
+        "vi": "Nội dung gọi lại",
+        "id": "Konten callback",
+        "pt": "Conteúdo de retorno de chamada",
+        "ja": "コールバックコンテンツ",
+        "ko": "콜백 내용",
+        "ms": "Kandungan panggilan balik"
+    },
+    {
+        "zh": "回调地址",
+        "en": "Callback address",
+        "vi": "Địa chỉ gọi lại",
+        "id": "Alamat callback",
+        "pt": "Endereço de retorno de chamada",
+        "ja": "コールバックアドレス",
+        "ko": "콜백 주소",
+        "ms": "Alamat panggilan balik"
+    },
+    {
+        "zh": "申请单数",
+        "en": "Number of applications",
+        "vi": "Số lượng ứng dụng",
+        "id": "Jumlah aplikasi",
+        "pt": "Número de aplicações",
+        "ja": "申請数",
+        "ko": "신청 수",
+        "ms": "Bilangan permohonan"
+    },
+    {
+        "zh": "总手续费",
+        "en": "Total handling fee",
+        "vi": "Tổng phí xử lý",
+        "id": "Total biaya penanganan",
+        "pt": "Taxa de manuseio total",
+        "ja": "合計手数料",
+        "ko": "총 수수료",
+        "ms": "Yuran pemprosesan keseluruhan"
+    },
+    {
+        "zh": "内部收费",
+        "en": "Internal charges",
+        "vi": "Các khoản phí nội bộ",
+        "id": "Biaya internal",
+        "pt": "Taxas internas",
+        "ja": "内部料金",
+        "ko": "내부 요금",
+        "ms": "Yuran dalaman"
+    },
+    {
+        "zh": "订单总数",
+        "en": "Total number of orders",
+        "vi": "Tổng số đơn hàng",
+        "id": "Total pesanan",
+        "pt": "Número total de pedidos",
+        "ja": "総注文数",
+        "ko": "총 주문 수",
+        "ms": "Jumlah pesanan keseluruhan"
+    },
+    {
+        "zh": "记录时间",
+        "en": "Record time",
+        "vi": "Thời gian ghi nhận",
+        "id": "Waktu catatan",
+        "pt": "Tempo de registro",
+        "ja": "記録時間",
+        "ko": "기록 시간",
+        "ms": "Masa rekod"
+    },
+    {
+        "zh": "处理时间",
+        "en": "Processing time",
+        "vi": "Thời gian xử lý",
+        "id": "Waktu pemrosesan",
+        "pt": "Tempo de processamento",
+        "ja": "処理時間",
+        "ko": "처리 시간",
+        "ms": "Masa pemprosesan"
+    },
+    {
+        "en": "Processing status",
+        "vi": "Trạng thái xử lý",
+        "id": "Status pemrosesan",
+        "pt": "Status de processamento",
+        "ja": "処理状態",
+        "ko": "처리 상태",
+        "ms": "Status pemprosesan",
+        "zh": "处理状态"
+    },
+    {
+        "en": "Sorting method",
+        "vi": "Phương pháp sắp xếp",
+        "id": "Metode pengurutan",
+        "pt": "Método de classificação",
+        "ja": "ソート方法",
+        "ko": "정렬 방법",
+        "ms": "Kaunter penyortiran",
+        "zh": "排序方式"
+    },
+    {
+        "en": "Freeze account",
+        "vi": "Đóng băng tài khoản",
+        "id": "Membekukan akun",
+        "pt": "Congelar conta",
+        "ja": "アカウントを凍結する",
+        "ko": "계정 동결",
+        "ms": "Bekukan akaun",
+        "zh": "冻结账号"
+    },
+    {
+        "en": "View order",
+        "vi": "Xem đơn hàng",
+        "id": "Lihat pesanan",
+        "pt": "Ver pedido",
+        "ja": "注文を表示",
+        "ko": "주문 보기",
+        "ms": "Lihat pesanan",
+        "zh": "查看订单"
+    },
+    {
+        "en": "Fund flow",
+        "vi": "Luồng quỹ",
+        "id": "Aliran dana",
+        "pt": "Fluxo de fundos",
+        "ja": "資金フロー",
+        "ko": "자금 흐름",
+        "ms": "Aliran dana",
+        "zh": "资金流水"
+    },
+    {
+        "en": "Details",
+        "vi": "Chi tiết",
+        "id": "Rincian",
+        "pt": "Detalhes",
+        "ja": "詳細",
+        "ko": "세부",
+        "ms": "Butiran",
+        "zh": "详细信息"
+    },
+    {
+        "en": "Sorting method",
+        "vi": "Phương pháp sắp xếp",
+        "id": "Metode pengurutan",
+        "pt": "Método de classificação",
+        "ja": "ソート方法",
+        "ko": "정렬 방법",
+        "ms": "Kaunter penyortiran",
+        "zh": "排序方式"
+    },
+    {
+        "en": "Merchant name",
+        "vi": "Tên của nhà cung cấp",
+        "id": "Nama pedagang",
+        "pt": "Nome do comerciante",
+        "ja": "商人の名前",
+        "ko": "상인 이름",
+        "ms": "Nama peniaga",
+        "zh": "商户名称"
+    },
+    {
+        "en": "Receiving account number",
+        "vi": "Số tài khoản nhận",
+        "id": "Nomor rekening penerima",
+        "pt": "Número da conta receptora",
+        "ja": "受信口座番号",
+        "ko": "수신 계좌 번호",
+        "ms": "Nombor akaun penerima",
+        "zh": "收款账号"
+    },
+    {
+        "en": "Payment mode",
+        "vi": "Chế độ thanh toán",
+        "id": "Mode pembayaran",
+        "pt": "Modo de pagamento",
+        "ja": "支払いモード",
+        "ko": "결제 모드",
+        "ms": "Mod pembayaran",
+        "zh": "支付模式"
+    },
+    {
+        "en": "Order amount",
+        "vi": "Số lượng đặt hàng",
+        "id": "Jumlah pesanan",
+        "pt": "Quantidade do pedido",
+        "ja": "注文金額",
+        "ko": "주문 금액",
+        "ms": "Jumlah pesanan",
+        "zh": "订单金额"
+    },
+    {
+        "en": "Payment status",
+        "vi": "Trạng thái thanh toán",
+        "id": "Status pembayaran",
+        "pt": "Status do pagamento",
+        "ja": "支払い状況",
+        "ko": "결제 상태",
+        "ms": "Status pembayaran",
+        "zh": "支付状态"
+    },
+    {
+        "en": "Payment amount",
+        "vi": "Số tiền thanh toán",
+        "id": "Jumlah pembayaran",
+        "pt": "Valor do pagamento",
+        "ja": "支払金額",
+        "ko": "지불 금액",
+        "ms": "Jumlah pembayaran",
+        "zh": "支付金额"
+    },
+    {
+        "en": "Order time",
+        "vi": "Thời gian đặt hàng",
+        "id": "Waktu pesanan",
+        "pt": "Tempo do pedido",
+        "ja": "注文時間",
+        "ko": "주문 시간",
+        "ms": "Masa pesanan",
+        "zh": "订单时间"
+    },
+    {
+        "en": "Callback status",
+        "vi": "Trạng thái gọi lại",
+        "id": "Status panggilan balik",
+        "pt": "Status de retorno de chamada",
+        "ja": "コールバック状態",
+        "ko": "콜백 상태",
+        "ms": "Status panggilan balik",
+        "zh": "回调状态"
+    },
+    {
+        "en": "Callback type",
+        "vi": "Loại gọi lại",
+        "id": "Jenis panggilan balik",
+        "pt": "Tipo de retorno de chamada",
+        "ja": "コールバックタイプ",
+        "ko": "콜백 유형",
+        "ms": "Jenis panggilan balik",
+        "zh": "回调类型"
+    },
+    {
+        "en": "Callback time",
+        "vi": "Thời gian gọi lại",
+        "id": "Waktu panggilan balik",
+        "pt": "Tempo de retorno de chamada",
+        "ja": "コールバック時間",
+        "ko": "콜백 시간",
+        "ms": "Masa panggilan balik",
+        "zh": "回调时间"
+    },
+    {
+        "en": "Callback type",
+        "vi": "Loại gọi lại",
+        "id": "Jenis panggilan balik",
+        "pt": "Tipo de retorno de chamada",
+        "ja": "コールバックタイプ",
+        "ko": "콜백 유형",
+        "ms": "Jenis panggilan balik",
+        "zh": "回调类型"
+    },
+    {
+        "en": "Merchant ID",
+        "vi": "ID của nhà cung cấp",
+        "id": "ID pedagang",
+        "pt": "ID do comerciante",
+        "ja": "商人ID",
+        "ko": "상인 ID",
+        "ms": "ID peniaga",
+        "zh": "商户Id"
+    },
+    {
+        "en": "Merchant name",
+        "vi": "Tên của nhà cung cấp",
+        "id": "Nama pedagang",
+        "pt": "Nome do comerciante",
+        "ja": "商人の名前",
+        "ko": "상인 이름",
+        "ms": "Nama peniaga",
+        "zh": "商户名称"
+    },
+    {
+        "en": "Receiving card number",
+        "vi": "Số thẻ nhận",
+        "id": "Nomor kartu penerimaan",
+        "pt": "Número do cartão receptor",
+        "ja": "カード番号を受け取る",
+        "ko": "수신 카드 번호",
+        "ms": "Nombor kad penerimaan",
+        "zh": "收款卡号"
+    },
+    {
+        "en": "Order amount",
+        "vi": "Số lượng đặt hàng",
+        "id": "Jumlah pesanan",
+        "pt": "Quantidade do pedido",
+        "ja": "注文金額",
+        "ko": "주문 금액",
+        "ms": "Jumlah pesanan",
+        "zh": "订单金额"
+    },
+    {
+        "en": "Search content",
+        "vi": "Nội dung tìm kiếm",
+        "id": "Konten pencarian",
+        "pt": "Conteúdo da pesquisa",
+        "ja": "検索コンテンツ",
+        "ko": "검색 내용",
+        "ms": "Kandungan carian",
+        "zh": "搜索内容"
+    },
+    {
+        "en": "Clear notification",
+        "vi": "Xóa thông báo",
+        "id": "Hapus notifikasi",
+        "pt": "Limpar notificação",
+        "ja": "通知をクリア",
+        "ko": "알림 지우기",
+        "ms": "Bersihkan pemberitahuan",
+        "zh": "清空通知"
+    },
+    {
+        "en": "Callback type",
+        "vi": "Loại gọi lại",
+        "id": "Jenis panggilan balik",
+        "pt": "Tipo de retorno de chamada",
+        "ja": "コールバックタイプ",
+        "ko": "콜백 유형",
+        "ms": "Jenis panggilan balik",
+        "zh": "回调类型"
+    },
+    {
+        "en": "Operator",
+        "vi": "Người điều hành",
+        "id": "Operator",
+        "pt": "Operador",
+        "ja": "オペレーター",
+        "ko": "오퍼레이터",
+        "ms": "Operator",
+        "zh": "操作人员"
+    },
+    {
+        "en": "Export data",
+        "vi": "Xuất dữ liệu",
+        "id": "Ekspor data",
+        "pt": "Exportar dados",
+        "ja": "データのエクスポート",
+        "ko": "데이터 내보내기",
+        "ms": "Eksport data",
+        "zh": "导出数据"
+    },
+    {
+        "en": "Processing time",
+        "vi": "Thời gian xử lý",
+        "id": "Waktu pemrosesan",
+        "pt": "Tempo de processamento",
+        "ja": "処理時間",
+        "ko": "처리 시간",
+        "ms": "Masa pemprosesan",
+        "zh": "处理时间"
+    },
+    {
+        "en": "Order time",
+        "vi": "Thời gian đặt hàng",
+        "id": "Waktu pesanan",
+        "pt": "Tempo do pedido",
+        "ja": "注文時間",
+        "ko": "주문 시간",
+        "ms": "Masa pesanan",
+        "zh": "订单时间"
+    },
+    {
+        "en": "Inconsistent amount",
+        "vi": "Số tiền không nhất quán",
+        "id": "Jumlah tidak konsisten",
+        "pt": "Quantidade inconsistente",
+        "ja": "一貫性のない金額",
+        "ko": "일치하지 않는 금액",
+        "ms": "Jumlah tidak konsisten",
+        "zh": "额不一致"
+    },
+    {
+        "en": "Order timeout",
+        "vi": "Hết thời gian đặt hàng",
+        "id": "Waktu pesanan habis",
+        "pt": "Tempo limite do pedido",
+        "ja": "注文のタイムアウト",
+        "ko": "주문 시간 초과",
+        "ms": "Masa pesanan habis",
+        "zh": "订单超时"
+    },
+    {
+        "en": "Duplicate payment",
+        "vi": "Thanh toán trùng lặp",
+        "id": "Pembayaran ganda",
+        "pt": "Pagamento duplicado",
+        "ja": "重複支払い",
+        "ko": "중복 결제",
+        "ms": "Bayaran berganda",
+        "zh": "重复支付"
+    },
+    {
+        "en": "Choose reason",
+        "vi": "Chọn lý do",
+        "id": "Pilih alasan",
+        "pt": "Escolha o motivo",
+        "ja": "理由を選択してください",
+        "ko": "이유 선택",
+        "ms": "Pilih sebab",
+        "zh": "选择原因"
+    },
+    {
+        "en": "Merchant name",
+        "vi": "Tên của nhà cung cấp",
+        "id": "Nama pedagang",
+        "pt": "Nome do comerciante",
+        "ja": "商人の名前",
+        "ko": "상인 이름",
+        "ms": "Nama peniaga",
+        "zh": "商户名称"
+    },
+    {
+        "en": "Receiving bank",
+        "vi": "Ngân hàng nhận",
+        "id": "Bank penerima",
+        "pt": "Banco receptor",
+        "ja": "受取銀行",
+        "ko": "수신 은행",
+        "ms": "Bank penerima",
+        "zh": "收款银行"
+    },
+    {
+        "en": "Receiving card number",
+        "vi": "Số thẻ nhận",
+        "id": "Nomor kartu penerimaan",
+        "pt": "Número do cartão receptor",
+        "ja": "カード番号を受け取る",
+        "ko": "수신 카드 번호",
+        "ms": "Nombor kad penerimaan",
+        "zh": "收款卡号"
+    },
+    {
+        "en": "Withdrawal amount",
+        "vi": "Số tiền rút",
+        "id": "Jumlah penarikan",
+        "pt": "Valor do saque",
+        "ja": "引き出し金額",
+        "ko": "출금 금액",
+        "ms": "Jumlah pengeluaran",
+        "zh": "提现金额"
+    },
+    {
+        "en": "Successful orders",
+        "vi": "Đơn hàng thành công",
+        "id": "Pesanan sukses",
+        "pt": "Pedidos bem sucedidos",
+        "ja": "成功した注文",
+        "ko": "성공한 주문",
+        "ms": "Pesanan berjaya",
+        "zh": "成功单数"
+    },
+    {
+        "en": "Successful orders",
+        "vi": "Đơn hàng thành công",
+        "id": "Pesanan sukses",
+        "pt": "Pedidos bem sucedidos",
+        "ja": "成功した注文",
+        "ko": "성공한 주문",
+        "ms": "Pesanan berjaya",
+        "zh": "成功单数"
+    },
+    {
+        "en": "Bank card number",
+        "vi": "Số thẻ ngân hàng",
+        "id": "Nomor kartu bank",
+        "pt": "Número do cartão bancário",
+        "ja": "銀行カード番号",
+        "ko": "은행 카드 번호",
+        "ms": "Nombor kad bank",
+        "zh": "银行卡号"
+    },
+    {
+        "en": "Bank name",
+        "vi": "Tên ngân hàng",
+        "id": "Nama bank",
+        "pt": "Nome do banco",
+        "ja": "銀行名",
+        "ko": "은행 이름",
+        "ms": "Nama bank",
+        "zh": "银行名称"
+    },
+    {
+        "en": "Desktop number",
+        "vi": "Số máy tính để bàn",
+        "id": "Nomor desktop",
+        "pt": "Número do desktop",
+        "ja": "デスクトップ番号",
+        "ko": "데스크톱 번호",
+        "ms": "Nombor desktop",
+        "zh": "桌面编号"
+    },
+    {
+        "en": "Script status",
+        "vi": "Trạng thái kịch bản",
+        "id": "Status skrip",
+        "pt": "Status do script",
+        "ja": "スクリプトステータス",
+        "ko": "스크립트 상태",
+        "ms": "Status skrip",
+        "zh": "脚本状态"
+    },
+    {
+        "en": "Desktop number",
+        "vi": "Số máy tính để bàn",
+        "id": "Nomor desktop",
+        "pt": "Número do desktop",
+        "ja": "デスクトップ番号",
+        "ko": "데스크톱 번호",
+        "ms": "Nombor desktop",
+        "zh": "桌面编号"
+    },
+    {
+        "en": "Execution device",
+        "vi": "Thiết bị thực thi",
+        "id": "Perangkat eksekusi",
+        "pt": "Dispositivo de execução",
+        "ja": "実行デバイス",
+        "ko": "실행 장치",
+        "ms": "Peranti pelaksanaan",
+        "zh": "执行设备"
+    },
+    {
+        "en": "System log",
+        "vi": "Nhật ký hệ thống",
+        "id": "Log sistem",
+        "pt": "Log do sistema",
+        "ja": "システムログ",
+        "ko": "시스템 로그",
+        "ms": "Log sistem",
+        "zh": "系统日志"
+    },
+    {
+        "en": "Login Account",
+        "vi": "Tài Khoản Đăng Nhập",
+        "id": "Akun Login",
+        "pt": "Conta de Login",
+        "ja": "ログインアカウント",
+        "ko": "로그인 계정",
+        "ms": "Akaun Log Masuk",
+        "zh": "登录账名"
+    },
+    {
+        "en": "All Orders",
+        "vi": "Tất Cả Các Đơn Đặt",
+        "id": "Semua Pesanan",
+        "pt": "Todos os Pedidos",
+        "ja": "すべての注文",
+        "ko": "모든 주문",
+        "ms": "Semua Pesanan",
+        "zh": "全部订单"
+    },
+    {
+        "en": "Name Mismatch",
+        "vi": "Sai Tên",
+        "id": "Nama Tidak Cocok",
+        "pt": "Incompatibilidade de Nome",
+        "ja": "名前の不一致",
+        "ko": "이름 불일치",
+        "ms": "Tidak Sejajar Nama",
+        "zh": "姓名不符"
+    },
+    {
+        "en": "Internal Cost",
+        "vi": "Chi Phí Nội Bộ",
+        "id": "Biaya Internal",
+        "pt": "Custo Interno",
+        "ja": "内部費用",
+        "ko": "내부 비용",
+        "ms": "Kos Dalaman",
+        "zh": "内部费用"
+    },
+    {
+        "en": "Update Remarks",
+        "vi": "Cập Nhật Ghi Chú",
+        "id": "Perbarui Catatan",
+        "pt": "Atualizar Observações",
+        "ja": "備考を更新する",
+        "ko": "비고 업데이트",
+        "ms": "Kemas kini Catatan",
+        "zh": "更新备注"
+    },
+    {
+        "en": "Click Callback",
+        "vi": "Bấm Gọi Lại",
+        "id": "Klik Panggilan Kembali",
+        "pt": "Clique para Retornar a Chamada",
+        "ja": "コールバックをクリック",
+        "ko": "콜백 클릭",
+        "ms": "Klik Panggilan Balik",
+        "zh": "点击回调"
+    },
+    {
+        "zh": "强制入款",
+        "en": "Force Deposit",
+        "vi": "Nạp bắt buộc",
+        "id": "Deposit Paksa",
+        "pt": "Depósito Forçado",
+        "ja": "強制入金",
+        "ko": "강제 입금",
+        "mo": "Далдлагатай орлого"
+    },
+    {
+        "zh": "请求的钱",
+        "en": "Requested Money",
+        "vi": "Tiền được yêu cầu",
+        "id": "Uang yang Diminta",
+        "pt": "Dinheiro Solicitado",
+        "ja": "リクエストされたお金",
+        "ko": "요청된 돈",
+        "mo": "Хүсэлтээр хүсэлтэгдсэн мөнгө"
+    },
+    {
+        "zh": "转入的钱",
+        "en": "Transferred Money",
+        "vi": "Tiền chuyển vào",
+        "id": "Uang yang Ditransfer",
+        "pt": "Dinheiro Transferido",
+        "ja": "送金されたお金",
+        "ko": "이체된 돈",
+        "mo": "Шилжүүлсэн мөнгө"
+    },
+    {
+        "zh": "清除日志",
+        "en": "Clear Logs",
+        "vi": "Xóa nhật ký",
+        "id": "Hapus Log",
+        "pt": "Limpar Logs",
+        "ja": "ログをクリア",
+        "ko": "로그 지우기",
+        "mo": "Нэвтрэлтийн бүртгэл цэвэрлэх"
+    },
+    {
+        "zh": "信息编辑",
+        "en": "Information Editing",
+        "vi": "Chỉnh sửa thông tin",
+        "id": "Pengeditan Informasi",
+        "pt": "Edição de Informações",
+        "ja": "情報の編集",
+        "ko": "정보 편집",
+        "mo": "Мэдээллийн засвар"
+    },
+    {
+        "zh": "申请资金",
+        "en": "Apply for Funds",
+        "vi": "Đăng ký quỹ",
+        "id": "Minta Dana",
+        "pt": "Aplicar para Fundos",
+        "ja": "資金を申請する",
+        "ko": "자금 신청",
+        "mo": "Мөнгөн төлөвлөгөө хүсэх"
+    },
+    {
+        "zh": "请选择卡",
+        "en": "Please Select Card",
+        "vi": "Vui lòng Chọn Thẻ",
+        "id": "Silakan Pilih Kartu",
+        "pt": "Por Favor Selecione o Cartão",
+        "ja": "カードを選択してください",
+        "ko": "카드를 선택하세요",
+        "mo": "Та карту сонгоно уу"
+    },
+    {
+        "zh": "转账金额",
+        "en": "Transfer Amount",
+        "vi": "Số tiền chuyển khoản",
+        "id": "Jumlah Transfer",
+        "pt": "Valor da Transferência",
+        "ja": "振込金額",
+        "ko": "이체 금액",
+        "mo": "Шилжүүлэх дүн"
+    },
+    {
+        "zh": "转账卡数",
+        "en": "Number of Transfer Cards",
+        "vi": "Số Lượng Thẻ Chuyển Khoản",
+        "id": "Jumlah Kartu Transfer",
+        "pt": "Número de Cartões de Transferência",
+        "ja": "振込カードの数",
+        "ko": "이체 카드 수",
+        "mo": "Шилжүүлэх картын тоо"
+    },
+    {
+        "zh": "初始资金",
+        "en": "Initial Capital",
+        "vi": "Vốn ban đầu",
+        "id": "Modal Awal",
+        "pt": "Capital Inicial",
+        "ja": "初期資本",
+        "ko": "초기 자본",
+        "mo": "Эхний үлдэгдэл"
+    },
+    {
+        "zh": "银行密码",
+        "en": "Bank Password",
+        "vi": "Mật khẩu ngân hàng",
+        "id": "Kata Sandi Bank",
+        "pt": "Senha do Banco",
+        "ja": "銀行のパスワード",
+        "ko": "은행 비밀번호",
+        "mo": "Банкны нууц үг"
+    },
+    {
+        "zh": "确认密码",
+        "en": "Confirm Password",
+        "vi": "Xác nhận mật khẩu",
+        "id": "Konfirmasi Kata Sandi",
+        "pt": "Confirmar Senha",
+        "ja": "パスワードを確認する",
+        "ko": "비밀번호 확인",
+        "mo": "Нууц үг батлах"
+    },
+    {
+        "zh": "拥有权重",
+        "en": "Ownership Weight",
+        "vi": "Trọng số Sở hữu",
+        "id": "Bobot Kepemilikan",
+        "pt": "Peso de Propriedade",
+        "ja": "所有権の重み",
+        "ko": "소유권 가중치",
+        "mo": "Хуулийн жин"
+    },
+    {
+        "zh": "权限修改",
+        "en": "Permission Modification",
+        "vi": "Sửa Đổi Quyền",
+        "id": "Modifikasi Izin",
+        "pt": "Modificação de Permissão",
+        "ja": "許可の変更",
+        "ko": "권한 수정",
+        "mo": "Зөвшөөрлийн Засвар"
+    },
+    {
+        "zh": "用户角色",
+        "en": "User Role",
+        "vi": "Vai trò người dùng",
+        "id": "Peran Pengguna",
+        "pt": "Papel do Usuário",
+        "ja": "ユーザーの役割",
+        "ko": "사용자 역할",
+        "mo": "Хэрэглэгчийн гүйцэтгэл"
+    },
+    {
+        "zh": "内充利率",
+        "en": "Internal Charging Interest Rate",
+        "vi": "Lãi suất Nạp nội bộ",
+        "id": "Suku Bunga Pengisian Internal",
+        "pt": "Taxa de Juros de Cobrança Interna",
+        "ja": "内部充電金利",
+        "ko": "내부 충전 이자율",
+        "mo": "Дотоод зарлагын хүүхдийн хүү хэмжээ"
+    },
+    {
+        "zh": "出款人员",
+        "en": "Payout Personnel",
+        "vi": "Nhân viên Thanh toán",
+        "id": "Personil Pembayaran",
+        "pt": "Pessoal de Pagamento",
+        "ja": "支払いスタッフ",
+        "ko": "지급 인원",
+        "mo": "Төлбөрийн ажилтан"
+    },
+    {
+        "zh": "控制台",
+        "en": "Console",
+        "vi": "Bảng điều khiển",
+        "id": "Konsol",
+        "pt": "Console",
+        "ja": "コンソール",
+        "ko": "콘솔",
+        "ms": "Konsol"
+    },
+    {
+        "zh": "已关闭",
+        "en": "Closed",
+        "vi": "Đã đóng",
+        "id": "Tutup",
+        "pt": "Fechado",
+        "ja": "閉じた",
+        "ko": "닫힘",
+        "ms": "Ditutup"
+    },
+    {
+        "zh": "已开启",
+        "en": "Opened",
+        "vi": "Đã mở",
+        "id": "Dibuka",
+        "pt": "Aberto",
+        "ja": "開いた",
+        "ko": "열림",
+        "ms": "Dibuka"
+    },
+    {
+        "zh": "操作人",
+        "en": "Operator",
+        "vi": "Người vận hành",
+        "id": "Operator",
+        "pt": "Operador",
+        "ja": "オペレーター",
+        "ko": "작업자",
+        "ms": "Pengendali"
+    },
+    {
+        "zh": "状态码",
+        "en": "Status code",
+        "vi": "Mã trạng thái",
+        "id": "Kode status",
+        "pt": "Código de status",
+        "ja": "ステータスコード",
+        "ko": "상태 코드",
+        "ms": "Kod status"
+    },
+    {
+        "zh": "文件名",
+        "en": "File name",
+        "vi": "Tên tệp",
+        "id": "Nama berkas",
+        "pt": "Nome do arquivo",
+        "ja": "ファイル名",
+        "ko": "파일 이름",
+        "ms": "Nama fail"
+    },
+    {
+        "zh": "数据量",
+        "en": "Data amount",
+        "vi": "Số liệu",
+        "id": "Jumlah data",
+        "pt": "Quantidade de dados",
+        "ja": "データ量",
+        "ko": "데이터 양",
+        "ms": "Kuantiti data"
+    },
+    {
+        "zh": "已导出",
+        "en": "Exported",
+        "vi": "Đã xuất",
+        "id": "Diekspor",
+        "pt": "Exportado",
+        "ja": "エクスポートされた",
+        "ko": "내보냄",
+        "ms": "Dieksport"
+    },
+    {
+        "zh": "请注意",
+        "en": "Please note",
+        "vi": "Vui lòng chú ý",
+        "id": "Harap perhatikan",
+        "pt": "Por favor, note",
+        "ja": "ご注意ください",
+        "ko": "주의하세요",
+        "ms": "Sila ambil perhatian"
+    },
+    {
+        "zh": "未提交",
+        "en": "Not submitted",
+        "vi": "Chưa nộp",
+        "id": "Belum diserahkan",
+        "pt": "Não apresentado",
+        "ja": "未提出",
+        "ko": "제출되지 않음",
+        "ms": "Belum dihantar"
+    },
+    {
+        "zh": "补提交",
+        "en": "Supplementary submission",
+        "vi": "Nộp bổ sung",
+        "id": "Penyerahan tambahan",
+        "pt": "Apresentação suplementar",
+        "ja": "補足提出",
+        "ko": "보충 제출",
+        "ms": "Penyerahan tambahan"
+    },
+    {
+        "zh": "中转卡",
+        "en": "Transit card",
+        "vi": "Thẻ chuyển tiếp",
+        "id": "Kartu Transit",
+        "pt": "Cartão de transferência",
+        "ja": "トランスファーカード",
+        "ko": "전송 카드",
+        "ms": "Kad pemindahan"
+    },
+    {
+        "zh": "其他卡",
+        "en": "Other card",
+        "vi": "Thẻ khác",
+        "id": "Kartu lain",
+        "pt": "Outro cartão",
+        "ja": "その他のカード",
+        "ko": "기타 카드",
+        "ms": "Kad lain-lain"
+    },
+    {
+        "zh": "出款卡",
+        "en": "Withdrawal card",
+        "vi": "Thẻ rút tiền",
+        "id": "Kartu penarikan",
+        "pt": "Cartão de saque",
+        "ja": "引き出しカード",
+        "ko": "출금 카드",
+        "ms": "Kad pengeluaran"
+    },
+    {
+        "zh": "入款卡",
+        "en": "Deposit card",
+        "vi": "Thẻ vào",
+        "id": "Kartu masuk",
+        "pt": "Cartão de entrada",
+        "ja": "入金カード",
+        "ko": "입금 카드",
+        "ms": "Kad masuk"
+    },
+    {
+        "zh": "未提交",
+        "en": "Not submitted",
+        "vi": "Chưa nộp",
+        "id": "Belum diserahkan",
+        "pt": "Não apresentado",
+        "ja": "未提出",
+        "ko": "제출되지 않음",
+        "ms": "Belum dihantar"
+    },
+    {
+        "zh": "补提交",
+        "en": "Supplementary submission",
+        "vi": "Nộp bổ sung",
+        "id": "Penyerahan tambahan",
+        "pt": "Apresentação suplementar",
+        "ja": "補足提出",
+        "ko": "보충 제출",
+        "ms": "Penyerahan tambahan"
+    },
+    {
+        "zh": "管理员",
+        "en": "Administrator",
+        "vi": "Quản trị viên",
+        "id": "Administrator",
+        "pt": "Administrador",
+        "ja": "管理者",
+        "ko": "관리자",
+        "ms": "Pentadbir"
+    },
+    {
+        "zh": "操作员",
+        "en": "Operator",
+        "vi": "Người vận hành",
+        "id": "Operator",
+        "pt": "Operador",
+        "ja": "オペレーター",
+        "ko": "작업자",
+        "ms": "Pengendali"
+    },
+    {
+        "zh": "付款人",
+        "en": "Payer",
+        "vi": "Người trả tiền",
+        "id": "Pemberi pembayaran",
+        "pt": "Pagador",
+        "ja": "支払い人",
+        "ko": "결제자",
+        "ms": "Pembayar"
+    },
+    {
+        "zh": "已接受",
+        "en": "Accepted",
+        "vi": "Đã chấp nhận",
+        "id": "Diterima",
+        "pt": "Aceito",
+        "ja": "受け入れ済み",
+        "ko": "수락 됨",
+        "ms": "Diterima"
+    },
+    {
+        "zh": "没接受",
+        "en": "Not accepted",
+        "vi": "Không chấp nhận",
+        "id": "Tidak diterima",
+        "pt": "Não aceito",
+        "ja": "受け入れられていません",
+        "ko": "수락되지 않음",
+        "ms": "Tidak diterima"
+    },
+    {
+        "zh": "已支付",
+        "en": "Paid",
+        "vi": "Đã thanh toán",
+        "id": "Dibayar",
+        "pt": "Pago",
+        "ja": "支払済み",
+        "ko": "지불 됨",
+        "ms": "Dibayar"
+    },
+    {
+        "zh": "未处理",
+        "en": "Unprocessed",
+        "vi": "Chưa được xử lý",
+        "id": "Belum diproses",
+        "pt": "Não processado",
+        "ja": "未処理",
+        "ko": "미처리 됨",
+        "ms": "Belum diproses"
+    },
+    {
+        "zh": "已订单",
+        "en": "Ordered",
+        "vi": "Đã đặt hàng",
+        "id": "Dipesan",
+        "pt": "Encomendado",
+        "ja": "注文済み",
+        "ko": "주문 됨",
+        "ms": "Dipesan"
+    },
+    {
+        "zh": "跳转至",
+        "en": "Jump to",
+        "vi": "Nhảy đến",
+        "id": "Lompat ke",
+        "pt": "Ir para",
+        "ja": "へ移動",
+        "ko": "이동",
+        "ms": "Langkau ke"
+    },
+    {
+        "zh": "条/页",
+        "en": "Items/page",
+        "vi": "Mục/trang",
+        "id": "Item/halaman",
+        "pt": "Itens/página",
+        "ja": "アイテム/ページ",
+        "ko": "항목/페이지",
+        "ms": "Item/halaman"
+    },
+    {
+        "zh": "卡数量",
+        "en": "Card quantity",
+        "vi": "Số lượng thẻ",
+        "id": "Jumlah kartu",
+        "pt": "Quantidade de cartões",
+        "ja": "カード数量",
+        "ko": "카드 수량",
+        "ms": "Kuantiti kad"
+    },
+    {
+        "zh": "卡类型",
+        "en": "Card type",
+        "vi": "Loại thẻ",
+        "id": "Jenis kartu",
+        "pt": "Tipo de cartão",
+        "ja": "カードタイプ",
+        "ko": "카드 유형",
+        "ms": "Jenis kad"
+    },
+    {
+        "zh": "系统卡",
+        "en": "System card",
+        "vi": "Thẻ hệ thống",
+        "id": "Kartu sistem",
+        "pt": "Cartão do sistema",
+        "ja": "システムカード",
+        "ko": "시스템 카드",
+        "ms": "Kad sistem"
+    },
+    {
+        "zh": "卡账户",
+        "en": "Card account",
+        "vi": "Tài khoản thẻ",
+        "id": "Akun kartu",
+        "pt": "Conta do cartão",
+        "ja": "カード口座",
+        "ko": "카드 계정",
+        "ms": "Akaun kad"
+    },
+    {
+        "zh": "误差值",
+        "en": "Error value",
+        "vi": "Giá trị lỗi",
+        "id": "Nilai kesalahan",
+        "pt": "Valor do erro",
+        "ja": "エラー値",
+        "ko": "오차 값",
+        "ms": "Nilai ralat"
+    },
+    {
+        "zh": "付款率",
+        "en": "Payment rate",
+        "vi": "Tỷ lệ thanh toán",
+        "id": "Tarif pembayaran",
+        "pt": "Taxa de pagamento",
+        "ja": "支払い率",
+        "ko": "지불률",
+        "ms": "Kadar pembayaran"
+    },
+    {
+        "zh": "卡类别",
+        "en": "Card category",
+        "vi": "Danh mục thẻ",
+        "id": "Kategori kartu",
+        "pt": "Categoria do cartão",
+        "ja": "カードの種類",
+        "ko": "카드 카테고리",
+        "ms": "Kategori kad"
+    },
+    {
+        "zh": "原订单",
+        "en": "Original order",
+        "vi": "Đơn đặt hàng gốc",
+        "id": "Pesanan asli",
+        "pt": "Ordem original",
+        "ja": "オリジナルオーダー",
+        "ko": "원래 주문",
+        "ms": "Pesanan asal"
+    },
+    {
+        "zh": "处理人",
+        "en": "Handler",
+        "vi": "Người xử lý",
+        "id": "Penangan",
+        "pt": "Manuseador",
+        "ja": "処理者",
+        "ko": "처리자",
+        "ms": "Pengendali"
+    },
+    {
+        "en": "Choose column",
+        "vi": "Chọn cột",
+        "id": "Pilih kolom",
+        "pt": "Escolha a coluna",
+        "ja": "列を選択",
+        "ko": "열 선택",
+        "ms": "Pilih lajur",
+        "zh": "选择列"
+    },
+    {
+        "en": "Audited",
+        "vi": "Đã kiểm tra",
+        "id": "Disetujui",
+        "pt": "Auditado",
+        "ja": "監査済み",
+        "ko": "감사",
+        "ms": "Diaudit",
+        "zh": "已审核"
+    },
+    {
+        "en": "Reduce balance",
+        "vi": "Giảm số dư",
+        "id": "Kurangi saldo",
+        "pt": "Reduzir saldo",
+        "ja": "バランスを減らす",
+        "ko": "잔액 감소",
+        "ms": "Kurangkan baki",
+        "zh": "减余额"
+    },
+    {
+        "en": "Custom",
+        "vi": "Tùy chỉnh",
+        "id": "Kustom",
+        "pt": "Personalizado",
+        "ja": "カスタム",
+        "ko": "맞춤",
+        "ms": "Kustom",
+        "zh": "自定义"
+    },
+    {
+        "en": "Unpaid",
+        "vi": "Chưa thanh toán",
+        "id": "Belum dibayar",
+        "pt": "Não pago",
+        "ja": "未払い",
+        "ko": "미지급",
+        "ms": "Belum dibayar",
+        "zh": "未支付"
+    },
+    {
+        "en": "Order number",
+        "vi": "Số đơn hàng",
+        "id": "Nomor pesanan",
+        "pt": "Número do pedido",
+        "ja": "注文番号",
+        "ko": "주문 번호",
+        "ms": "Nombor pesanan",
+        "zh": "订单号"
+    },
+    {
+        "en": "Payee",
+        "vi": "Người nhận",
+        "id": "Penerima",
+        "pt": "Beneficiário",
+        "ja": "受取人",
+        "ko": "수취인",
+        "ms": "Penerima",
+        "zh": "收款人"
+    },
+    {
+        "en": "Handling fee",
+        "vi": "Phí xử lý",
+        "id": "Biaya penanganan",
+        "pt": "Taxa de manuseio",
+        "ja": "処理手数料",
+        "ko": "수수료",
+        "ms": "Yuran pemprosesan",
+        "zh": "手续费"
+    },
+    {
+        "en": "Order number",
+        "vi": "Số đơn hàng",
+        "id": "Nomor pesanan",
+        "pt": "Número do pedido",
+        "ja": "注文番号",
+        "ko": "주문 번호",
+        "ms": "Nombor pesanan",
+        "zh": "订单号"
+    },
+    {
+        "en": "Order number",
+        "vi": "Số đơn hàng",
+        "id": "Nomor pesanan",
+        "pt": "Número do pedido",
+        "ja": "注文番号",
+        "ko": "주문 번호",
+        "ms": "Nombor pesanan",
+        "zh": "订单号"
+    },
+    {
+        "en": "Merchant I",
+        "vi": "Thương nhân tôi",
+        "id": "Pedagang saya",
+        "pt": "Meu comerciante",
+        "ja": "私の商人",
+        "ko": "내 상인",
+        "ms": "Peniaga saya",
+        "zh": "商家I"
+    },
+    {
+        "en": "Payment code",
+        "vi": "Mã thanh toán",
+        "id": "Kode pembayaran",
+        "pt": "Código de pagamento",
+        "ja": "支払いコード",
+        "ko": "결제 코드",
+        "ms": "Kod pembayaran",
+        "zh": "支付码"
+    },
+    {
+        "en": "Pending review",
+        "vi": "Đang chờ xem xét",
+        "id": "Menunggu ulasan",
+        "pt": "Aguardando revisão",
+        "ja": "レビュー待ち",
+        "ko": "검토 중",
+        "ms": "Menunggu semakan",
+        "zh": "待审核"
+    },
+    {
+        "en": "Handling fee",
+        "vi": "Phí xử lý",
+        "id": "Biaya penanganan",
+        "pt": "Taxa de manuseio",
+        "ja": "処理手数料",
+        "ko": "수수료",
+        "ms": "Yuran pemprosesan",
+        "zh": "手续费"
+    },
+    {
+        "en": "Handling fee",
+        "vi": "Phí xử lý",
+        "id": "Biaya penanganan",
+        "pt": "Taxa de manuseio",
+        "ja": "処理手数料",
+        "ko": "수수료",
+        "ms": "Yuran pemprosesan",
+        "zh": "手续费"
+    },
+    {
+        "en": "Success rate",
+        "vi": "Tỷ lệ thành công",
+        "id": "Tingkat keberhasilan",
+        "pt": "Taxa de sucesso",
+        "ja": "成功率",
+        "ko": "성공률",
+        "ms": "Kadar kejayaan",
+        "zh": "成功率"
+    },
+    {
+        "en": "Success number",
+        "vi": "Số lượng thành công",
+        "id": "Nomor keberhasilan",
+        "pt": "Número de sucesso",
+        "ja": "成功数",
+        "ko": "성공 수",
+        "ms": "Nombor kejayaan",
+        "zh": "成功数"
+    },
+    {
+        "en": "Login name",
+        "vi": "Tên đăng nhập",
+        "id": "Nama masuk",
+        "pt": "Nome de usuário",
+        "ja": "ログイン名",
+        "ko": "로그인 이름",
+        "ms": "Nama log masuk",
+        "zh": "登录名"
+    },
+    {
+        "en": "Payment code",
+        "vi": "Mã thanh toán",
+        "id": "Kode pembayaran",
+        "pt": "Código de pagamento",
+        "ja": "支払いコード",
+        "ko": "결제 코드",
+        "ms": "Kod pembayaran",
+        "zh": "支付码"
+    },
+    {
+        "en": "Choose column",
+        "vi": "Chọn cột",
+        "id": "Pilih kolom",
+        "pt": "Escolha a coluna",
+        "ja": "列を選択",
+        "ko": "열 선택",
+        "ms": "Pilih lajur",
+        "zh": "选择列"
+    },
+    {
+        "en": "Agent",
+        "vi": "Đại Lý",
+        "id": "Agen",
+        "pt": "Agente",
+        "ja": "代理",
+        "ko": "에이전트",
+        "ms": "Ejen",
+        "zh": "代理商"
+    },
+    {
+        "en": "Processed",
+        "vi": "Đã Xử Lý",
+        "id": "Diproses",
+        "pt": "Processado",
+        "ja": "処理済み",
+        "ko": "처리 완료",
+        "ms": "Diproses",
+        "zh": "已处理"
+    },
+    {
+        "en": "World Pay",
+        "vi": "Thanh Toán Thế Giới",
+        "id": "Pembayaran Dunia",
+        "pt": "Pagamento Mundial",
+        "ja": "ワールドペイ",
+        "ko": "월드페이",
+        "ms": "Bayar Dunia",
+        "zh": "世界付"
+    },
+    {
+        "zh": "未回调",
+        "en": "Unreturned",
+        "vi": "Chưa gọi lại",
+        "id": "Belum dikembalikan",
+        "pt": "Não retornado",
+        "ja": "未着信",
+        "ko": "미회신",
+        "mo": "Хариуцаагүй"
+    },
+    {
+        "zh": "总笔数",
+        "en": "Total Transactions",
+        "vi": "Tổng số Giao dịch",
+        "id": "Total Transaksi",
+        "pt": "Total de Transações",
+        "ja": "合計トランザクション数",
+        "ko": "총 거래",
+        "mo": "Нийт Гүйлгээний тоо"
+    },
+    {
+        "zh": "总金额",
+        "en": "Total Amount",
+        "vi": "Tổng số tiền",
+        "id": "Jumlah Total",
+        "pt": "Valor Total",
+        "ja": "合計金額",
+        "ko": "총액",
+        "mo": "Нийт Дүн"
+    },
+    {
+        "zh": "菜单名",
+        "en": "Menu Name",
+        "vi": "Tên Menu",
+        "id": "Nama Menu",
+        "pt": "Nome do Menu",
+        "ja": "メニュー名",
+        "ko": "메뉴 이름",
+        "mo": "Цэсний Нэр"
+    },
+    {
+        "zh": "代付",
+        "en": "Payment",
+        "vi": "Thanh toán",
+        "id": "Pembayaran",
+        "pt": "Pagamento",
+        "ja": "支払い",
+        "ko": "지불",
+        "ms": "Pembayaran"
+    },
+    {
+        "zh": "掉单",
+        "en": "Dropped order",
+        "vi": "Đơn hàng bị bỏ lỡ",
+        "id": "Pesanan yang jatuh",
+        "pt": "Ordem descartada",
+        "ja": "ドロップされた注文",
+        "ko": "주문 삭제",
+        "ms": "Pesanan tergugur"
+    },
+    {
+        "zh": "首页",
+        "en": "Home",
+        "vi": "Trang chủ",
+        "id": "Beranda",
+        "pt": "Casa",
+        "ja": "ホーム",
+        "ko": "홈",
+        "ms": "Laman utama"
+    },
+    {
+        "zh": "管理",
+        "en": "Management",
+        "vi": "Quản lý",
+        "id": "Manajemen",
+        "pt": "Gerenciamento",
+        "ja": "管理",
+        "ko": "관리",
+        "ms": "Pengurusan"
+    },
+    {
+        "zh": "列表",
+        "en": "List",
+        "vi": "Danh sách",
+        "id": "Daftar",
+        "pt": "Lista",
+        "ja": "リスト",
+        "ko": "목록",
+        "ms": "Senarai"
+    },
+    {
+        "zh": "代收",
+        "en": "Collection",
+        "vi": "Sưu tầm",
+        "id": "Koleksi",
+        "pt": "Coleção",
+        "ja": "収集",
+        "ko": "수집",
+        "ms": "Pengumpulan"
+    },
+    {
+        "zh": "代付",
+        "en": "Payment",
+        "vi": "Thanh toán",
+        "id": "Pembayaran",
+        "pt": "Pagamento",
+        "ja": "支払い",
+        "ko": "지불",
+        "ms": "Pembayaran"
+    },
+    {
+        "zh": "正常",
+        "en": "Normal",
+        "vi": "Bình thường",
+        "id": "Normal",
+        "pt": "Normal",
+        "ja": "正常",
+        "ko": "정상",
+        "ms": "Normal"
+    },
+    {
+        "zh": "停用",
+        "en": "Disabled",
+        "vi": "Tắt",
+        "id": "Mati",
+        "pt": "Desativado",
+        "ja": "停止",
+        "ko": "비활성화",
+        "ms": "Dimatikan"
+    },
+    {
+        "zh": "名称",
+        "en": "Name",
+        "vi": "Tên",
+        "id": "Nama",
+        "pt": "Nome",
+        "ja": "名前",
+        "ko": "이름",
+        "ms": "Nama"
+    },
+    {
+        "zh": "状态",
+        "en": "Status",
+        "vi": "Trạng thái",
+        "id": "Status",
+        "pt": "Status",
+        "ja": "状態",
+        "ko": "상태",
+        "ms": "Status"
+    },
+    {
+        "zh": "备注",
+        "en": "Remark",
+        "vi": "Ghi chú",
+        "id": "Catatan",
+        "pt": "Observação",
+        "ja": "備考",
+        "ko": "비고",
+        "ms": "Nota"
+    },
+    {
+        "zh": "操作",
+        "en": "Operation",
+        "vi": "Hoạt động",
+        "id": "Operasi",
+        "pt": "Operação",
+        "ja": "操作",
+        "ko": "조작",
+        "ms": "Operasi"
+    },
+    {
+        "zh": "正常",
+        "en": "Normal",
+        "vi": "Bình thường",
+        "id": "Normal",
+        "pt": "Normal",
+        "ja": "正常",
+        "ko": "정상",
+        "ms": "Normal"
+    },
+    {
+        "zh": "停用",
+        "en": "Disabled",
+        "vi": "Tắt",
+        "id": "Mati",
+        "pt": "Desativado",
+        "ja": "停止",
+        "ko": "비활성화",
+        "ms": "Dimatikan"
+    },
+    {
+        "zh": "编辑",
+        "en": "Edit",
+        "vi": "Chỉnh sửa",
+        "id": "Edit",
+        "pt": "Editar",
+        "ja": "編集",
+        "ko": "편집",
+        "ms": "Edit"
+    },
+    {
+        "zh": "状态",
+        "en": "Status",
+        "vi": "Trạng thái",
+        "id": "Status",
+        "pt": "Status",
+        "ja": "状態",
+        "ko": "상태",
+        "ms": "Status"
+    },
+    {
+        "zh": "测试",
+        "en": "Test",
+        "vi": "Kiểm tra",
+        "id": "Uji",
+        "pt": "Teste",
+        "ja": "テスト",
+        "ko": "시험",
+        "ms": "Ujian"
+    },
+    {
+        "zh": "删除",
+        "en": "Delete",
+        "vi": "Xóa",
+        "id": "Hapus",
+        "pt": "Excluir",
+        "ja": "削除",
+        "ko": "삭제",
+        "ms": "Padam"
+    },
+    {
+        "zh": "通道",
+        "en": "Channel",
+        "vi": "Kênh",
+        "id": "Saluran",
+        "pt": "Canal",
+        "ja": "チャネル",
+        "ko": "채널",
+        "ms": "Saluran"
+    },
+    {
+        "zh": "搜索",
+        "en": "Search",
+        "vi": "Tìm kiếm",
+        "id": "Cari",
+        "pt": "Pesquisar",
+        "ja": "検索",
+        "ko": "검색",
+        "ms": "Cari"
+    },
+    {
+        "zh": "重置",
+        "en": "Reset",
+        "vi": "Đặt lại",
+        "id": "Reset",
+        "pt": "Redefinir",
+        "ja": "リセット",
+        "ko": "초기화",
+        "ms": "Tetapkan semula"
+    },
+    {
+        "zh": "日期",
+        "en": "Date",
+        "vi": "Ngày",
+        "id": "Tanggal",
+        "pt": "Data",
+        "ja": "日付",
+        "ko": "날짜",
+        "ms": "Tarikh"
+    },
+    {
+        "zh": "请求",
+        "en": "Request",
+        "vi": "Yêu cầu",
+        "id": "Permintaan",
+        "pt": "Pedido",
+        "ja": "リクエスト",
+        "ko": "요청",
+        "ms": "Permintaan"
+    },
+    {
+        "zh": "方法",
+        "en": "Method",
+        "vi": "Phương pháp",
+        "id": "Metode",
+        "pt": "Método",
+        "ja": "方法",
+        "ko": "방법",
+        "ms": "Kaedah"
+    },
+    {
+        "zh": "路径",
+        "en": "Path",
+        "vi": "Đường dẫn",
+        "id": "Jalur",
+        "pt": "Caminho",
+        "ja": "経路",
+        "ko": "경로",
+        "ms": "Laluan"
+    },
+    {
+        "zh": "说明",
+        "en": "Explanation",
+        "vi": "Giải thích",
+        "id": "Penjelasan",
+        "pt": "Explicação",
+        "ja": "説明",
+        "ko": "설명",
+        "ms": "Penjelasan"
+    },
+    {
+        "zh": "提交",
+        "en": "Submit",
+        "vi": "Gửi đi",
+        "id": "Kirim",
+        "pt": "Enviar",
+        "ja": "提出する",
+        "ko": "제출",
+        "ms": "Hantar"
+    },
+    {
+        "zh": "登录",
+        "en": "Login",
+        "vi": "Đăng nhập",
+        "id": "Masuk",
+        "pt": "Login",
+        "ja": "ログイン",
+        "ko": "로그인",
+        "ms": "Log masuk"
+    },
+    {
+        "zh": "银行",
+        "en": "Bank",
+        "vi": "Ngân hàng",
+        "id": "Bank",
+        "pt": "Banco",
+        "ja": "銀行",
+        "ko": "은행",
+        "ms": "Bank"
+    },
+    {
+        "zh": "请求",
+        "en": "Request",
+        "vi": "Yêu cầu",
+        "id": "Permintaan",
+        "pt": "Pedido",
+        "ja": "リクエスト",
+        "ko": "요청",
+        "ms": "Permintaan"
+    },
+    {
+        "zh": "位置",
+        "en": "Location",
+        "vi": "Vị trí",
+        "id": "Lokasi",
+        "pt": "Localização",
+        "ja": "場所",
+        "ko": "위치",
+        "ms": "Lokasi"
+    },
+    {
+        "zh": "转入",
+        "en": "Transfer in",
+        "vi": "Chuyển vào",
+        "id": "Transfer masuk",
+        "pt": "Transferir para",
+        "ja": "転入",
+        "ko": "입금",
+        "ms": "Pindah masuk"
+    },
+    {
+        "zh": "下发",
+        "en": "Issue",
+        "vi": "Phát hành",
+        "id": "Masalah",
+        "pt": "Emissão",
+        "ja": "発行",
+        "ko": "발급",
+        "ms": "Isu"
+    },
+    {
+        "zh": "转出",
+        "en": "Transfer out",
+        "vi": "Chuyển ra",
+        "id": "Transfer keluar",
+        "pt": "Transferir para fora",
+        "ja": "転出",
+        "ko": "출금",
+        "ms": "Pindah keluar"
+    },
+    {
+        "zh": "删除",
+        "en": "Delete",
+        "vi": "Xóa",
+        "id": "Hapus",
+        "pt": "Excluir",
+        "ja": "削除",
+        "ko": "삭제",
+        "ms": "Padam"
+    },
+    {
+        "zh": "位置",
+        "en": "Location",
+        "vi": "Vị trí",
+        "id": "Lokasi",
+        "pt": "Localização",
+        "ja": "場所",
+        "ko": "위치",
+        "ms": "Lokasi"
+    },
+    {
+        "zh": "行为",
+        "en": "Action",
+        "vi": "Hành động",
+        "id": "Tindakan",
+        "pt": "Ação",
+        "ja": "アクション",
+        "ko": "행동",
+        "ms": "Tindakan"
+    },
+    {
+        "zh": "重选",
+        "en": "Re-select",
+        "vi": "Chọn lại",
+        "id": "Pilih ulang",
+        "pt": "Re-selecionar",
+        "ja": "再選択",
+        "ko": "재선택",
+        "ms": "Pilih semula"
+    },
+    {
+        "zh": "输入",
+        "en": "Input",
+        "vi": "Đầu vào",
+        "id": "Input",
+        "pt": "Entrada",
+        "ja": "入力",
+        "ko": "입력",
+        "ms": "Input"
+    },
+    {
+        "zh": "确定",
+        "en": "Confirm",
+        "vi": "Xác nhận",
+        "id": "Konfirmasi",
+        "pt": "Confirmar",
+        "ja": "確認",
+        "ko": "확인",
+        "ms": "Sahkan"
+    },
+    {
+        "zh": "名字",
+        "en": "Name",
+        "vi": "Tên",
+        "id": "Nama",
+        "pt": "Nome",
+        "ja": "名前",
+        "ko": "이름",
+        "ms": "Nama"
+    },
+    {
+        "zh": "注解",
+        "en": "Annotation",
+        "vi": "Chú thích",
+        "id": "Anotasi",
+        "pt": "Anotação",
+        "ja": "注釈",
+        "ko": "주석",
+        "ms": "Anotasi"
+    },
+    {
+        "zh": "系统",
+        "en": "System",
+        "vi": "Hệ thống",
+        "id": "Sistem",
+        "pt": "Sistema",
+        "ja": "システム",
+        "ko": "시스템",
+        "ms": "Sistem"
+    },
+    {
+        "zh": "越南",
+        "en": "Vietnamese",
+        "vi": "Tiếng Việt",
+        "id": "Vietnam",
+        "pt": "Vietnamita",
+        "ja": "ベトナム語",
+        "ko": "베트남어",
+        "ms": "Vietnamese"
+    },
+    {
+        "zh": "开启",
+        "en": "Open",
+        "vi": "Mở",
+        "id": "Buka",
+        "pt": "Abrir",
+        "ja": "開く",
+        "ko": "열다",
+        "ms": "Buka"
+    },
+    {
+        "zh": "开启",
+        "en": "Open",
+        "vi": "Mở",
+        "id": "Buka",
+        "pt": "Abrir",
+        "ja": "開く",
+        "ko": "열다",
+        "ms": "Buka"
+    },
+    {
+        "zh": "关闭",
+        "en": "Close",
+        "vi": "Đóng",
+        "id": "Tutup",
+        "pt": "Fechar",
+        "ja": "閉じる",
+        "ko": "닫기",
+        "ms": "Tutup"
+    },
+    {
+        "zh": "代码",
+        "en": "Code",
+        "vi": "Mã",
+        "id": "Kode",
+        "pt": "Código",
+        "ja": "コード",
+        "ko": "코드",
+        "ms": "Kod"
+    },
+    {
+        "zh": "简称",
+        "en": "Abbreviation",
+        "vi": "Viết tắt",
+        "id": "Singkatan",
+        "pt": "Abreviação",
+        "ja": "略語",
+        "ko": "약어",
+        "ms": "Singkatan"
+    },
+    {
+        "zh": "编码",
+        "en": "Encoding",
+        "vi": "Mã hóa",
+        "id": "Encoding",
+        "pt": "Codificação",
+        "ja": "エンコード",
+        "ko": "인코딩",
+        "ms": "Pengekodan"
+    },
+    {
+        "zh": "关闭",
+        "en": "Close",
+        "vi": "Đóng",
+        "id": "Tutup",
+        "pt": "Fechar",
+        "ja": "閉じる",
+        "ko": "닫기",
+        "ms": "Tutup"
+    },
+    {
+        "zh": "代理",
+        "en": "Agent",
+        "vi": "Đại lý",
+        "id": "Agen",
+        "pt": "Agente",
+        "ja": "エージェント",
+        "ko": "에이전트",
+        "ms": "Ejen"
+    },
+    {
+        "zh": "掉线",
+        "en": "Drop line",
+        "vi": "Rơi dây",
+        "id": "Drop line",
+        "pt": "Solte a linha",
+        "ja": "線を落とす",
+        "ko": "라인 드롭",
+        "ms": "Jatuh talian"
+    },
+    {
+        "zh": "无限",
+        "en": "Unlimited",
+        "vi": "Không giới hạn",
+        "id": "Tidak terbatas",
+        "pt": "Ilimitado",
+        "ja": "無制限",
+        "ko": "무제한",
+        "ms": "Tanpa had"
+    },
+    {
+        "zh": "更多",
+        "en": "More",
+        "vi": "Thêm",
+        "id": "Lebih",
+        "pt": "Mais",
+        "ja": "もっと",
+        "ko": "더",
+        "ms": "Lebih"
+    },
+    {
+        "zh": "账户",
+        "en": "Account",
+        "vi": "Tài khoản",
+        "id": "Akun",
+        "pt": "Conta",
+        "ja": "アカウント",
+        "ko": "계정",
+        "ms": "Akaun"
+    },
+    {
+        "zh": "查看",
+        "en": "View",
+        "vi": "Xem",
+        "id": "Melihat",
+        "pt": "Ver",
+        "ja": "見る",
+        "ko": "보다",
+        "ms": "Lihat"
+    },
+    {
+        "zh": "时间",
+        "en": "Time",
+        "vi": "Thời gian",
+        "id": "Waktu",
+        "pt": "Tempo",
+        "ja": "時間",
+        "ko": "시간",
+        "ms": "Masa"
+    },
+    {
+        "zh": "响应",
+        "en": "Response",
+        "vi": "Phản hồi",
+        "id": "Respon",
+        "pt": "Resposta",
+        "ja": "応答",
+        "ko": "응답",
+        "ms": "Tindak balas"
+    },
+    {
+        "zh": "商户",
+        "en": "Merchant",
+        "vi": "Thương gia",
+        "id": "Pedagang",
+        "pt": "Comerciante",
+        "ja": "商人",
+        "ko": "상인",
+        "ms": "Peniaga"
+    },
+    {
+        "zh": "失败",
+        "en": "Failure",
+        "vi": "Thất bại",
+        "id": "Kegagalan",
+        "pt": "Falha",
+        "ja": "失敗",
+        "ko": "실패",
+        "ms": "Gagal"
+    },
+    {
+        "zh": "订单",
+        "en": "Order",
+        "vi": "Đặt hàng",
+        "id": "Pesan",
+        "pt": "Encomenda",
+        "ja": "注文",
+        "ko": "주문",
+        "ms": "Pesanan"
+    },
+    {
+        "zh": "金额",
+        "en": "Amount",
+        "vi": "Số tiền",
+        "id": "Jumlah",
+        "pt": "Quantidade",
+        "ja": "量",
+        "ko": "금액",
+        "ms": "Jumlah"
+    },
+    {
+        "zh": "手动",
+        "en": "Manual",
+        "vi": "Thủ công",
+        "id": "Manual",
+        "pt": "Manual",
+        "ja": "手動",
+        "ko": "수동",
+        "ms": "Manual"
+    },
+    {
+        "zh": "金额",
+        "en": "Amount",
+        "vi": "Số tiền",
+        "id": "Jumlah",
+        "pt": "Quantidade",
+        "ja": "量",
+        "ko": "금액",
+        "ms": "Jumlah"
+    },
+    {
+        "zh": "金额",
+        "en": "Amount",
+        "vi": "Số tiền",
+        "id": "Jumlah",
+        "pt": "Quantidade",
+        "ja": "量",
+        "ko": "금액",
+        "ms": "Jumlah"
+    },
+    {
+        "zh": "处理",
+        "en": "Processing",
+        "vi": "Xử lý",
+        "id": "Pemprosesan",
+        "pt": "Processamento",
+        "ja": "処理",
+        "ko": "처리",
+        "ms": "Pemprosesan"
+    },
+    {
+        "en": "Withdraw",
+        "vi": "Rút tiền",
+        "id": "Penarikan",
+        "pt": "Retirar",
+        "ja": "撤回",
+        "ko": "인출",
+        "ms": "Tarik balik",
+        "zh": "提现"
+    },
+    {
+        "en": "Select",
+        "vi": "Chọn",
+        "id": "Pilih",
+        "pt": "Selecione",
+        "ja": "選択",
+        "ko": "선택",
+        "ms": "Pilih",
+        "zh": "选择"
+    },
+    {
+        "en": "Review",
+        "vi": "Xem xét",
+        "id": "Ulasan",
+        "pt": "Rever",
+        "ja": "レビュー",
+        "ko": "리뷰",
+        "ms": "Semakan",
+        "zh": "审核"
+    },
+    {
+        "en": "Top-up",
+        "vi": "Nạp tiền",
+        "id": "Top-up",
+        "pt": "Recarregar",
+        "ja": "トップアップ",
+        "ko": "충전",
+        "ms": "Isi semula",
+        "zh": "内充"
+    },
+    {
+        "en": "Payment",
+        "vi": "Thanh toán",
+        "id": "Pembayaran",
+        "pt": "Pagamento",
+        "ja": "支払い",
+        "ko": "지불",
+        "ms": "Bayaran",
+        "zh": "支付"
+    },
+    {
+        "en": "No",
+        "vi": "Không",
+        "id": "Tidak",
+        "pt": "Não",
+        "ja": "いいえ",
+        "ko": "아니",
+        "ms": "Tidak",
+        "zh": "暂不"
+    },
+    {
+        "en": "Operation",
+        "vi": "Hoạt động",
+        "id": "Operasi",
+        "pt": "Operação",
+        "ja": "操作",
+        "ko": "조작",
+        "ms": "Operasi",
+        "zh": "操作"
+    },
+    {
+        "en": "Total",
+        "vi": "Tổng",
+        "id": "Total",
+        "pt": "Total",
+        "ja": "合計",
+        "ko": "합계",
+        "ms": "Jumlah",
+        "zh": "总计"
+    },
+    {
+        "en": "Automatic",
+        "vi": "Tự động",
+        "id": "Otomatis",
+        "pt": "Automático",
+        "ja": "自動",
+        "ko": "자동",
+        "ms": "Automatik",
+        "zh": "自动"
+    },
+    {
+        "en": "Remarks",
+        "vi": "Ghi chú",
+        "id": "Catatan",
+        "pt": "Observações",
+        "ja": "備考",
+        "ko": "비고",
+        "ms": "Ulasan",
+        "zh": "备注"
+    },
+    {
+        "en": "Callback",
+        "vi": "Gọi lại",
+        "id": "Panggil balik",
+        "pt": "Chamada de volta",
+        "ja": "コールバック",
+        "ko": "콜백",
+        "ms": "Panggil balik",
+        "zh": "回调"
+    },
+    {
+        "en": "Statistics",
+        "vi": "Thống kê",
+        "id": "Statistik",
+        "pt": "Estatísticas",
+        "ja": "統計",
+        "ko": "통계",
+        "ms": "Statistik",
+        "zh": "统计"
+    },
+    {
+        "en": "Apply",
+        "vi": "Áp dụng",
+        "id": "Menerapkan",
+        "pt": "Aplique",
+        "ja": "適用する",
+        "ko": "신청",
+        "ms": "Memohon",
+        "zh": "申请"
+    },
+    {
+        "en": "Pass",
+        "vi": "Mở qua",
+        "id": "Lulus",
+        "pt": "Passar",
+        "ja": "パス",
+        "ko": "통과하다",
+        "ms": "Lulus",
+        "zh": "通过"
+    },
+    {
+        "en": "Reject",
+        "vi": "Từ chối",
+        "id": "Tolak",
+        "pt": "Rejeitar",
+        "ja": "拒否",
+        "ko": "거부",
+        "ms": "Tolak",
+        "zh": "拒绝"
+    },
+    {
+        "en": "Success",
+        "vi": "Thành công",
+        "id": "Berhasil",
+        "pt": "Sucesso",
+        "ja": "成功",
+        "ko": "성공",
+        "ms": "Berjaya",
+        "zh": "成功"
+    },
+    {
+        "en": "Add",
+        "vi": "Thêm vào",
+        "id": "Menambahkan",
+        "pt": "Adicionar",
+        "ja": "追加",
+        "ko": "추가",
+        "ms": "Tambah",
+        "zh": "增加"
+    },
+    {
+        "en": "Rate",
+        "vi": "Tỷ lệ",
+        "id": "Nilai",
+        "pt": "Avaliar",
+        "ja": "レート",
+        "ko": "율",
+        "ms": "Kadar",
+        "zh": "费率"
+    },
+    {
+        "en": "Type",
+        "vi": "Kiểu",
+        "id": "Jenis",
+        "pt": "Tipo",
+        "ja": "タイプ",
+        "ko": "유형",
+        "ms": "Jenis",
+        "zh": "类型"
+    },
+    {
+        "en": "Create",
+        "vi": "Tạo",
+        "id": "Membuat",
+        "pt": "Criar",
+        "ja": "作成する",
+        "ko": "생성하다",
+        "ms": "Cipta",
+        "zh": "创建"
+    },
+    {
+        "en": "Available",
+        "vi": "Có sẵn",
+        "id": "Tersedia",
+        "pt": "Disponível",
+        "ja": "利用可能",
+        "ko": "유효한",
+        "ms": "Tersedia",
+        "zh": "可用"
+    },
+    {
+        "en": "Task",
+        "vi": "Nhiệm vụ",
+        "id": "Tugas",
+        "pt": "Tarefa",
+        "ja": "仕事",
+        "ko": "임무",
+        "ms": "Tugasan",
+        "zh": "任务"
+    },
+    {
+        "en": "Start",
+        "vi": "Bắt đầu",
+        "id": "Mulai",
+        "pt": "Começar",
+        "ja": "開始",
+        "ko": "스타트",
+        "ms": "Mula",
+        "zh": "开始"
+    },
+    {
+        "en": "Payment",
+        "vi": "Thanh toán",
+        "id": "Pembayaran",
+        "pt": "Pagamento",
+        "ja": "支払い",
+        "ko": "지불",
+        "ms": "Bayaran",
+        "zh": "支付"
+    },
+    {
+        "en": "Role",
+        "vi": "Vai trò",
+        "id": "Peran",
+        "pt": "Função",
+        "ja": "役割",
+        "ko": "역할",
+        "ms": "Peranan",
+        "zh": "角色"
+    },
+    {
+        "en": "Recently",
+        "vi": "Gần đây",
+        "id": "Baru-baru ini",
+        "pt": "Recentemente",
+        "ja": "最近",
+        "ko": "최근에",
+        "ms": "Baru-baru ini",
+        "zh": "最近"
+    },
+    {
+        "en": "Balance",
+        "vi": "Cân bằng",
+        "id": "Keseimbangan",
+        "pt": "Balanço",
+        "ja": "バランス",
+        "ko": "균형",
+        "ms": "Baki",
+        "zh": "余额"
+    },
+    {
+        "en": "Download",
+        "vi": "Tải xuống",
+        "id": "Unduh",
+        "pt": "Baixar",
+        "ja": "ダウンロード",
+        "ko": "다운로드",
+        "ms": "Muat turun",
+        "zh": "下载"
+    },
+    {
+        "en": "Add",
+        "vi": "Thêm",
+        "id": "Tambahkan",
+        "pt": "Adicionar",
+        "ja": "追加",
+        "ko": "추가",
+        "ms": "Tambah",
+        "zh": "添加"
+    },
+    {
+        "en": "Email",
+        "vi": "Email",
+        "id": "Surel",
+        "pt": "E-mail",
+        "ja": "Eメール",
+        "ko": "이메일",
+        "ms": "E-mel",
+        "zh": "邮箱"
+    },
+    {
+        "en": "Name",
+        "vi": "Tên",
+        "id": "Nama",
+        "pt": "Nome",
+        "ja": "名前",
+        "ko": "이름",
+        "ms": "Nama",
+        "zh": "姓名"
+    },
+    {
+        "en": "Permission",
+        "vi": "Quyền",
+        "id": "Izin",
+        "pt": "Permissão",
+        "ja": "許可",
+        "ko": "허가",
+        "ms": "Kebenaran",
+        "zh": "权限"
+    },
+    {
+        "en": "Device",
+        "vi": "Thiết Bị",
+        "id": "Perangkat",
+        "pt": "Dispositivo",
+        "ja": "デバイス",
+        "ko": "장치",
+        "ms": "Peranti",
+        "zh": "设备"
+    },
+    {
+        "en": "Enable",
+        "vi": "Kích Hoạt",
+        "id": "Aktifkan",
+        "pt": "Habilitar",
+        "ja": "有効にする",
+        "ko": "활성화",
+        "ms": "Aktifkan",
+        "zh": "启用"
+    },
+    {
+        "en": "Payment",
+        "vi": "Thanh Toán",
+        "id": "Pembayaran",
+        "pt": "Pagamento",
+        "ja": "支払い",
+        "ko": "지불",
+        "ms": "Pembayaran",
+        "zh": "付款"
+    },
+    {
+        "en": "End",
+        "vi": "Kết Thúc",
+        "id": "Selesai",
+        "pt": "Fim",
+        "ja": "終了",
+        "ko": "끝",
+        "ms": "Tamat",
+        "zh": "结束"
+    },
+    {
+        "en": "Address",
+        "vi": "Địa Chỉ",
+        "id": "Alamat",
+        "pt": "Endereço",
+        "ja": "住所",
+        "ko": "주소",
+        "ms": "Alamat",
+        "zh": "地址"
+    },
+    {
+        "en": "Source",
+        "vi": "Nguồn Gốc",
+        "id": "Sumber",
+        "pt": "Fonte",
+        "ja": "ソース",
+        "ko": "출처",
+        "ms": "Sumber",
+        "zh": "来源"
+    },
+    {
+        "en": "Reason",
+        "vi": "Lý Do",
+        "id": "Alasan",
+        "pt": "Razão",
+        "ja": "理由",
+        "ko": "이유",
+        "ms": "Sebab",
+        "zh": "原因"
+    },
+    {
+        "en": "Paid",
+        "vi": "Đã Thanh Toán",
+        "id": "Dibayar",
+        "pt": "Pago",
+        "ja": "支払済み",
+        "ko": "지불 됨",
+        "ms": "Dibayar",
+        "zh": "已付"
+    },
+    {
+        "zh": "注解",
+        "en": "Annotation",
+        "vi": "Chú thích",
+        "id": "Anotasi",
+        "pt": "Anotação",
+        "ja": "注釈",
+        "ko": "주석",
+        "mo": "Тайлбар"
+    },
+    {
+        "zh": "密钥",
+        "en": "Key",
+        "vi": "Khóa",
+        "id": "Kunci",
+        "pt": "Chave",
+        "ja": "キー",
+        "ko": "키",
+        "mo": "Түлхүүр"
+    },
+    {
+        "zh": "在线",
+        "en": "Online",
+        "vi": "Trực tuyến",
+        "id": "Online",
+        "pt": "Online",
+        "ja": "オンライン",
+        "ko": "온라인",
+        "mo": "Онлайн"
+    },
+    {
+        "zh": "离线",
+        "en": "Offline",
+        "vi": "Ngoại tuyến",
+        "id": "Offline",
+        "pt": "Offline",
+        "ja": "オフライン",
+        "ko": "오프라인",
+        "mo": "Офлайн"
+    },
+    {
+        "zh": "取消",
+        "en": "Cancel",
+        "vi": "Hủy bỏ",
+        "id": "Batal",
+        "pt": "Cancelar",
+        "ja": "キャンセル",
+        "ko": "취소",
+        "mo": "Цуцлах"
+    },
+    {
+        "zh": "收款",
+        "en": "Collection",
+        "vi": "Thu tiền",
+        "id": "Penerimaan",
+        "pt": "Recebimento",
+        "ja": "受取",
+        "ko": "수금",
+        "mo": "Орлого"
+    },
+    {
+        "zh": "电话",
+        "en": "Phone",
+        "vi": "Điện thoại",
+        "id": "Telepon",
+        "pt": "Telefone",
+        "ja": "電話",
+        "ko": "전화",
+        "mo": "Утас"
+    },
+    {
+        "zh": "页",
+        "en": "Page",
+        "vi": "Trang",
+        "id": "Halaman",
+        "pt": "Página",
+        "ja": "ページ",
+        "ko": "페이지",
+        "ms": "Halaman"
+    },
+    {
+        "zh": "共",
+        "en": "Total",
+        "vi": "Tổng cộng",
+        "id": "Total",
+        "pt": "Total",
+        "ja": "合計",
+        "ko": "전체",
+        "ms": "Jumlah"
+    },
+    {
+        "zh": "条",
+        "en": "Strip",
+        "vi": "Dải",
+        "id": "Strip",
+        "pt": "Tira",
+        "ja": "ストリップ",
+        "ko": "스트립",
+        "ms": "Strip"
+    },
+    {
+        "zh": "总",
+        "en": "Total",
+        "vi": "Tổng cộng",
+        "id": "Total",
+        "pt": "Total",
+        "ja": "合計",
+        "ko": "전체",
+        "ms": "Jumlah"
+    },
+    {
+        "zh": "日",
+        "en": "Day",
+        "vi": "Ngày",
+        "id": "Hari",
+        "pt": "Dia",
+        "ja": "日",
+        "ko": "일",
+        "ms": "Hari"
+    },
+    {
+        "zh": "卡",
+        "en": "Card",
+        "vi": "Thẻ",
+        "id": "Kartu",
+        "pt": "Cartão",
+        "ja": "カード",
+        "ko": "카드",
+        "ms": "Kad"
+    },
+    {
+        "en": "Number",
+        "vi": "Con số",
+        "id": "Nomor",
+        "pt": "Número",
+        "ja": "数",
+        "ko": "번호",
+        "ms": "Nombor",
+        "zh": "号"
+    }
+]

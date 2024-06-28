@@ -1,0 +1,121 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+        // 统计信息
+        function getTotalInfo() {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_total_info'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox">'
+                        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总订单金额：</b>'+js_format_money(data.data.order_amount_tota)+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总支付金额：</b>'+js_format_money(data.data.actual_amount_tota)+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总手续费金额：</b>'+js_format_money(data.data.repay_amount_tota)+'</p>'
+                        html += '</div></div>'
+                        Swal({
+                            title: '订单数据统计',
+                            width: 550,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            //position: 'top-start'
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function clearpay_timeTime() {
+            $("input[name='callback_time']").val('');
+        }
+
+        function clearOrderTime() {
+            $("input[name='order_time']").val('');
+        }
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <select class="form-control mr-sm-2 mb-2" name="pay_statu" aria-label="">
+                <option value="">支付状态</option>
+                <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>已支付</option>
+                <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>未支付</option>
+            </select>
+            <select class="form-control mr-sm-2 mb-2" name="callback_statu" aria-label="">
+                <option value="">回调状态</option>
+                {% for callback in CallbackState.name_arr %}
+                <option value="{{ callback }}" {% if search_res.callback_statu == callback %}selected{% endif %}>{{ CallbackState.name_dict.get(callback) }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="order_id" value="{{ search_res.order_id or '' }}" placeholder="订单号" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_order_id" value="{{ search_res.merchant_order_id or '' }}" placeholder="商户订单ID" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="order_time" value="{{ search_res.order_time }}" placeholder="订单时间" aria-label="" onchange="clearpay_timeTime()">
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="callback_time" value="{{ search_res.callback_time }}" placeholder="回调时间" aria-label="" onchange="clearOrderTime()">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: white;" onclick="post_update_statu('export_order', 'fewfwe', '确认导出当前订单数据？')">导出当前数据</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="getTotalInfo()">统计</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>订单号</td>
+                <td>商户名称</td>
+                <td>商户订单ID</td>
+                <td>收款卡号</td>
+                <td>收款卡姓名</td>
+                <td>订单金额</td>
+                <td>手续费</td>
+                <td>订单时间</td>
+                <td>支付状态</td>
+                <td>回调时间</td>
+                <td>回调状态</td>
+            </tr>
+            {% for data in all_datas %}
+            <tr>
+                <td>{{ data.order_id }}</td>
+                <td>{{ data.merchant_data.merchant_name }}</td>
+                <td>{{ data.merchant_order_id }}</td>
+                <td>{{ data.receive_account or 0 }}</td>
+                <td>{{ data.receive_owner or 0 }}</td>
+                <td>{{ format_money(data.order_amount) or 0 }}</td>
+                <td>{{ format_money(data.repay_amount) or 0 }}</td>
+                <td>{{ format_time_func(data.order_time) }}</td>
+                <td>{% if data.pay_statu %}<span class="ant-tag ant-tag-green">已支付</span>{% elif data.reject_pay %}<span class="ant-tag ant-tag-red">支付失败</span>{% else %}<span class="ant-tag ant-tag-red">未支付</span>{% endif %}</td>
+                <td>{{ format_time_func(data.callback_time) }}</td>
+                <td>
+                    {% if data.callback_statu == CallbackState.SUCCESS %}
+                        <span class="ant-tag ant-tag-green">已回调</span>
+                    {% elif data.callback_statu == CallbackState.FAILED %}
+                        <span class="ant-tag ant-tag-red">回调失败</span>
+                    {% else %}
+                        <span class="ant-tag ant-tag-cyan">未回调</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

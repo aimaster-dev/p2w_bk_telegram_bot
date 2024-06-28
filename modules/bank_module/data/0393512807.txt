@@ -1,0 +1,1 @@
+{"username": "0393512807", "password": "Dieng2299@", "account_number": "1039434719", "sessionId": "b2c8eb28fed14b38b36829b605e18a4f", "mobileId": "24567881", "clientId": "40288734", "cif": "24623100", "E": "", "res": "", "tranId": "", "browserToken": "", "browserId": "7152b4936cbdfaeb8ad6db2aad1e28d1"}

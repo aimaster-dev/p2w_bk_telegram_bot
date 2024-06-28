@@ -1,0 +1,239 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<script>
+    // 数据提交
+    let ready_post_vpn = false;
+    function post_vpn_data(action, data_uuid) {
+        if (!action) { return xtalert.alertError('缺少参数："action"！') }
+        let name = $.trim($("#name").val());
+        let vpn_url = $.trim($("#vpn_url").val());
+        let note = $.trim($("#note").val());
+        let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+        if (!name) { return xtalert.showValidationError('请输入名称！') }
+        if (!vpn_url) { return xtalert.showValidationError('请输入VPN链接信息！') }
+        let _data = {
+            'action': action,
+            'name': name,
+            'vpn_url': vpn_url,
+            'note': note,
+            'data_uuid': data_uuid ? data_uuid : '',
+            'agentadmin_uuid': agentadmin_uuid,
+        }
+        xtajax.post({
+            'data': _data,
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('VPN操作成功！');
+                    return reloadpage();
+                } else {
+                    return xtalert.alertError(data.message)
+                }
+            }
+        })
+    }
+
+    // 查看一行卡
+    function get_bankcard_lsit(data_uuid) {
+        Swal({
+            title: false,
+            text: '数据请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_bankcard_lsit', 'data_uuid': data_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '';
+                    html += '<div class="formBox"><div style="height: 32rem; position: relative; box-sizing: border-box; overflow-y: auto;">';
+                    html += '<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;"><tbody><tr style="background-color: #f7f7f7;"><td>银行名称</td> <td>银行卡人姓名</td> <td>银行卡号</td></tr>'
+                    let bankcard_datas = data.data.bankcard_datas;
+                    for (let i = 0; bankcard_datas.length > i; i++) {
+                        var _vv = bankcard_datas[i];
+                        console.log('_vv:', _vv)
+                        html += '<tr>'
+                        html += '<td>' + _vv.short_name + '</td>'
+                        html += '<td>' + _vv.account_username + '</td>'
+                        html += '<td>' + _vv.account + '</td>'
+                        html += '</tr>'
+                    }
+                    html += '</tbody></table></div></div>'
+                    Swal({
+                        title: '银行列表',
+                        width: 650,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    // function switch_vpn_data() {
+    //     $("#bulk_vpn").show()
+    //     $("#vpn_html").hide()
+    //     ready_post_vpn = false;
+    // }
+
+    function post_bulkvpn_data(_action) {
+        let vpn_url = $.trim($("#bulk_vpn").val());
+        let note = $.trim($("#note").val());
+        let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+        if (!vpn_url) { return xtalert.showValidationError('请输入VPN链接信息！') }
+
+        if(_action == "add") action = 'add_bulk_vpn'
+        else if(_action == "del") action = 'del_bulk_vpn'
+        else action = ''
+
+        let _data = {
+            'action': action,
+            'vpn_url': vpn_url,
+            'note': note,
+            'agentadmin_uuid': agentadmin_uuid,
+        }
+        xtajax.post({
+            'data': _data,
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('VPN操作成功！');
+                    return reloadpage();
+                } else {
+                    return xtalert.alertError(data.message)
+                }
+            }
+        })
+    }
+    // function post_bulkvpn_data(agent_html) {
+    //     if (ready_post_vpn) {
+    //         ready_post_vpn = false;
+    //         var inputDataArray = [];
+    //         $(".vpn-cell").each(function () {
+    //             // Define an object to store input data for this div
+    //             var inputData = {
+    //                 "name": $(this).find("#vpn_name").val(),
+    //                 "url": $(this).find("#vpn_url").val(),
+    //                 "agentadmin_uuid": $(this).find("#agentadmin_uuid").val(),
+    //                 "note": $(this).find("#vpn_note").val(),
+    //             }
+    //             inputDataArray.push(inputData);
+    //         });
+    //         let _data = {
+    //             'action': 'add_bulk_vpn',
+    //             'vpn_data': JSON.stringify(inputDataArray),
+    //         }
+    //         xtajax.post({
+    //             'data': _data,
+    //             'success': function (data) {
+    //                 if (data.code === 200) {
+    //                     xtalert.alertSuccessToast('VPN操作成功！');
+    //                     return reloadpage();
+    //                 } else {
+    //                     return xtalert.alertError(data.message)
+    //                 }
+    //             }
+    //         })
+    //     } else {
+    //         let txt = $("#bulk_vpn").val();
+    //         if (!txt) xtalert.alertError("请输入文字");
+    //         agents = agent_html.split("&");
+    //         select_html = '<select class="form-control mr-2" id="agentadmin_uuid" aria-label="" style="display: inline-block; width :150px"><option value="">选择代理</option>';
+    //         agents.map(function (ele) {
+    //             eleparts = ele.split(":");
+    //             select_html += `<option value="${eleparts[0]}">${eleparts[1]} (${eleparts[2]})</option>`;
+    //         });
+    //         select_html += '</select>';
+
+    //         parts = txt.split('\n');
+    //         let content_html = '';
+    //         parts.map(function (ele) {
+    //             name = ele.split(":")[0];
+    //             content_html += `
+    //         <div class="d-flex mb-2 vpn-cell">
+    //             <input type="text" class="form-control mr-2" id="vpn_name" placeholder="名称" value = ${name} style="display: inline-block;width :150px">
+    //             <input type="text" class="form-control mr-2" id="vpn_url" placeholder="VPN 链接" value = ${ele} style="display: inline-block;width :250px">
+    //             ${select_html}
+    //             <input type="text" class="form-control" id="vpn_note" placeholder="备注" style="display: inline-block;">
+    //         </div>
+    //     `
+    //         });
+    //         $("#bulk_vpn").hide();
+    //         $("#vpn_html").html(content_html);
+    //         $("#vpn_html").show();
+    //         ready_post_vpn = true;
+    //     }
+    // }
+</script>
+{% endblock %}
+
+{% block searchInput %}
+<select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+    <option value="">账户状态</option>
+    <option value="1" {% if search_res.statu=='1' %}selected{% endif %}>正常</option>
+    <option value="0" {% if search_res.statu=='0' %}selected{% endif %}>停用</option>
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="vpn_url" value="{{ search_res.vpn_url or '' }}"
+    placeholder="VPN" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" name="name" value="{{ search_res.name or '' }}" placeholder="名称"
+    aria-label="">
+{% endblock %}
+
+{% block other_function %}
+<span class="btn btn-primary ml-1 mb-2" onclick="post_form_html({'action': 'add_vpn_html'}, '添加VPN', 800)">添加VPN</span>
+<span class="btn btn-primary ml-1 mb-2"
+onclick="post_form_html({'action': 'add_bulkvpn_html'}, '批量添加VPN', 800)">批量添加VPN</span>
+<span class="btn btn-primary ml-1 mb-2" onclick="post_update_statu('allCheckVpn','669')">VPN批量检测</span>
+<span class="btn btn-danger ml-1 mb-2" onclick="post_form_html({'action': 'del_bulkvpn_html'}, '批量删除VPN', 800)">批量删除VPN</span>
+{% endblock %}
+
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            <td>名称</td>
+            <td>VPN</td>
+            <td>状态</td>
+            <td>绑定数量</td>
+            <td>绑定银行数量</td>
+            <td>添加时间</td>
+            <td>备注</td>
+            <td>操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>{{ data.name or '' }}</td>
+            <td>{{ data.vpn_url or '' }}</td>
+            <td>{% if data.statu %}<span class="ant-tag ant-tag-green">正常</span>{% else %}<span
+                    class="ant-tag ant-tag-red">停用</span>{% endif %}</td>
+            <td>{{ data.bcount or 0 }}</td>
+            <td>{{ data.bkcount or 0 }}</td>
+            <td>{{ format_time_func(data.create_time) }}</td>
+            <td>{{ data.note or '' }}</td>
+            <td width="290">
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="get_bankcard_lsit('{{ data.uuid }}')">银行列表</span>
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="post_form_html({'action': 'edit_vpn_html', 'data_uuid': '{{ data.uuid }}'}, '编辑VPN信息', 800)">编辑</span>
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="post_update_statu('testVpn','{{ data.uuid }}')">测试</span>
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="post_update_statu('update_statu', '{{ data.uuid }}','确定切换该Vpn使用状态？')">状态</span>
+                <span class="ant-tag ant-tag-red"
+                    onclick="post_update_statu('del', '{{ data.uuid }}', '确定删除该数据？')">删除</span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

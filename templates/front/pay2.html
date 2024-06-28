@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="
+         upgrade-insecure-requests; 
+         default-src &#39;self&#39; wss: ws: data: blob: wvjbscheme://* &#39;unsafe-eval&#39; &#39;unsafe-inline&#39;;
+         img-src * data: blob:;
+         media-src * data: blob:;
+         font-src * data:;
+         style-src * &#39;unsafe-inline&#39;; 
+         script-src * &#39;unsafe-inline&#39; &#39;unsafe-eval&#39;;
+         connect-src * ws: wss:;">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#007aff">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>Payment Gateway</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <link rel="stylesheet" href="/public/world/p/index.7f20d6b2.css">
+    <link rel="stylesheet" href="/public/world/p/bootstrap-grid.min.css">
+    <script src="/static/common/jquery.js"></script>
+    <script src="/static/common/xtajax.js"></script>
+    <script>
+
+        $(function () {
+
+            var check_order = setInterval(function () {
+                xtajax.post({
+                    'url': '{{ url_for('api.order_query_api') }}',
+                    'data': {'action': 'queryStatu', 'orderUid': '{{ orderUuid }}', 'time': '{{ time }}'},
+                    'success': function (data) {
+                        if (data.code === 200){
+                            if (data.data.is_state){
+                                window.location.href = '{{ url_for('front.pay_success_view', order_id=orderId) }}';
+                            }
+                            if (data.data.finish){
+                                return clearInterval(check_order);
+                            }
+                        }else{
+                            console.log(data.message);
+                        }
+                    }
+                })
+            }, 3000)
+            DaoJiShi('{{ orderend_time }}', '{{ crr_time }}')
+        })
+
+        function getDate(strDate){
+            var _date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
+            function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+            return _date;
+        }
+        function getLocalTime(nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+        }
+        function DaoJiShi(openTime1, serverTime1) {
+            var openTime = getDate(openTime1);
+            var serverTime = getDate(serverTime1);
+            var difftime = (openTime - serverTime) / 1000;
+
+            var data_func = function () {
+                if (difftime > 0){
+                    var hours = parseInt(difftime / 3600);    // 小时 60*60 总小时数-过去的小时数=现在的小时数
+                    var minutes = parseInt(difftime % 3600/60); // 分钟 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
+                    var seconds = parseInt(difftime % 60);  // 以60秒为一整份 取余 剩下秒数
+                    if (hours < 10){
+                        var hours = '0'+hours;
+                    }
+                    if (minutes < 10){
+                        var minutes = '0'+minutes;
+                    }
+                    if (seconds < 10){
+                        var seconds = '0'+seconds;
+                    }
+                    var dj_str = hours + ':' + minutes + ':' + seconds
+                    $("#jsText").text(dj_str);
+                }else {
+                    $("#jsText").html('Đơn hàng đã hết hạn!');
+                    let rr = '/public/world/img/sb.png'
+                    $("#qrcode_image").find('img').attr('src', rr)
+                    clearInterval(timer);
+                    return
+                }
+                -- difftime;
+            }
+            var timer = setInterval(function () {
+                try {
+                    data_func();
+                }catch (e) {
+                    clearInterval(timer);
+                    window.location.replace(window.location.href);
+                }
+            }, 1000);
+        }
+    </script>
+</head>
+<body zaui-theme="light">
+
+    <div id="app">
+        <div class="zaui-routes">
+            <div class="zaui-routes-item">
+                <div class="zaui-page">
+                    <div class="css-16t6ibu">
+
+
+                        <div class="zaui-box zaui-box-mb-4">
+
+                            <div class="zaui-box zaui-box-mb-4">
+                                <span class="zaui-text-title zaui-text-title-small">1. Nếu không thể sử dụng mã QR, vui lòng sao chép thông tin bên dưới để chuyển tiền</span>
+                            </div>
+                            <div class="zaui-box-flex row">
+                                <div class="css-1tcuxkf col-12 col-md-4 border-left">
+                                    <div class="md:w-[360px] lg:h-[537px] md:h-auto px-6 py-10 lg:min-h-[537px] rounded-lg">
+                                        <div class="flex flex-col bg-white rounded-lg overflow-hidden h-full">
+                                            <div class="flex flex-col items-center justify-center flex-1 ">
+                                                <div>
+                                                    <img id="qrcode_image" alt="qr" src="{{ payQrcode }}" height="363" width="363" style="height: 207.61px; width: 207.61px;">
+                                                </div>
+                                            </div>
+                                            <div class="bg-[#F4F5F6] h-10 text-center flex flex-center items-center justify-center">
+                                                <i class="zaui-icon" style="font-size: 17px;margin-top: 3px;margin-left: 10px;">zi_clock_1</i>
+                                                <p id="jsText" style="color:#c90000;font-weight:500;font-size:16px;margin: 7px 10px 5px 3px;" class="text-[12px]  text-[#767A7F]  leading-4">00:14:59</p>
+                                                <i onclick="downloadImage()" class="zaui-text-large zaui-icon" style="cursor:pointer;font-size: 17px;margin-bottom: 1px;">zi_qrline</i>
+                                                <p onclick="downloadImage()" class="zaui-text-large text-[12px]  text-[#767A7F]  leading-4" style="cursor:pointer;margin: 7px 10px 5px 3px;font-size:17px">Lưu mã QR</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="css-1tcuxkf col-12 col-md-8 border-right">
+                                    <div class="css-ngk5ld">
+                                        <div class="css-1rxujjw">
+                                            <div size="36" radius="0" class="css-v7jcd0"><img src="{{ bank_data.local_logo }}" draggable="false" alt="mbbank" loading="lazy"></div>
+                                        </div>
+                                        <span style="font-size:22px;" class="zaui-text zaui-text-large">{{ bank_data.get('shortName') }}</span>
+                                    </div>
+                                    <ul class="zaui-list">
+                                        <li role="presentation" class="zaui-list-item">
+                                            <div class="zaui-list-item-right">
+                                                <div class="zaui-list-item-content"><span
+                                                        class="zaui-text zaui-text-small zaui-text-02">Tên tài khoản</span><span
+                                                        style="font-size:22px;font-weight:500" class="zaui-text ">{{ bankcard_data.account_username }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li role="presentation" class="zaui-list-item">
+                                            <div class="zaui-list-item-right">
+                                                <div class="zaui-list-item-content"><span
+                                                        class="zaui-text zaui-text-small zaui-text-02">Số tài khoản</span><span
+                                                        style="font-size:22px;font-weight:500"
+                                                        class="zaui-text">{{ bankcard_data.account }}</span></div>
+                                                <div class="zaui-list-item-suffix">
+                                                    <div class="zaui-box zaui-box-flex zaui-box-align-items-center"
+                                                         style="height: 100%;">
+                                                        <button onclick="copyText('{{ bankcard_data.account }}','Số tài khoản')" class="zaui-btn zaui-btn-primary zaui-btn-small" type="button">
+                                                            <div class="zaui-btn-container"><span><i class="zaui-icon" style="font-size: 14px;margin-right: 3px;margin-bottom: 2px;">zi_copy</i>Sao chép</span>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li role="presentation" class="zaui-list-item">
+                                            <div class="zaui-list-item-right">
+                                                <div class="zaui-list-item-content"><span
+                                                        class="zaui-text zaui-text-small zaui-text-02">Nội dung chuyển khoản</span><span
+                                                        style="background: linear-gradient(135deg, rgb(181 11 32) 0%, rgb(221 0 34) 100%);    -webkit-background-clip: text;"
+                                                        class="zaui-text zaui-text-large">{{ order_data.bank_memo }}</span></div>
+                                                <div class="zaui-list-item-suffix">
+                                                    <div class="zaui-box zaui-box-flex zaui-box-align-items-center"
+                                                         style="height: 100%;">
+                                                        <button onclick="copyText('{{ order_data.bank_memo }}','nội dung chuyển khoản')"
+                                                                class="zaui-btn zaui-btn-secondary zaui-btn-small"
+                                                                type="button">
+                                                            <div class="zaui-btn-container"><span><i class="zaui-icon" style="font-size: 14px;margin-right: 3px;margin-bottom: 2px;">zi_copy</i>Sao chép</span>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li role="presentation" class="zaui-list-item">
+                                            <div class="zaui-list-item-right">
+                                                <div class="zaui-list-item-content"><span
+                                                        class="zaui-text zaui-text-small zaui-text-02">Số tiền (đ)</span><span
+                                                        class="zaui-text zaui-text-large">{{ format_money(order_data.order_amount) }} VND</span></div>
+                                                <div class="zaui-list-item-suffix">
+                                                    <div class="zaui-box zaui-box-flex zaui-box-align-items-center"
+                                                         style="height: 100%;">
+                                                        <button onclick="copyText('{{ order_data.order_amount }}','số tiền')"
+                                                                class="zaui-btn zaui-btn-secondary zaui-btn-small"
+                                                                type="button">
+                                                            <div class="zaui-btn-container"><span><i class="zaui-icon"
+                                                                                                     style="font-size: 14px;margin-right: 3px;margin-bottom: 2px;">zi_copy</i>Sao chép</span>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="zaui-box zaui-box-mb-6"></div>
+                            <div class="css-18xbri6">
+                                <div>
+                                    <span color="text-02" class="zaui-text zaui-text-xSmall css-17nbru5">
+                                        <strong>Lưu ý:</strong><br>
+                                        <ul>
+                                            <li> Nếu <strong>không thể sử dụng mã QR Code</strong>, vui lòng <strong>sao chép tài khoản thanh toán</strong>.</li>
+                                            <li>Bạn vui lòng <strong>kiểm tra kỹ thông tin</strong> trước khi thực hiện bất kỳ thao tác nào. Chúng tôi  <strong>không chịu trách nhiệm</strong> về tính xác thực thông tin chuyển khoản.</li>
+                                            <li>Khi chuyển khoản <strong>không làm mới trình duyệt</strong>.</li>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="zaui-box zaui-box-mb-4">
+                            <div class="zaui-box zaui-box-mb-6"></div>
+                            <div class="zaui-box zaui-box-mb-4"><span class="zaui-text-title zaui-text-title-small" style="white-space: pre-wrap;">2. Dán vào ứng dụng ngân hàng của bạn<span class="zaui-text-02"></span></span></div>
+                            <div offset="16" class="css-11on2hz">
+                                <div class="css-p5qly7" onclick="open_app_bank()">
+                                    <div class="zaui-box zaui-box-mb-1 zaui-box-flex zaui-box-justify-center zaui-box-align-items-center">
+                                        <div size="48" radius="4" class="css-wn8v4"><img src="/public/world/p/techcombank-logo.png"
+                                                                                         draggable="false" alt="techcombank"
+                                                                                         loading="lazy"></div>
+                                    </div>
+                                    <span class="zaui-text zaui-text-xxSmall app-name">Techcombank</span>
+                                </div>
+                                <div class="css-p5qly7" onclick="open_app_bank()">
+                                    <div class="zaui-box zaui-box-mb-1 zaui-box-flex zaui-box-justify-center zaui-box-align-items-center">
+                                        <div size="48" radius="4" class="css-wn8v4"><img src="/public/world/p/namabank-logo.png"
+                                                                                         draggable="false" alt="namabank"
+                                                                                         loading="lazy"></div>
+                                    </div>
+                                    <span class="zaui-text zaui-text-xxSmall app-name">Nam A Bank</span>
+                                </div>
+                                <div class="css-p5qly7" onclick="open_app_bank()">
+                                    <div class="zaui-box zaui-box-mb-1 zaui-box-flex zaui-box-justify-center zaui-box-align-items-center">
+                                        <div size="48" radius="4" class="css-wn8v4"><img src="/public/world/p/vietcombank-logo.png"
+                                                                                         draggable="false" alt="vietcombank"
+                                                                                         loading="lazy"></div>
+                                    </div>
+                                    <span class="zaui-text zaui-text-xxSmall app-name">Vietcombank</span>
+                                </div>
+                                <div class="css-p5qly7" id="expand_bank">
+                                    <div class="zaui-box zaui-box-mb-1 zaui-box-flex zaui-box-justify-center zaui-box-align-items-center"
+                                         style="height: 48px;"><i class="zaui-icon zaui-text-02">zi_more_grid</i></div>
+                                    <span class="zaui-text zaui-text-xxSmall">Xem thêm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="css-2n23ns">
+                            <div class="css-i8g9mc" id="background_fade" style="opacity: 0;display: none;"></div>
+                            <div class="css-1qiyv9">
+                                <div id="banks_list"
+                                     style="overflow: hidden; display: flex; flex-direction: column; height: 0vh; touch-action: none;">
+                                    <div class="css-1pozz91"><i class="zaui-icon">zi_close</i></div>
+                                    <div class="css-1rp5a86">
+                                        <div class="css-1i9zwtc"></div>
+                                    </div>
+                                    <div class="zaui-box zaui-box-pb-3 zaui-box-text-align-center"><span
+                                            class="zaui-text-title">Tìm ngân hàng của bạn</span></div>
+                                    <div class="css-n3wn9s"></div>
+                                    <div class="zaui-box zaui-box-p-4" style="position: relative;">
+                                     <span class="zaui-input-affix-wrapper zaui-input-search zaui-input-search-small"
+                                           role="presentation">
+                                        <span class="zaui-input-prefix">
+                                           <button class="zaui-btn zaui-btn-neutral zaui-btn-tertiary zaui-btn-icon-only zaui-btn-small zaui-input-search-button"
+                                                   type="button">
+                                              <div class="zaui-btn-container">
+                                                 <span class="zaui-btn-icon">
+                                                    <svg viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                       <path fill-rule="evenodd" clip-rule="evenodd"
+                                                             d="M2.10039 8.00039C2.10039 4.74191 4.74191 2.10039 8.00039 2.10039C11.2589 2.10039 13.9004 4.74191 13.9004 8.00039C13.9004 11.2589 11.2589 13.9004 8.00039 13.9004C4.74191 13.9004 2.10039 11.2589 2.10039 8.00039ZM8.00039 0.900391C4.07917 0.900391 0.900391 4.07917 0.900391 8.00039C0.900391 11.9216 4.07917 15.1004 8.00039 15.1004C9.67283 15.1004 11.2102 14.5221 12.4235 13.5547C12.4272 13.5585 12.431 13.5623 12.4348 13.5661L17.4348 18.5661C17.7472 18.8785 18.2537 18.8785 18.5661 18.5661C18.8785 18.2537 18.8785 17.7472 18.5661 17.4348L13.5661 12.4348C13.5623 12.431 13.5585 12.4272 13.5547 12.4235C14.5221 11.2102 15.1004 9.67283 15.1004 8.00039C15.1004 4.07917 11.9216 0.900391 8.00039 0.900391Z"
+                                                             fill="currentColor"></path>
+                                                    </svg>
+                                                 </span>
+                                              </div>
+                                           </button>
+                                        </span>
+                                        <input type="text" id="search-input" placeholder="Nhập tên ngân hàng" label=""
+                                               class="zaui-input zaui-input-small zaui-input-search zaui-input-search-small"
+                                               value="">
+                                        <span class="zaui-input-suffix">
+                                           <span class="zaui-input-suffix-item zaui-input-clear-btn zaui-input-clear-btn-hidden"
+                                                 role="button" tabindex="-1">
+                                              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                                   xmlns="http://www.w3.org/2000/svg" class="zaui-input-clear-icon">
+                                                 <path fill-rule="evenodd" clip-rule="evenodd"
+                                                       d="M1.09961 7.99961C1.09961 4.18884 4.18884 1.09961 7.99961 1.09961C11.8104 1.09961 14.8996 4.18884 14.8996 7.99961C14.8996 11.8104 11.8104 14.8996 7.99961 14.8996C4.18884 14.8996 1.09961 11.8104 1.09961 7.99961ZM5.27535 5.27535C5.50966 5.04103 5.88956 5.04103 6.12387 5.27535L7.99961 7.15108L9.87535 5.27535C10.1097 5.04103 10.4896 5.04103 10.7239 5.27535C10.9582 5.50966 10.9582 5.88956 10.7239 6.12387L8.84814 7.99961L10.7239 9.87535C10.9582 10.1097 10.9582 10.4896 10.7239 10.7239C10.4896 10.9582 10.1097 10.9582 9.87535 10.7239L7.99961 8.84814L6.12387 10.7239C5.88956 10.9582 5.50966 10.9582 5.27535 10.7239C5.04103 10.4896 5.04103 10.1097 5.27535 9.87535L7.15108 7.99961L5.27535 6.12387C5.04103 5.88956 5.04103 5.50966 5.27535 5.27535Z"
+                                                       fill="currentColor"></path>
+                                              </svg>
+                                           </span>
+                                        </span>
+                                     </span>
+                                    </div>
+                                    <div class="css-72wqq8" style="overflow-y: auto;">
+                                        <ul class="zaui-list">
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/abbank-logo.png" draggable="false" alt="abbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">AB Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP An Bình</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/acb-logo.png" draggable="false" alt="acb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">ACB</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Á Châu</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/agribank-logo.png" draggable="false" alt="agribank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Agribank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Nông nghiệp và Phát triển
+                                                            Nông thôn Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/baoviet-logo.png" draggable="false" alt="baoviet"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">BaoViet Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Bảo Việt</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/bidv-logo.png" draggable="false" alt="bidv"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">BIDV</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Đầu tư và Phát triển
+                                                            Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/cake-logo.png" draggable="false" alt="cake"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">CAKE by VPBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH số CAKE by VPBank - NH TMCP
+                                                            Việt Nam Thịnh Vượng
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/cimb-logo.png" draggable="false" alt="cimb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">CIMB Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TNHH MTV CIMB Việt Nam</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/coopbank-logo.png" draggable="false" alt="coopbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Co-op Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Hợp tác xã Việt Nam</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/eximbank-logo.png" draggable="false" alt="eximbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Eximbank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Xuất Nhập khẩu Việt
+                                                            Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/hdbank-logo.png" draggable="false" alt="hdbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">HDBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Phát triển TP. Hồ Chí
+                                                            Minh
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/ibkhn-logo.png" draggable="false" alt="ibkhn"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">IBK HN</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Công nghiệp Hàn Quốc - CN Hà
+                                                            Nội
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/ibkhcm-logo.png" draggable="false" alt="ibkhcm"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">IBK HCM</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Công nghiệp Hàn Quốc - CN
+                                                            TP.HCM
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/indovinabank-logo.png" draggable="false"
+                                                            alt="indovinabank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Indovina Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TNHH Indovina</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/kasikorn-logo.png" draggable="false" alt="kasikorn"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Kasikornbank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Đại chúng TNHH KASIKORNBANK
+                                                            - CN TP. Hồ Chí Minh
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/kienlongbank-logo.png" draggable="false"
+                                                            alt="kienlongbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">KienlongBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Kiên Long</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/lienvietpostbank-logo.png" draggable="false"
+                                                            alt="lienvietpostbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">LienVietPostBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Bưu Điện Liên Việt
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/mbbank-logo.png" draggable="false" alt="mbbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">MB Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Quân đội</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/msb-logo.png" draggable="false" alt="msb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">MSB</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Hàng Hải</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/namabank-logo.png" draggable="false" alt="namabank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz">
+                                                                <span style="margin-right: 4px;">Nam A Bank</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Nam Á</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/ncb-logo.png" draggable="false" alt="ncb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">NCB Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Quốc Dân</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/nonghyup-logo.png" draggable="false" alt="nonghyup"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Nonghyup Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH Nonghyup - CN Hà Nội</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/ocb-logo.png" draggable="false" alt="ocb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">OCB Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Phương Đông</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/oceanbank-logo.png" draggable="false"
+                                                            alt="oceanbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Ocean Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TM TNHH MTV Đại Dương</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/publicbank-logo.png" draggable="false"
+                                                            alt="publicbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Public Bank Vietnam</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TNHH MTV Public Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/pvcombank-logo.png" draggable="false"
+                                                            alt="pvcombank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">PVcomBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Đại Chúng Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/sacombank-logo.png" draggable="false"
+                                                            alt="sacombank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Sacombank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Sài Gòn Thương Tín
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/saigonbank-logo.png" draggable="false"
+                                                            alt="saigonbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">SaigonBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Sài Gòn Công Thương
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/scb-logo.png" draggable="false" alt="scb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">SCB</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Sài Gòn</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/seabank-logo.png" draggable="false" alt="seabank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">SeABank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Đông Nam Á</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/shb-logo.png" draggable="false" alt="shb"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">SHB</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Sài Gòn - Hà Nội</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/shinhanbank-logo.png" draggable="false"
+                                                            alt="shinhanbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Shinhan Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TNHH MTV Shinhan Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/techcombank-logo.png" draggable="false"
+                                                            alt="techcombank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz">
+                                                                <span style="margin-right: 4px;">Techcombank</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Kỹ thương Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/timo-logo.png" draggable="false" alt="timo"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Timo</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH số Timo by Bản Việt Bank
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/tpbank-logo.png" draggable="false" alt="tpbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">TPBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Tiên Phong</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/uob-logo.png" draggable="false" alt="uob"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">United Overseas Bank Vietnam</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH United Overseas Bank Việt
+                                                            Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vib-logo.png" draggable="false" alt="vib"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">VIB</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Quốc tế Việt Nam</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vietabank-logo.png" draggable="false"
+                                                            alt="vietabank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">VietABank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Việt Á</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vietbank-logo.png" draggable="false" alt="vietbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">VietBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Việt Nam Thương Tín
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vietcombank-logo.png" draggable="false"
+                                                            alt="vietcombank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Vietcombank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Ngoại Thương Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vietinbank-logo.png" draggable="false"
+                                                            alt="vietinbank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">VietinBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Công thương Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/vpbank-logo.png" draggable="false" alt="vpbank"
+                                                            loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">VPBank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TMCP Việt Nam Thịnh Vượng
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li onclick="open_app_bank_list()" role="presentation"
+                                                class="zaui-list-item zaui-list-item-ellipsis zaui-list-item-pressable">
+                                                <div class="zaui-list-item-prefix">
+                                                    <div size="40" radius="8" class="css-16vqky5"><img
+                                                            src="/public/world/p/wooribank-logo.png" draggable="false"
+                                                            alt="wooribank" loading="lazy"></div>
+                                                </div>
+                                                <div class="zaui-list-item-right">
+                                                    <div class="zaui-list-item-content">
+                                                        <div class="zaui-list-item-title-container">
+                                                            <div class="zaui-list-item-title css-1sg2lsz"><span
+                                                                    style="margin-right: 4px;">Woori Bank</span></div>
+                                                        </div>
+                                                        <div class="zaui-list-item-subtitle">NH TNHH MTV Woori Việt Nam
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="zaui-box zaui-box-mb-4"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="notify" style="display:none" class="zaui-snackbar zaui-snackbar zaui-snackbar-bottom-visible zaui-snackbar-bottom">
+            <div class="zaui-snackbar-content">
+                <div class="zaui-snackbar-desc-wrapper">
+                    <div class="zaui-snackbar-prefix-icon zaui-snackbar-success"><i class="zaui-icon">zi_check_circle_solid</i></div>
+                    <div class="zaui-snackbar-desc"><span id="type_copy"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // 下载QR
+        function downloadImage() {
+            var imageToDownload = document.getElementById('qrcode_image');
+            // Create a temporary <a> element to trigger the download
+            var tempLink = document.createElement('a');
+            tempLink.href = imageToDownload.src;
+            tempLink.download = 'DownloadedImage'; // Specify the default filename here
+            document.body.appendChild(tempLink); // Append to body
+            tempLink.click(); // Simulate click
+            document.body.removeChild(tempLink); // Remove the temporary link
+            document.getElementById("type_copy").textContent = "Đã lưu ảnh về máy"
+            showSnackbar()
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', function () {
+                var filter = searchInput.value.toLowerCase();
+                var listItems = document.querySelectorAll('.zaui-list-item[onclick="open_app_bank_list()"]');
+
+                listItems.forEach(function (item) {
+                    console.log(item);
+                    var bankName = item.querySelector('.zaui-list-item-title').textContent.toLowerCase();
+                    var bankAlt = item.querySelector('img').getAttribute('alt').toLowerCase();
+                    var bankSubtitle = item.querySelector('.zaui-list-item-subtitle').textContent.toLowerCase();
+
+                    if (bankName.includes(filter) || bankAlt.includes(filter) || bankSubtitle.includes(filter)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        list_bank = JSON.parse('{"abbank":{"bank":"abbank","scheme":"abbankmobile","packageId":"com.vnpay.abbank","appStoreId":"id1137160023","supportVietQR":true,"supportVNPayQR":true},"acb":{"bank":"acb","scheme":"acbapp","packageId":"mobile.acb.com.vn","appStoreId":"id950141024","supportVietQR":true,"supportVNPayQR":false},"agribank":{"bank":"agribank","scheme":"agribankmobile","packageId":"com.vnpay.Agribank3g","appStoreId":"id935944952","supportVietQR":true,"supportVNPayQR":true},"bacabank":{"bank":"bacabank","packageId":"com.bab.retailUAT","appStoreId":"id1441408786","supportVietQR":false,"supportVNPayQR":false},"baoviet":{"bank":"baoviet","scheme":"baovietmobile","packageId":"com.vnpay.bvbank","appStoreId":"id1504422967","supportVietQR":true,"supportVNPayQR":true},"bidc":{"bank":"bidc","scheme":"bidcvnmobile","packageId":"com.vnpay.bidc","appStoreId":"id1043501726","supportVietQR":false,"supportVNPayQR":true},"bidv":{"bank":"bidv","scheme":"bidvsmartbanking","packageId":"com.vnpay.bidv","appStoreId":"id1061867449","supportVietQR":true,"supportVNPayQR":true},"cake":{"bank":"cake","scheme":"cake.vn","packageId":"xyz.be.cake","appStoreId":"id1551907051","supportVietQR":true,"supportVNPayQR":false},"cbbank":{"bank":"cbbank","packageId":"cbbank.vn.mobile","appStoreId":"id1531443181","supportVietQR":false,"supportVNPayQR":false},"cimb":{"bank":"cimb","scheme":"cimb","packageId":"vn.cimbbank.octo","appStoreId":"id1318127958","supportVietQR":true,"supportVNPayQR":false},"coopbank":{"bank":"coopbank","scheme":"coopbankmobile","packageId":"com.vnpay.coopbank","appStoreId":"id1578445811","supportVietQR":true,"supportVNPayQR":true},"dbsbank":{"bank":"dbsbank","packageId":"com.dbs.sg.dbsmbanking","appStoreId":"id1068403826","supportVietQR":false,"supportVNPayQR":false},"dongabank":{"bank":"dongabank","packageId":"com.dongabank.mobilenternet","appStoreId":"id993124125","supportVietQR":false,"supportVNPayQR":false},"eximbank":{"bank":"eximbank","scheme":"com.vnpay.eximbankomnimobile","schemeAndroid":"eximbankomnimobile","packageId":"com.vnpay.EximBankOmni","appStoreId":"id1571427361","supportVietQR":true,"supportVNPayQR":true},"gpbank":{"bank":"gpbank","supportVietQR":false,"supportVNPayQR":false},"hdbank":{"bank":"hdbank","scheme":"hdbankmobile","packageId":"com.vnpay.hdbank","appStoreId":"id1461658565","supportVietQR":true,"supportVNPayQR":true},"hongleongbank":{"bank":"hongleongbank","packageId":"my.com.hongleongconnect.mobileconnect","appStoreId":"id1446719260","supportVietQR":false,"supportVNPayQR":false},"hsbc":{"bank":"hsbc","packageId":"vn.hsbc.hsbcvietnam","appStoreId":"id1472163155","supportVietQR":false,"supportVNPayQR":false},"ibkhn":{"bank":"ibkhn","scheme":"ionebankglobal","packageId":"com.ibk.neobanking.mini","appStoreId":"id787064809","supportVietQR":true,"supportVNPayQR":false},"ibkhcm":{"bank":"ibkhcm","scheme":"ionebankglobal","packageId":"com.ibk.neobanking.mini","appStoreId":"id787064809","supportVietQR":true,"supportVNPayQR":false},"indovinabank":{"bank":"indovinabank","scheme":"ivbmobilebanking","packageId":"com.vnpay.ivb","appStoreId":"id1096963960","supportVietQR":true,"supportVNPayQR":true},"kasikorn":{"bank":"kasikorn","scheme":"kbank.kplusvn","packageId":"com.kasikornbank.kplus.vn","appStoreId":"id1586576195","supportVietQR":true,"supportVNPayQR":false},"kienlongbank":{"bank":"kienlongbank","scheme":"kienlongbankmobilebanking","packageId":"com.sunshine.ksbank","appStoreId":"id1562823941","supportVietQR":true,"supportVNPayQR":true},"kookminhn":{"bank":"kookminhn","packageId":"com.kbstar.global","appStoreId":"id1542727700","supportVietQR":false,"supportVNPayQR":false},"kookminhcm":{"bank":"kookminhcm","packageId":"com.kbstar.global","appStoreId":"id1542727700","supportVietQR":false,"supportVNPayQR":false},"lienvietpostbank":{"bank":"lienvietpostbank","scheme":"lv24h","packageId":"vn.com.lpb.lienviet24h","appStoreId":"id1488794748","supportVietQR":true,"supportVNPayQR":false},"mbbank":{"bank":"mbbank","scheme":"mbmobile","packageId":"com.mbmobile","appStoreId":"id1205807363","supportVietQR":true,"supportVNPayQR":false},"msb":{"bank":"msb","scheme":"msbmobile","packageId":"vn.com.msb.smartBanking","appStoreId":"id436134873","supportVietQR":true,"supportVNPayQR":false},"namabank":{"bank":"namabank","scheme":"nabTransferMoney","packageId":"ops.namabank.com.vn","appStoreId":"id1456997296","supportVietQR":true,"supportVNPayQR":false},"ncb":{"bank":"ncb","scheme":"ncbizimobile","packageId":"com.ncb.bank","appStoreId":"id1465217154","supportVietQR":true,"supportVNPayQR":false},"nonghyup":{"bank":"nonghyup","scheme":"newnhsmartbanking","packageId":"nh.smart.banking","appStoreId":"id1444712671","supportVietQR":true,"supportVNPayQR":false},"ocb":{"bank":"ocb","scheme":"omniapp","packageId":"com.ocb.omniextra","appStoreId":"id1358682577","supportVietQR":true,"supportVNPayQR":false},"oceanbank":{"bank":"oceanbank","scheme":"oceanbankmobilebanking","packageId":"com.vnpay.ocean","appStoreId":"id1469028843","supportVietQR":true,"supportVNPayQR":true},"pgbank":{"bank":"pgbank","packageId":"pgbankApp.pgbank.com.vn","appStoreId":"id1537765475","supportVietQR":false,"supportVNPayQR":false},"publicbank":{"bank":"publicbank","scheme":"publicbankmobile","packageId":"com.vnpay.publicbank","appStoreId":"id1573736472","supportVietQR":true,"supportVNPayQR":false},"pvcombank":{"bank":"pvcombank","scheme":"pvcombankapp","packageId":"com.vsii.pvcombank","appStoreId":"id957284067","supportVietQR":true,"supportVNPayQR":false},"sacombank":{"bank":"sacombank","scheme":"sacombankmobile","packageId":"src.com.sacombank","appStoreId":"id885814869","supportVietQR":true,"supportVNPayQR":false},"saigonbank":{"bank":"saigonbank","scheme":"Sgbmobile","packageId":"com.vnpay.sgbank","appStoreId":"id1481832587","supportVietQR":true,"supportVNPayQR":true},"scb":{"bank":"scb","scheme":"scbmobilebanking","packageId":"com.vnpay.SCB","appStoreId":"id954973621","supportVietQR":true,"supportVNPayQR":true},"seabank":{"bank":"seabank","scheme":"seabankmobile","packageId":"vn.com.seabank.mb1","appStoreId":"id846407152","supportVietQR":true,"supportVNPayQR":false},"shb":{"bank":"shb","scheme":"shbmobile","packageId":"vn.shb.mbanking","appStoreId":"id538278798","supportVietQR":true,"supportVNPayQR":true},"shinhanbank":{"bank":"shinhanbank","scheme":"shinhanglbvnbank","packageId":"com.shinhan.global.vn.bank","appStoreId":"id1071033810","supportVietQR":true,"supportVNPayQR":true},"standardcharteredbank":{"bank":"standardcharteredbank","packageId":"com.sc.mobilebanking.vn","appStoreId":"id1146741999","supportVietQR":false,"supportVNPayQR":false},"techcombank":{"bank":"techcombank","scheme":"tcb","packageId":"vn.com.techcombank.bb.app","appStoreId":"id1548623362","supportVietQR":true,"supportVNPayQR":true,"supportSignedDeeplink":true},"timo":{"bank":"timo","scheme":"plus","packageId":"io.lifestyle.plus","appStoreId":"id1521230347","supportVietQR":true,"supportVNPayQR":false},"tpbank":{"bank":"tpbank","scheme":"hydro","packageId":"com.tpb.mb.gprsandroid","appStoreId":"id450464147","supportVietQR":true,"supportVNPayQR":false},"ubank":{"bank":"ubank","packageId":"vn.vpbank.ubank","appStoreId":"id1529056628","supportVietQR":false,"supportVNPayQR":false},"uob":{"bank":"uob","scheme":"mightyapp","packageId":"com.uob.mightyvn","appStoreId":"id1174327324","supportVietQR":true,"supportVNPayQR":false},"vib":{"bank":"vib","scheme":"myvib2","packageId":"com.vib.myvib2","appStoreId":"id1626624790","supportVietQR":true,"supportVNPayQR":false},"vietabank":{"bank":"vietabank","scheme":"vabmobilebanking","packageId":"phn.com.vn.mb","appStoreId":"id910897337","supportVietQR":true,"supportVNPayQR":true},"vietbank":{"bank":"vietbank","scheme":"vietbankmobilebanking","packageId":"com.vnpay.vietbank","appStoreId":"id1461658565","supportVietQR":true,"supportVNPayQR":true},"banviet":{"bank":"banviet","packageId":"vn.banvietbank.mobilebanking","appStoreId":"id1526444697","supportVietQR":false,"supportVNPayQR":false},"vietcombank":{"bank":"vietcombank","scheme":"vietcombankmobile","packageId":"com.VCB","appStoreId":"id561433133","supportVietQR":true,"supportVNPayQR":true},"vietinbank":{"bank":"vietinbank","scheme":"vietinbankmobile","packageId":"com.vietinbank.ipay","appStoreId":"id689963454","supportVietQR":true,"supportVNPayQR":true},"vpbank":{"bank":"vpbank","scheme":"vpbankneo","packageId":"com.vnpay.vpbankonline","appStoreId":"id1209349510","supportVietQR":true,"supportVNPayQR":false},"vrb":{"bank":"vrb","supportVietQR":false,"supportVNPayQR":false},"wooribank":{"bank":"wooribank","scheme":"wvbs","packageId":"vn.com.woori.smart","appStoreId":"id1501785125","supportVietQR":true,"supportVNPayQR":false}}')
+
+        function open_app_bank() {
+            // Get the image element inside the clicked div
+            var imgElement = event.currentTarget.getElementsByTagName('img')[0];
+
+            // Extract the bank name from the alt attribute of the image
+            var bankName = imgElement.getAttribute('alt');
+
+            // Parse the list of banks
+
+            // Check if the bank exists in the list
+            if (list_bank[bankName]) {
+                var bankDetails = list_bank[bankName];
+
+                // Construct the URL
+                var urlScheme = bankDetails.scheme;
+                var url = urlScheme + "://";
+
+                // Redirect to the URL
+                window.location.href = url;
+            } else {
+                console.error("Bank not found in the list");
+            }
+        }
+
+        function open_app_bank_list() {
+            // Find the closest li element to the clicked target
+            var clickedLi = event.target.closest('li');
+
+            // Get the image element inside the li element
+            var imgElement = clickedLi.querySelector('img');
+
+            // Extract the bank name from the alt attribute of the image
+            var bankName = imgElement.getAttribute('alt');
+
+            // Parse the list of banks
+
+            // Check if the bank exists in the list
+            if (list_bank[bankName]) {
+                var bankDetails = list_bank[bankName];
+
+                // Construct the URL
+                var urlScheme = bankDetails.scheme;
+                var url = urlScheme + "://";
+
+                // Redirect to the URL
+                window.location.href = url;
+            } else {
+                console.error("Bank not found in the list");
+            }
+        }
+
+        function showSnackbar() {
+            var snackbar = document.getElementById("notify");
+            snackbar.style.display = "block";
+            snackbar.style.animation = "fadeIn 1s";
+
+            // Hide after 3 seconds
+            setTimeout(function () {
+                hideSnackbar(snackbar);
+            }, 3000);
+        }
+
+        function hideSnackbar(snackbar) {
+            snackbar.style.animation = "fadeOut 1s";
+            setTimeout(function () {
+                snackbar.style.display = "none";
+            },);
+        }
+
+        function copyText(text, copy_type) {
+            document.getElementById("type_copy").textContent = "Đã sao chép " + copy_type;
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+
+            // Show the toast notification
+            showSnackbar();
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var vh_px = document.documentElement.clientHeight;
+            var openButton = document.querySelector('#expand_bank');
+            var closeButton = document.querySelector('.css-1pozz91');
+            var target1 = document.querySelector('#background_fade');
+            var target2 = document.querySelector('#banks_list');
+            var myElement = document.getElementById('banks_list');
+            var startY;
+            var initialHeight = 65; // vh
+            var fixedPoint = window.innerHeight * (initialHeight / 100); // convert vh to pixels
+            openButton.addEventListener('click', function () {
+                target2.style.height = initialHeight + 'vh';
+                target1.style.display = 'block';
+                target1.style.opacity = '1';
+                event.stopPropagation();
+            });
+
+            closeButton.addEventListener('click', function () {
+
+                target1.style.display = 'none';
+                target1.style.opacity = '0';
+                target2.style.height = '40vh';
+                target2.style.height = '20vh';
+                target2.style.height = '0vh';
+            });
+            target2.addEventListener('touchstart', function (e) {
+                startY = e.touches[0].clientY;
+            });
+            document.addEventListener('click', function (event) {
+                // Check if the click happened outside the myElement
+                if (target2.style.height != '0vh') {
+
+                    if (!myElement.contains(event.target)) {
+                        target2.style.height = '40vh';
+                        target2.style.height = '20vh';
+                        target2.style.height = '0vh';
+                        target1.style.display = 'none';
+                        target1.style.opacity = '0';
+                    }
+                }
+            });
+            target2.addEventListener('touchmove', function (e) {
+
+                var moveY = e.touches[0].clientY;
+                var diffY = startY - moveY;
+                if (diffY > 0) { // moving up
+                    target2.style.height = '100vh';
+                } else if (diffY < 0) { // moving down
+                    target2.style.height = '20vh';
+                } else { // moving down
+                    target2.style.height = '65vh';
+                }
+            });
+
+            target2.addEventListener('touchend', function (e) {
+                var endY = e.changedTouches[0].clientY;
+                var diffY = startY - endY;
+                if (diffY > 0) { // moving up
+                    target2.style.height = '100vh';
+                } else if (diffY < -0.5 * vh_px) { // moving down
+                    target2.style.height = '40vh';
+                    target2.style.height = '20vh';
+                    target2.style.height = '0vh';
+                    target1.style.display = 'none';
+                    target1.style.opacity = '0';
+                } else { // moving down
+                    target2.style.height = '65vh';
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>

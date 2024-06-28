@@ -1,0 +1,884 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<link rel="stylesheet" href="/static/common/layui/layui/css/layui.css">
+<style>
+    #contentCardInfo {
+        display: none;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 100%;
+        z-index: 1;
+    }
+
+    #contentCardInfo th,
+    #contentCardInfo td {
+        font-size: 13px;
+    }
+
+    .proc_detail_info {
+        display: none;
+        position: absolute;
+        z-index: 1;
+    }
+</style>
+<script>
+    var djss = 30;
+    var refreshOrderSeter = null;
+    var callbackPageUrl = '{{ url_for('admin.behalfPay_callbackLog') }}';
+    var is_search = {{ 'true' if search_res.is_search else 'false' }};
+    $(function () {
+        if (!is_search) {
+            refreshOrderSeter = setInterval(function () {
+                if (djss < 0) {
+                    clearInterval(refreshOrderSeter);
+                    refreshOrderList_func();
+                } else {
+                    $("#refreshOrderBtn").find('text').text('刷新(' + djss + ')')
+                }
+                djss--;
+            }, 1000)
+        }
+    })
+    $(document).ready(function () {
+        // $('#contentCardInfo').mouseleave(
+        //     function () {
+        //         $(this).hide();
+        //     },
+        // );
+        $('#firstCardInfo').mouseenter(
+            function () {
+                $('#contentCardInfo').show();
+            },
+        );
+        $('#contentCardInfo').mouseleave(
+            function () {
+                $(this).hide();
+            },
+        );
+        // $('.proc_info').mouseenter(
+        //     function () {
+        //         let uuid = $(this).attr("proc_info");
+        //         $(`table[proc_detail_info=${uuid}]`).show()
+        //     },
+        // );
+    });
+
+    // 设置已读
+    function is_openpay(objt, data_uuid) {
+        xtajax.post({
+            'data': { 'action': 'update_is_read', 'data_uuid': data_uuid },
+            'success': function (data) {
+                objt.css('color', 'red');
+            }
+        })
+    }
+
+    // 支付码
+    function getPayInfo(data_uuid) {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_pay_info', 'data_uuid': data_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox" style="padding: 0px;">' +
+                        '<div id="payInfott" style="height: 32rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    if (data.data.pay_statu) {
+                        html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 150px; margin: auto; margin-bottom: 30px;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 16px;"><b>已支付</b></p>'
+                    } else if (data.data.reject_pay) {
+                        html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 190px; margin: auto; margin-bottom: 15px;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 16px;"><b>已拒绝支付</b></p>'
+                    } else {
+                        html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 260px; margin: auto; margin-bottom: 30px;">'
+                    }
+                    if (data.data.is_read) {
+                        html += '<div style="color: red;">'
+                    } else {
+                        html += '<div onclick="is_openpay($(this),\'' + data_uuid + '\')">'
+                    }
+                    html += '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">订单号：' + data.data.order_id + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款银行：' + data.data.receive_bank + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款卡号：' + data.data.receive_account + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款人：' + data.data.receive_owner + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; font-size: 14px;">订单金额：' + js_format_money(data.data.order_amount) + '</p>' +
+                        '</div></div>'
+                    if (!data.data.pay_statu && !data.data.reject_pay) {
+                        html += '<div class="blank" style="background: #eeeeee; height: 1px; margin: 10px 0 15px;"></div>' +
+                            '<div style="position: relative; text-align: center">' +
+                            '<span class="btn btn-warning" style="color: white;" onclick="post_update_statu(\'payOrder\', \'' + data_uuid + '\')">已支付</span>' +
+                            '</div>'
+                    }
+                    '</div>'
+                    Swal({
+                        title: '',
+                        width: 400,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        position: 'top-start'
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    // 强制支付码
+    function getPayQrcode(data_uuid) {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_payQrcode', 'data_uuid': data_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox" style="padding: 0px;">' +
+                        '<div style="height: 32rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 260px; margin: auto; margin-bottom: 30px;">'
+                    html += '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">订单号：' + data.data.order_id + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款银行：' + data.data.receive_bank + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款卡号：' + data.data.receive_account + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款人：' + data.data.receive_owner + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; font-size: 14px;">订单金额：' + js_format_money(data.data.order_amount) + '</p>' +
+                        '</div></div>'
+                    Swal({
+                        title: '',
+                        width: 400,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        position: 'top-start'
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    // 统计信息
+    function getTotalInfo() {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_total_info' },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox">'
+                    html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总订单金额：</b>' + js_format_money(data.data.order_amount_total) + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总订单笔数：</b>' + data.data.total_order_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总订单手续费：</b>' + js_format_money(data.data.repay_amount_total) + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总支付金额：</b>' + js_format_money(data.data.actual_amount_total) + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总支付笔数：</b>' + data.data.total_pay_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总支付手续费：</b>' + js_format_money(data.data.pay_repay_amount_total) + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总回调笔数：</b>' + data.data.callback_order_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总回调金额：</b>' + js_format_money(data.data.callback_amount_total) + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>支付成功回调失败笔数：</b>' + data.data.nf_callback_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>支付成功回调失败金额：</b>' + js_format_money(data.data.nf_callback_amount) + '</p>'
+                    html += '</div></div>'
+                    Swal({
+                        title: '订单数据统计',
+                        width: 550,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    // 回调失败
+    function callbank_fail_func(data_uuid) {
+        let html = '<div class="formBox">'
+        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+        html += '<p style="margin-bottom: 20px; font-size: 16px; text-align: left;"><b>选择回调备注：</b></p>'
+        html += '<div class="form-check" style="text-align: left; padding-left: 50px; margin-bottom: 15px; cursor: pointer;"><input class="form-check-input" type="radio" name="order_msg" id="order_msg1" value="姓名不符" checked><label class="form-check-label" for="exampleRadios1">姓名不符</label></div>'
+        html += '<div class="form-check" style="text-align: left; padding-left: 50px; margin-bottom: 15px; cursor: pointer;"><input class="form-check-input" type="radio" name="order_msg" id="order_msg2" value="银行卡号不存在"><label class="form-check-label" for="exampleRadios2">银行卡号不存在</label></div>'
+        html += '<div class="form-check" style="text-align: left; padding-left: 50px; margin-bottom: 15px; cursor: pointer;"><input class="form-check-input" type="radio" name="order_msg" id="order_msg3" value="银行维护中"><label class="form-check-label" for="exampleRadios3">银行维护中</label></div>'
+        html += '</div>'
+        html += '<div class="blank" style="background: #eeeeee; height: 1px; margin: 10px 0 15px;"></div>' +
+            '<div style="position: relative; text-align: center">' +
+            '<span class="btn btn-warning" style="color: white;" onclick="reject_pay_func(\'is_reject_pay\', \'' + data_uuid + '\')">点击提交</span>' +
+            '</div>'
+        html += '</div></div>'
+        Swal({
+            title: '拒绝订单回调',
+            width: 550,
+            html: html,
+            showCloseButton: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        })
+    }
+
+    // 拒绝订单
+    function reject_pay_func(action, data_uuid) {
+        let order_msg = $('input[name="order_msg"]:checked').val();
+        Swal({
+            title: false,
+            text: '提交中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid, 'order_msg': order_msg },
+            'success': function (data) {
+                if (data.code === 200) {
+                    return xtalert.alertSuccessToast('提交成功！');
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    // 刷新订单
+    function refreshOrderList_func(isClick = false) {
+        let pageValue = 1
+        var url = window.location.href;
+        var queryString = url.split('?')[1];
+        if (queryString) {
+            var params = {};
+            var queries = queryString.split("&");
+            for (var i = 0; i < queries.length; i++) {
+                let temp = queries[i].split('=');
+                params[temp[0]] = temp[1];
+            }
+            pageValue = parseInt(params['page']);
+        }
+        let pay_statu = $.trim($("select[name='pay_statu']").val());
+        let callback_statu = $.trim($("select[name='callback_statu']").val());
+        let sort_type = $.trim($("select[name='sort_type']").val());
+        let order_time = $.trim($("input[name='order_time']").val());
+        let pay_time = $.trim($("input[name='pay_time']").val());
+        let searchValue = $.trim($("input[name='searchValue']").val());
+        let searchType = $.trim($("select[name='searchType']").val());
+        let _pp = {
+            'action': 'refreshOrderList',
+            'pay_statu': pay_statu,
+            'callback_statu': callback_statu,
+            'sort_type': sort_type,
+            'order_time': order_time,
+            'pay_time': pay_time,
+            'searchType': searchType,
+            'searchValue': searchValue,
+            'page': pageValue ? pageValue : 1,
+        }
+        $("#tableLoding").css('display', 'flex');
+        xtajax.get({
+            'url': '{{ url_for('admin.behalfPay') }}',
+            'data': _pp,
+            'success': function (data) {
+                if (data.code === 200) {
+                    let datas = data.data.datas;
+                    if (datas.length <= 0) {
+                        $(".no_data").show()
+                    } else {
+                        $(".no_data").hide()
+                    }
+
+                    let html = '';
+                    for (let i = 0; datas.length > i; i++) {
+                        let _vv = datas[i];
+                        html += '<tr>'
+                        html += '<td>' + _vv.order_id + '</td>'
+                        html += '<td>' + _vv.merchant_name + '</td>'
+                        html += '<td>' + _vv.merchant_order_id + '</td>'
+                        html += '<td>' + _vv.shortName + '</td>'
+                        html += '<td>' + _vv.receive_account + '</td>'
+                        html += '<td'
+                        if (_vv.check_aname_state === 'c2') {
+                            html += ' style="color: #FFA500;" '
+                        } else if (_vv.check_aname_state === 'c3') {
+                            html += ' style="color: red;" '
+                        }
+                        html += '>' + _vv.receive_owner + '</td>'
+                        html += '<td>' + js_format_money(_vv.order_amount) + '</td>'
+                        {% if system_paybehalf %}
+                        html += '<td onclick="getPayInfo(\'' + _vv.data_uuid + '\')"><span class="ant-tag to_cursor ant-tag-blue mr-0">支付码</span></td>'
+                        {% endif %}
+                        html += '<td>' + js_format_money(_vv.repay_amount) + '</td>'
+                        html += '<td>' + _vv.order_time + '</td>'
+                        html += '<td>'
+                        if (_vv.pay_statu) {
+                            html += '<span class="ant-tag ant-tag-green">已支付</span></td>'
+                        } else if (_vv.reject_pay) {
+                            html += '<span class="ant-tag ant-tag-red">支付失败</span></td>'
+                        } else {
+                            html += '<span class="ant-tag ant-tag-red">未支付</span></td>'
+                        }
+                        html += '<td>' + _vv.pay_time + '</td>'
+                        html += '<td>';
+                        if (_vv.callback_statu === '{{ CallbackState.SUCCESS }}') {
+                            html += '<span class="ant-tag ant-tag-green">已回调</span>';
+                        } else if (_vv.callback_statu === '{{ CallbackState.FAILED }}') {
+                            html += '<span class="ant-tag ant-tag-red">回调失败</span>';
+                        } else {
+                            html += '<span class="ant-tag ant-tag-cyan">未回调</span>';
+                        }
+                        html += '</td>';
+                        html += '<td>' + _vv.callbank_type + '</td>'
+                        html += '<td>' + _vv.callback_time + '</td>'
+                        if (_vv.is_out_money_userid) {
+                            html += '<td>' + _vv.out_money_userid + '</td>'
+                        }
+                        html += '<td width="200">'
+                        html += '<span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_update_statu(\'payOrder\', \'' + _vv.data_uuid + '\')">通过</span>&ensp;'
+                        html += '<span class="ant-tag to_cursor ant-tag-red mr-0" onclick="callbank_fail_func(\'' + _vv.data_uuid + '\')">拒绝订单</span>&ensp;'
+                        html += '<span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>'
+                        html += '<div class="dropdown-menu">' +
+                            '<span class="dropdown-item" onclick="post_update_statu(\'callbackOrder\', \'' + _vv.data_uuid + '\')">回调订单</span>' +
+                            {% if system_paybehalf %}
+                    '<span class="dropdown-item" onclick="getPayQrcode(\'' + _vv.data_uuid + '\')">支付码</span>' +
+                        {% endif %}
+                '<a class="dropdown-item" href="' + callbackPageUrl + '?order_id=' + _vv.order_id + '" target="_blank">回调记录</a>' +
+                    '<span class="dropdown-item" onclick="post_form_html({\'action\': \'detailsInfo_html\', \'data_uuid\': \'' + _vv.data_uuid + '\'}, \'订单详细信息\', 800)">订单详细</span>' +
+                    '<span class="dropdown-item" onclick="oneinput(\'updateNote\', \'' + _vv.data_uuid + '\', \'输入备注内容\', \'输入备注内容\')">更新备注</span>' +
+                    '</div>'
+                html += '</td></tr>'
+                html += '</tr>'
+            }
+                        var parent = $("#behalfTable");//$(".table > tbody");
+            var allChildren = parent.children();
+            var unwantedChildren = allChildren.slice(1);
+            unwantedChildren.remove();
+            parent.append(html);
+            $("#tableLoding").css('display', 'none');
+
+            if(!isClick) {
+                let sv = $("#refreshSends").val();
+                djss = parseInt(sv);
+                refreshOrderSeter = setInterval(function () {
+                    if (djss < 0) {
+                        clearInterval(refreshOrderSeter);
+                        refreshOrderList_func();
+                    } else {
+                        $("#refreshOrderBtn").find('text').text('刷新(' + djss + ')')
+                    }
+                    djss--;
+                }, 1000)
+            }
+        }               
+    }
+            
+})
+        
+}
+
+    // 控制刷新
+    function refreshOrderBtn_func(crrobj, sv) {
+        crrobj.siblings().removeClass('active').css('color', '#212529');
+        crrobj.addClass('active').css('color', 'rgb(204, 155, 18)').css('background-color', '#fff');
+        $("#refreshSends").val(sv);
+        djss = parseInt(sv);
+        clearInterval(refreshOrderSeter);
+        if (sv === 0) {
+            $("#refreshOrderBtn").find('text').text('暂不处理')
+        } else {
+            refreshOrderSeter = setInterval(function () {
+                if (djss < 0) {
+                    clearInterval(refreshOrderSeter);
+                    refreshOrderList_func();
+                } else {
+                    $("#refreshOrderBtn").find('text').text('刷新(' + djss + ')')
+                }
+                djss--;
+            }, 1000)
+        }
+    }
+
+    //
+    function post_createTestOrder() {
+        let test_mchId = $.trim($("#test_mchId").val());
+        let test_mchOrderId = $.trim($("#test_mchOrderId").val());
+        let test_bankCode = $.trim($("#test_bankCode").val());
+        let test_bankAccount = $.trim($("#test_bankAccount").val());
+        let test_bankOwner = $.trim($("#test_bankOwner").val());
+        let test_amount = $.trim($("#test_amount").val());
+        let test_notifyUrl = $.trim($("#test_notifyUrl").val());
+        if (!test_mchId) { return xtalert.alertError('请输入商户Id!') }
+        if (!test_mchOrderId) { return xtalert.alertError('请输入商户订单号!') }
+        if (!test_bankCode) { return xtalert.alertError('请输入银行Code!') }
+        if (!test_bankAccount) { return xtalert.alertError('请输入收款银行卡号!') }
+        if (!test_bankOwner) { return xtalert.alertError('请输入收款人姓名!') }
+        if (!test_amount) { return xtalert.alertError('请输入收款金额!') }
+        if (!test_notifyUrl) { return xtalert.alertError('请输入回调地址!') }
+        Swal({
+            title: false,
+            text: '提交中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': {
+                'action': 'createOrder', 'mchId': test_mchId, 'mchOrderId': test_mchOrderId,
+                'bankCode': test_bankCode, 'bankAccount': test_bankAccount, 'bankOwner': test_bankOwner, 'amount': test_amount, 'notifyUrl': test_notifyUrl
+            },
+            'success': function (data) {
+
+            }
+        })
+    }
+
+    function post_input_money(behavior, data_uuid) {
+        let transfer_money = $.trim($("#transfer_money").val());
+        // let bank_code = $.trim($("#bank_code").val());
+        // let bankcard_account = $.trim($("#bankcard_account").val());
+        // let bank_name = $.trim($("#bank_name").val());
+        let note = $.trim($("#note").val());
+
+        if (transfer_money == 0) { return xtalert.showValidationError('请输入金额！') }
+        // if (!bank_code) { return xtalert.showValidationError('请输入银行类型！') }
+        // if (!bankcard_account) { return xtalert.showValidationError('请输入卡银行卡账号！') }
+        // if (!bank_name) { return xtalert.showValidationError('请输入银行名字！') }
+
+        xtajax.post({
+            'url': '{{ url_for('admin.WithdrawalBankCard') }}',
+            'data': { 'action': 'request_money', 'data_uuid': data_uuid, 'transfer_money': transfer_money, 'note': note, 'behavior': behavior },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_accept_confirm(action, data_uuid, accepted_status) {
+        xtalert.alertConfirm({
+            'msg': '确定操作？', 'confirmCallback': function () {
+                xtajax.post({
+                    'url': '{{ url_for('admin.TransactionFlow') }}',
+                    'data': { 'action': action, 'data_uuid': data_uuid, 'accepted_status': accepted_status },
+                    'success': function (data) {
+                        if (data.code === 200) {
+                            xtalert.alertSuccessToast('操作成功！')
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 800)
+                        } else {
+                            return xtalert.alertError(data.message);
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function setRequestMoney(val) {
+        $("#transfer_money").val(val)
+    }
+
+    function clearpay_timeTime() {
+        $("input[name='pay_time']").val('');
+    }
+
+    function clearOrderTime() {
+        $("input[name='order_time']").val('');
+    }
+
+    function _update_statu22(params) {
+        Swal({
+            title: '',
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        var method = params['method'];
+        var ajax_params = {
+            'url': params['get_url'],
+            'timeout': 300000, // 设置超时时间为5秒
+            'data': { 'data_uuid': params['data_uuid'], 'action': params['action'] },
+            'success': function (data) {
+                if (data.code == 200) {
+                    if (data.message) { xtalert.alertSuccessToast(data.message); } else { xtalert.alertSuccessToast('操作成功'); }
+                    if (params['redi_url']) { reloadpage(params['redi_url']); } else { reloadpage(); }
+                } else { xtalert.alertError(data.message) }
+            },
+            'error': function (jqXHR, textStatus, errorThrown) {
+                if (textStatus === "timeout") {
+                    return xtalert.alertError('网络超时！')
+                } else {
+                    // 处理其他错误
+                }
+            }
+        };
+        if (method == 'post') { xtajax.post(ajax_params) } else { xtajax.get(ajax_params) }
+    }
+
+    function post_update_statu22(action, data_uuid, msg, redi_url, get_url, method = 'post') {
+        if (data_uuid == '' || typeof (data_uuid) == 'undefined' || data_uuid == 'undefined') { xtalert.alertError('要更新的ID不能为空!'); return false }
+        if (action == '' || typeof (action) == 'undefined' || action == 'undefined') { var action = 'statu' }
+        if (typeof (redi_url) == 'undefined' || redi_url == 'undefined') { var redi_url = '' }
+        if (typeof (get_url) == 'undefined' || get_url == 'undefined') { var get_url = '' }
+        if (typeof (msg) == 'undefined' || msg == 'undefined') { var msg = '确定操作？' }
+        xtalert.alertConfirm({ 'msg': msg, 'confirmCallback': _update_statu22, 'funcargs': { 'data_uuid': data_uuid, 'action': action, 'redi_url': redi_url, 'get_url': get_url, 'method': method } })
+    }
+
+    function redirect_sel_card() {
+        window.location.href = "{{ url_for('admin.WithdrawalBankCard') }}";
+    }
+    function post_request_money_html(action, data_uuid, behavior, title, width, url) {
+        if (!data_uuid) {
+            Swal({
+                title: '错误',
+                width: '500px',
+                html: '<div style="padding:20px; border:solid gray 1px; border-radius:3px"><h3 class="mb-4">首先，要选择提款卡！</h3><span class="btn btn-secondary mr-2" onclick="redirect_sel_card()">选择卡</span><div>',
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
+            return;
+            //return xtalert.alertToast('首先，要选择提款卡！')
+        }
+        post_form_html({ 'action': action, 'data_uuid': data_uuid, 'behavior': behavior }, title, width, url);
+    }
+</script>
+{% endblock %}
+<div class="d-flex">
+    {% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="pay_status" aria-label="">
+        <option value="">支付状态</option>
+        <option value="1" {% if search_res.pay_status=='1' %}selected{% endif %}>已支付</option>
+        <option value="0" {% if search_res.pay_status=='0' %}selected{% endif %}>未支付</option>
+        <option value="2" {% if search_res.pay_status=='2' %}selected{% endif %}>支付失败</option>
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="callback_statu" aria-label="">
+        <option value="">回调状态</option>
+        {% for callback in CallbackState.name_arr %}
+        <option value="{{ callback }}" {% if search_res.callback_statu==callback %}selected{% endif %}>{{
+            CallbackState.name_dict.get(callback) }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="sort_type" aria-label="">
+        <option value="">排序方式</option>
+        <option value="order_time_0" {% if search_res.sort_type=='order_time_0' %}selected{% endif %}>按订单时间倒序</option>
+        <option value="order_time_1" {% if search_res.sort_type=='order_time_1' %}selected{% endif %}>按订单时间顺序</option>
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="sys_payorder" aria-label="">
+        <option value="">全部订单</option>
+        <option value="1" {% if search_res.sys_payorder=='1' %}selected{% endif %}>系统支付订单</option>
+        <option value="0" {% if search_res.sys_payorder=='0' %}selected{% endif %}>代理自行支付订单</option>
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="searchType" aria-label="" style="width: 200px;">
+        <option value="">选择搜索类型</option>
+        <option value="merchant_id" {% if search_res.searchType=='merchant_id' %}selected{% endif %}>商户Id</option>
+        <option value="merchant_name" {% if search_res.searchType=='merchant_name' %}selected{% endif %}>商户名称</option>
+        <option value="bankcard_account" {% if search_res.searchType=='bankcard_account' %}selected{% endif %}>收款卡号
+        </option>
+        <option value="order_id" {% if search_res.searchType=='order_id' %}selected{% endif %}>订单号</option>
+        <option value="merchant_order_id" {% if search_res.searchType=='merchant_order_id' %}selected{% endif %}>商户订单号
+        </option>
+        <option value="order_amount" {% if search_res.searchType=='order_amount' %}selected{% endif %}>订单金额</option>
+        <option value="actual_amount" {% if search_res.searchType=='actual_amount' %}selected{% endif %}>实际支付金额</option>
+        <option value="receive_account" {% if search_res.receive_account=='receive_account' %}selected{% endif %}>收款卡号
+        </option>
+        <option value="receive_owner" {% if search_res.receive_owner=='receive_owner' %}selected{% endif %}>收款卡姓名
+        </option>
+        <option value="agentadmin_account" {% if search_res.searchType=='agentadmin_account' %}selected{% endif %}>代理商账户
+        </option>
+        {# <option value="processor_uid" {% if search_res.searchType=='processor_uid' %}selected{% endif %}>处理人账户
+        </option>#}
+        <option value="out_money_userid" {% if search_res.searchType=='out_money_userid' %}selected{% endif %}>出款人
+        </option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="searchValue" value="{{ search_res.searchValue or '' }}"
+        placeholder="搜索内容" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="order_time"
+        value="{{ search_res.order_time }}" placeholder="订单时间" aria-label="" onchange="clearpay_timeTime()">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="pay_time" value="{{ search_res.pay_time }}"
+        placeholder="支付时间" aria-label="" onchange="clearOrderTime()">
+    {% endblock %}
+
+    {% block other_function %}
+    <span id="refreshOrderBtn" data-toggle="dropdown" aria-expanded="false" type="button"
+        class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"><svg
+            viewBox="64 64 896 896" focusable="false" data-icon="sync" width="1em" height="1em" fill="currentColor"
+            aria-hidden="true">
+            <path
+                d="M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z">
+            </path>
+        </svg>
+        <text style="margin-left: 10px;">暂不处理</text>
+    </span>
+    <input type="hidden" id="refreshSends" value="30" aria-label="">
+    <div class="dropdown-menu refreshOrderBtnList">
+        <span class="dropdown-item active" onclick="refreshOrderBtn_func($(this), 0)">暂不处理</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 10)">10秒自动刷新</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 20)">20秒自动刷新</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 30)">30秒自动刷新</span>
+    </div>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+        onclick="post_update_statu('export_order', '666', '确认导出当前订单数据？')">导出订单数据</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+        onclick="getTotalInfo()">统计</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+        onclick="post_update_statu('createTestOrder', '666', '确认生成5个测试订单？')">生成测试订单</span>
+
+    {% if current_admin_user.role_code == ROlE_ALL.SYS_OUT_MONEY_USER or current_admin_user.role_code ==
+    ROlE_ALL.OUT_MONEY_USER %}
+    <span class="btn btn-info ml-3 mb-2" style="color: white; display: flex; align-items: center;"
+        onclick="post_request_money_html('request_money_html','{{ selectedcard.uuid }}', 'request_money' ,'您想要索取多少钱', 600, '{{ url_for('admin.WithdrawalBankCard') }}')">申请资金</span>
+    <div class="ml-auto">
+        <div id="firstCardInfo">
+            {% if selectedcard.uuid %}
+            <div class="d-flex justify-content-between" style="position: relative;">
+                <div class="mr-2">银行卡账户: <span class="text-danger">{{selectedcard.account or 0}}</span></div>
+                <div class="mr-2">银行卡余额:
+                    <span class="text-danger" style="position: relative; ">
+                        {{format_money(selectedcard.balance_amount)}}
+                        {#<div style="position: relative;">
+                            {% if selectedcard.withdrawlogs %}
+                            <div class="proc_info badge badge-pill badge-success to_cursor"
+                                style="position: absolute; top:-27px; right:-15px; font-size:10px;">
+                                +{{selectedcard.transfer_money}}
+                            </div>
+                            {% endif %}
+                        </div>#}
+                    </span>
+                </div>
+                <div class="mr-2">已支付金额: <span class="text-danger">{{format_money(selectedcard.paid_amount)}}</span>
+                </div>
+                <div class="mr-2">转入: <span class="text-danger">{{format_money(selectedcard.transfer_in_money)}}</span></div>
+                <div class="mr-2">转出: <span class="text-danger">{{format_money(selectedcard.transfer_out_money)}}</span></div>
+                <div class="mr-2">其他转入: <span class="text-danger">{{format_money(selectedcard.other_transfer_in_money)}}</span></div>
+                <div class="mr-2">其他转出: <span class="text-danger">{{format_money(selectedcard.other_transfer_out_money)}}</span></div>
+                <div class="mr-2">下发: <span class="text-danger">{{format_money(selectedcard.issued_money)}}</span></div>
+                {% if selectedcard.withdrawlogs %}
+                <div class="proc_detail_info" id="contentCardInfo">
+                    <div style="height: 30px"></div>
+                    <table class="table table-hover text-center table-bordered" style="color: rgb(0, 0, 0);">
+                        <tbody>
+                            <tr style="background-color: #f7f7f7;">
+                                <td>订购时间</td>
+                                <td>请求的钱</td>
+                                <td>转账金额</td>
+                                <td>行为</td>
+                                <td>接受状态</td>
+                                <td>操作</td>
+                            </tr>
+                            {% for log in selectedcard.withdrawlogs %}
+                            <tr style="background-color: #ffffff;">
+                                <td> <span class="text-danger">{{format_time_func(log.pay_time)}}</span>
+                                <td><span class="text-danger">{{format_money(log.request_money )}}</span></td>
+                                <td><span class="text-danger">{{format_money(log.transfer_money )}}</span></td>
+                                <td>
+                                    <span {% if log.behavior==BEHAVIOR_TYPE.TRANSFER_IN %} style="color: green;" {% elif
+                                        log.behavior==BEHAVIOR_TYPE.TRANSFER_OUT %} style="color: red;" {% elif
+                                        log.behavior==BEHAVIOR_TYPE.OTHER_TRANSFER_IN %} style="color:rgb(13, 133, 113)"
+                                        {% elif log.behavior==BEHAVIOR_TYPE.OTHER_TRANSFER_OUT %}
+                                        style="color:deeppink;" {% elif log.behavior==BEHAVIOR_TYPE.ISSUED %}
+                                        style=" color:chocolate" {% endif %}>
+                                        {{BEHAVIOR_TYPE.name_dict.get(log.behavior)}}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if log.accepted_status == ACCEPTED_STATUS.ACCEPTED %}
+                                    <span class="ant-tag-green p-1">{{ACCEPTED_STATUS.ACCEPTED}}</span>
+                                    {% elif log.accepted_status == ACCEPTED_STATUS.NOT_ACCEPTED %}
+                                    <span class="ant-tag-red p-1">{{ACCEPTED_STATUS.NOT_ACCEPTED}}</span>
+                                    {% elif log.accepted_status == ACCEPTED_STATUS.CANCELLED %}
+                                    <span class="ant-tag-yellow p-1">{{ACCEPTED_STATUS.CANCELLED}}</span>
+                                    {% elif log.accepted_status == ACCEPTED_STATUS.NOT_PROCESSED %}
+                                    <span class="ant-tag-blue p-1">{{ACCEPTED_STATUS.NOT_PROCESSED}}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span {% if log.accepted_status==ACCEPTED_STATUS.NOT_PROCESSED %}
+                                        onclick="post_accept_confirm('accept_confirm', '{{ log.uuid }}', '{{ACCEPTED_STATUS.ACCEPTED}}')"
+                                        class="ant-tag to_cursor ant-tag-green mb-1" {% elif
+                                        log.accepted_status==ACCEPTED_STATUS.ACCEPTED %}
+                                        onclick="post_accept_confirm('accept_confirm', '{{ log.uuid }}', '{{ACCEPTED_STATUS.CANCELLED}}')"
+                                        class="ant-tag to_cursor ant-tag-blue mb-1" {% else %}
+                                        class="ant-tag to_cursor ant-tag-gray mb-1" {% endif %}>
+                                        {% if log.accepted_status==ACCEPTED_STATUS.ACCEPTED %}
+                                        撤消
+                                        {% else %}
+                                        已接受
+                                        {% endif %}
+                                    </span>
+                                    <span {% if log.accepted_status==ACCEPTED_STATUS.NOT_PROCESSED %}
+                                        onclick="post_accept_confirm('accept_confirm', '{{ log.uuid }}', '{{ACCEPTED_STATUS.NOT_ACCEPTED}}')"
+                                        class="ant-tag to_cursor ant-tag-red" {% else %}
+                                        class="ant-tag to_cursor ant-tag-gray mb-1" {% endif %}>
+                                        没接受
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {%endif%}
+            </div>
+            {%endif%}
+
+        </div>
+
+
+
+    </div>
+    {% endif %}
+    {% endblock %}
+</div>
+
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody id="behalfTable">
+        <tr style="background-color: #f7f7f7;">
+            <td>订单号[{{ total }}]</td>
+            <td>商户名称</td>
+            <td>商户订单号</td>
+            <td>收款银行</td>
+            <td>收款卡号</td>
+            <td>收款卡姓名</td>
+            <td>订单金额</td>
+            {% if system_paybehalf %}
+            <td>付款码</td>
+            {% endif %}
+            <td>手续费</td>
+            <td>订单时间</td>
+            <td>支付状态</td>
+            <td>支付时间</td>
+            <td>回调状态</td>
+            <td>回调类型</td>
+            <td>回调时间</td>
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <td>分配出款者</td>
+            {% endif %}
+            <td width="190">操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>{{ data.order_id }}</td>
+            <td>{{ data.merchant_data.merchant_name }}</td>
+            <td>{{ data.merchant_order_id }}</td>
+            <td>{{ data.bank_data.shortName or '' }}</td>
+            <td>{{ data.receive_account or '' }}</td>
+            <td
+                style="{% if data.check_aname_state == 'c2' %}color: #FFA500;{% elif data.check_aname_state == 'c3' %}color: red;{% endif %} ">
+                {{ data.receive_owner or '' }}</td>
+            <td>{{ format_money(data.order_amount or 0) }}</td>
+            {% if system_paybehalf %}
+            <td onclick="getPayInfo('{{ data.uuid }}')"><span class="ant-tag to_cursor ant-tag-blue mr-0">支付码</span>
+            </td>
+            {% endif %}
+            <td>{{ format_money(data.repay_amount or 0) }}</td>
+            <td>{{ format_time_func(data.order_time, '%H:%M:%S') }}</td>
+            <td>{% if data.pay_statu %}<span class="ant-tag ant-tag-green">已支付</span>{% elif data.reject_pay %}<span
+                    class="ant-tag ant-tag-red">支付失败</span>{% else %}<span class="ant-tag ant-tag-red">未支付</span>{%
+                endif %}</td>
+            <td>{{ format_time_func(data.pay_time, '%H:%M:%S') }}</td>
+            <td>
+                {% if data.callback_statu == CallbackState.SUCCESS %}
+                <span class="ant-tag ant-tag-green">已回调</span>
+                {% elif data.callback_statu == CallbackState.FAILED %}
+                <span class="ant-tag ant-tag-red">回调失败</span>
+                {% else %}
+                <span class="ant-tag ant-tag-cyan">未回调</span>
+                {% endif %}
+            </td>
+            <td>{{ CallbankType.name_dict.get(data.callbank_type) or '' }}</td>
+            <td>{{ format_time_func(data.callback_time, '%H:%M:%S') }}</td>
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <td>{{ data.out_money_user_data.account or '' }}</td>
+            {% endif %}
+            <td width="200">
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="post_update_statu('payOrder', '{{ data.uuid }}')">通过</span>
+                <span class="ant-tag to_cursor ant-tag-red mr-0"
+                    onclick="callbank_fail_func('{{ data.uuid }}')">拒绝订单</span>
+                <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false">更多</span>
+                <div class="dropdown-menu">
+                    <span class="dropdown-item"
+                        onclick="post_update_statu('callbackOrder', '{{ data.uuid }}')">回调订单</span>
+                    {% if system_paybehalf %}
+                    <span class="dropdown-item" onclick="getPayQrcode('{{ data.uuid }}')">支付码</span>
+                    {% endif %}
+                    <a class="dropdown-item" href="{{ url_for('admin.behalfPay_callbackLog', order_id=data.order_id) }}"
+                        target="_blank">回调记录</a>
+                    <span class="dropdown-item"
+                        onclick="post_form_html({'action': 'detailsInfo_html', 'data_uuid': '{{ data.uuid }}'}, '订单详细信息', 800)">订单详细</span>
+                    <span class="dropdown-item"
+                        onclick="oneinput('updateNote', '{{ data.uuid }}', '输入备注内容', '输入备注内容')">更新备注</span>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div id="tableLoding"
+    style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+    <img src="/assets/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+</div>
+{% endblock %}

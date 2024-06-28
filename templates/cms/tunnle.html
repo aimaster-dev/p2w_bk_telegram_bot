@@ -1,0 +1,103 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <style>
+        .table-bordered td, .table-bordered th{border-bottom: 1px solid #e9e9e9;}
+        .table thead th{border-bottom: 2px solid #e9e9e9;}
+        .table td, .table th {border-bottom: 1px solid #e9e9e9;}
+        .table{ font-size: 12px; color: rgba(0, 0, 0, 0.65); }
+        .table-hover tbody tr:hover {color: rgba(0, 0, 0, 0.65);background-color: rgba(195, 195, 195, 0.07)}
+
+        .ant-tag {display: inline-block; cursor:pointer; line-height: 20px;height: 22px;padding: 0 8px;border-radius: 4px;border: 1px solid #e9e9e9;background: #f3f3f3;font-size: 12px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 1;margin-right: 5px;cursor: pointer;white-space: nowrap;}
+        .ant-tag:hover {opacity: 0.85;}
+        .ant-tag,
+        .ant-tag a,
+        .ant-tag a:hover {color: rgba(0, 0, 0, 0.65);}
+        .ant-tag-text a:first-child:last-child {display: inline-block;margin: 0 -8px;padding: 0 8px;}
+        .ant-tag .anticon-cross {display: inline-block;font-size: 12px;transform: scale(0.83333333) rotate(0deg);-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";zoom: 1;cursor: pointer;font-weight: bold;margin-left: 3px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 0.66;}
+        :root .ant-tag .anticon-cross {filter: none;}
+        :root .ant-tag .anticon-cross {font-size: 12px;}
+        .ant-tag .anticon-cross:hover {opacity: 1;}
+        .ant-tag-has-color {border-color: transparent;}
+        .ant-tag-has-color,
+        .ant-tag-has-color a,
+        .ant-tag-has-color a:hover,
+        .ant-tag-has-color .anticon-cross,
+        .ant-tag-has-color .anticon-cross:hover {color: #fff;}
+        .ant-tag-checkable {background-color: transparent;border-color: transparent;}
+        .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {color: #108ee9;}
+        .ant-tag-checkable:active, .ant-tag-checkable-checked {color: #fff;}
+        .ant-tag-checkable-checked {background-color: #108ee9;}
+        .ant-tag-checkable:active {background-color: #0e77ca;}
+        .ant-tag-close {width: 0 !important;padding: 0;margin: 0;}
+        .ant-tag-zoom-enter,
+        .ant-tag-zoom-appear {animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-zoom-leave {animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-pink {color: #f5317f;background: #fdd8e7;border-color: #fdd8e7;}
+        .ant-tag-pink-inverse {background: #f5317f;border-color: #f5317f;color: #fff;}
+        .ant-tag-red {color: #f04134;background: #fcdbd9;border-color: #fcdbd9;}
+        .ant-tag-red-inverse {background: #f04134;border-color: #f04134;color: #fff;}
+        .ant-tag-orange {color: #f56a00;background: #fde3cf;border-color: #fde3cf;}
+        .ant-tag-orange-inverse {background: #f56a00;border-color: #f56a00;color: #fff;}
+        .ant-tag-yellow {color: #ffbf00;background: #fff3cf;border-color: #fff3cf;}
+        .ant-tag-yellow-inverse {background: #ffbf00;border-color: #ffbf00;color: #fff;}
+        .ant-tag-cyan {color: #00a2ae;background: #cfedf0;border-color: #cfedf0;}
+        .ant-tag-cyan-inverse {background: #00a2ae;border-color: #00a2ae;color: #fff;}
+        .ant-tag-green {color: #00a854;background: #cfefdf;border-color: #cfefdf;}
+        .ant-tag-green-inverse {background: #00a854;border-color: #00a854;color: #fff;}
+        .ant-tag-blue {color: #108ee9;background: #d2eafb;border-color: #d2eafb;}
+        .ant-tag-blue-inverse {background: #108ee9;border-color: #108ee9;color: #fff;}
+        .ant-tag-purple {color: #7265e6;background: #e4e2fa;border-color: #e4e2fa;}
+        .ant-tag-purple-inverse {background: #7265e6;border-color: #7265e6;color: #fff;}
+        .swal2-popup .swal2-title {color: rgba(4,15,66,.9);font-size: 1.43em;}
+        .table tr:last-child td {border-bottom: 1px solid #e9e9e9;}
+
+        .tableBox{position: relative;padding: 20px;background-color: #FFFFFF;overflow: hidden;box-sizing: border-box;border-radius: 3px; color: rgba(0, 0, 0, 0.65); font-size: 12px;}
+
+    </style>
+{% endblock %}
+
+{% block content_main %}
+    <div class="col-lg-6 col-12">
+
+        <div class="alert alert-primary" role="alert">
+            <i class="iconfont icon-tishi" style="color: rgb(24, 128, 255); font-size: 18px; vertical-align: -2px; margin-right: 3px;"></i> 平台收款通道总开关，控制平台的全部收款方式！
+        </div>
+
+        <div class="tableBox">
+
+            <table class="table table-hover text-left table-bordered" style="background-color: #ffffff;">
+                <tbody>
+                    <tr style="background-color: #f7f7f7;">
+                        <td >通道名称</td>
+                        <td >通道Code</td>
+                        <td >通道状态</td>
+                        <td >操作</td>
+                    </tr>
+                    {% for data in datas %}
+                    <tr>
+                        <td>{{ data.tunnel_name }}</td>
+                        <td>{{ data.code }}</td>
+                        <td>
+                            {% if data.tunnel_statu %}
+                            <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>已开启</span>
+                            {% else %}
+                            <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已关闭</span>
+                            {% endif %} 
+                        </td>
+                        <td>
+                            {% if data.tunnel_statu %}
+                                <span class="ant-tag ant-tag-red" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定关闭该通道？')">关闭</span>
+                            {% else %}
+                                <span class="ant-tag ant-tag-blue-inverse" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定开启该通道？')">开启</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+{% endblock %}

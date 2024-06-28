@@ -1,0 +1,104 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <link rel="stylesheet" href="/static/common/layui/layui/css/layui.css">
+    <script src="/static/common/layui/layui/layui.js"></script>
+    <script>
+        // 开关
+        function switch_func(obj) {
+            if (obj.hasClass('icon-kaiguanguan')){
+                obj.parent().prev().val('1');
+                obj.removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+            }else {
+                obj.parent().prev().val('0');
+                obj.removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+            }
+        }
+
+        function aattt() {
+            layui.use('laydate', function(){
+                var laydate = layui.laydate;
+                //时间范围
+                laydate.render({
+                    elem: '.test9',type: 'time',range: true
+                });
+            })
+        }
+
+        function post_bank_data(action, data_uuid) {
+            let ips = $.trim($("#ips").val());
+            let is_ip_pool = $.trim($("#is_ip_pool").val());
+            let ip_single_period = $.trim($("#ip_single_period").val());
+            let ip_disable_period = $.trim($("#ip_disable_period").val());
+            xtajax.post({
+                'data': {'action': action, 'data_uuid': data_uuid, 'ips': ips, 'is_ip_pool': is_ip_pool, 'ip_single_period': ip_single_period, 'ip_disable_period': ip_disable_period},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('提交成功！');
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+
+        }
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">开启状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>开启</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>关闭</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="name" value="{{ search_res.name or '' }}" placeholder="银行名称" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="code" value="{{ search_res.code or '' }}" placeholder="银行代码" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>logo【{{ total }}】</td>
+                <td>银行名称</td>
+                <td>银行简称</td>
+                <td>银行代码</td>
+                <td>银行编码</td>
+                <td>状态</td>
+                <td>银行卡数量</td>
+                <td width="180">操作</td>
+            </tr>
+            {% for data in all_datas %}
+            <tr>
+                <td><img src="{{ data.local_logo }}" alt="" style="position: relative; height: 35px; display: inline-block;" onclick="xtalert.alertImg('', '{{ data.local_logo }}')"></td>
+                <td>{{ data.name }}</td>
+                <td>{{ data.shortName }}</td>
+                <td>{{ data.code }}</td>
+                <td>{{ data.bin }}</td>
+                <td>
+                    {% if data.statu %}
+                    <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>已开启</span>
+                    {% else %}
+                    <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已关闭</span>
+                    {% endif %}
+                </td>
+                <td>{{ data.bankcard_count or 0 }}</td>
+                <td>
+                    <span class="ant-tag ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_bank_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行信息', 800)">编辑</span>
+                    {% if data.statu %}
+                    <span class="ant-tag ant-tag-red" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定关闭使用该银行？')">关闭</span>
+                    {% else %}<span class="ant-tag ant-tag-blue" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定开启使用该银行？')">开启</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}         
+        </tbody>
+    </table>
+
+{% endblock %}

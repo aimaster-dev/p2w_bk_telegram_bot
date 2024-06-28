@@ -1,0 +1,57 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="filename" value="{{ search_res.filename }}" placeholder="文件名" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="_create_time" value="{{ search_res._create_time }}" placeholder="导出时间"  aria-label="">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>文件名</td>
+                <td>文件路径</td>
+                <td>文件大小(KB)</td>
+                <td>数据量</td>
+                <td>已导出</td>
+                <td>导出状态</td>
+                <td>导出时间</td>
+                <td>备注</td>
+                <td width="260">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.filename or '' }}</td>
+                    <td>{{ data.path or '' }}</td>
+                    <td>{{ data.file_size or '' }}</td>
+                    <td>{{ data.total or '' }}</td>
+                    <td>{{ data.out_count or '' }}</td>
+                    <td>
+                        {% if data.statu == 'successed' %}
+                            <span class="btn btn-success btn-xs">导出成功</span>
+                        {% elif data.statu == 'failed' %}
+                            <span class="btn btn-danger btn-xs">导出失败</span>
+                        {% else %}
+                            <span class="btn btn-warning btn-xs">导出中</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ format_datetime(data.create_time) }}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td width="100">
+                        <a class="btn btn-primary btn-xs" href="{{ data.path }}">下载</a>
+                        <span class="btn btn-danger btn-xs" onclick="post_update_statu('del', '{{ data.uuid }}', '确定删除该数据？')">删除</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

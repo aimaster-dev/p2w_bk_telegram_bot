@@ -1,0 +1,108 @@
+{% extends 'cms/table_base.html' %}
+
+{% block ol %}
+<li class="breadcrumb-item"><a href="{{ url_for('admin.merchant_view') }}">商家列表</a></li>
+<li class="breadcrumb-item active">{{ title }}</li>
+{% endblock %}
+
+{% block other_head %}
+    <script>
+        // 统计信息
+        function getTotalInfo() {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_total_info'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox">'
+                        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代收成功笔数：</b>'+data.data.ds_success_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代收成功总金额：</b>'+data.data.ds_success_amount_total+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代收总手续费：</b>'+data.data.ds_repay_amount_total+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代付成功笔数：</b>'+data.data.df_success_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代付成功总金额：</b>'+data.data.df_success_amount_total+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>代付总手续费：</b>'+data.data.df_repay_amount_total+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>结算成功总金额：</b>'+data.data.js_successAmount+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>内充和减金额差值：</b>'+data.data.nc_jje_vv+'</p>'
+                        html += '</div></div>'
+                        Swal({
+                            title: '流水统计',
+                            width: 550,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="bill_type" aria-label="">
+        <option value="">交易类型</option>
+        {% for jytype in BILL_STATEMEN_TYPES.name_arr %}
+        <option value="{{ jytype }}" {% if search_res.bill_type == jytype %}selected{% endif %}>{{ BILL_STATEMEN_TYPES.name_dict.get(jytype) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="order_id" value="{{ search_res.order_id or '' }}" placeholder="交易订单号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="amount" value="{{ search_res.amount or '' }}" placeholder="交易金额" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="时间" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="post_update_statu('exportBill', '666', '确认导出当前账单数据？')">导出订单数据</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="getTotalInfo()">统计</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户ID【{{ total }}】</td>
+                <td>商户名称</td>
+                <td>交易订单号</td>
+                <td>交易商户订单号</td>
+                <td>交易类型</td>
+                <td>交易金额</td>
+                <td>手续费</td>
+                <td>当前余额</td>
+                <td>账单时间</td>
+                <td>备注</td>
+            </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>{{ data.merchant_data.merchant_id or '' }}</td>
+            <td>{{ data.merchant_data.merchant_name }}</td>
+            <td>{{ data.order_id or '' }}</td>
+            <td>{{ data.merchant_order_id or '' }}</td>
+            <td>{{ BILL_STATEMEN_TYPES.name_dict.get(data.bill_type) or '' }}</td>
+            <td>{{ format_money(data.amount or 0) }}</td>
+            <td>{{ format_money(data.repay_amount or 0) }}</td>
+            <td>{{ format_money(data.balance_amount or 0) }}</td>
+            <td>{{ format_time_func(data.create_time) }}</td>
+            <td>{{ data.note or '' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

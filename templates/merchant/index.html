@@ -1,0 +1,252 @@
+{% extends 'merchant/base.html' %}
+
+{% block head %}
+    <script src="/static/common/echarts/echarts.min.js"></script>
+    <style>
+        .classifyTotal{display: flex;position: relative;box-sizing: border-box;justify-content: space-between;align-items: center;margin-bottom: 20px;}
+        .classifyTotal .totalItem{width: 24%;position: relative;box-sizing: border-box;overflow: hidden;background-color: #FFFFFF;border-radius: 5px;}
+        .totalItem .card-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 38px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .totalItem .card_tag_gl{box-sizing: border-box;margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .totalItem .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .totalItem .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .totalItem .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .totalItem .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+        .totalItem .card-content{padding: 15px;position: relative;box-sizing: border-box;overflow: hidden;}
+
+        /* 面板 */
+        .cardt{position: relative;background-color: #FFFFFF;overflow: hidden;border-radius: 5px;margin-bottom: 20px;}
+        .cardt .cardt-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 39px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .cardt .cardt-content{position: relative;overflow: hidden;padding: 20px;}
+        .cardt .cardt_tag{box-sizing: border-box; cursor: pointer; margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .cardt .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .cardt .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .cardt .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .cardt .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+
+    </style>
+    <script>
+        $(function () {
+
+            update_orderTotal()
+        })
+
+        // 更新订单统计
+        function update_orderTotal() {
+            var chartDom = document.getElementById('orderTotal');
+            var myChart = echarts.init(chartDom);
+const colors = ['#5470C6', '#91CC75', '#EE6666'];
+option = {
+  color: colors,
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'cross'
+    }
+  },
+  grid: {
+    right: '20%'
+  },
+  toolbox: {
+    feature: {
+      dataView: { show: true, readOnly: false },
+      restore: { show: true },
+      saveAsImage: { show: true }
+    }
+  },
+  legend: {
+    data: ['越南银行扫码', 'Precipitation', '订单量']
+  },
+  xAxis: [
+    {
+      type: 'category',
+      axisTick: {
+        alignWithLabel: true
+      },
+      data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value',
+      name: '',
+      position: 'right',
+      alignTicks: true,
+      axisLine: {
+        show: false,
+        lineStyle: {
+          color: colors[0]
+        }
+      },
+      axisLabel: {
+        formatter: '{value} ml'
+      }
+    },
+    {
+      type: 'value',
+      name: 'Precipitation',
+      position: 'right',
+      alignTicks: true,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: colors[1]
+        }
+      },
+      axisLabel: {
+        formatter: '{value} ml'
+      }
+    },
+    {
+      type: 'value',
+      name: '订单量',
+      position: 'left',
+      alignTicks: true,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: colors[2]
+        }
+      },
+      axisLabel: {
+        formatter: '{value}'
+      }
+    }
+  ],
+  series: [
+    {
+      name: '越南银行扫码',
+      type: 'bar',
+      yAxisIndex: 1,
+
+      data: [
+        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+      ]
+    },
+    {
+      name: 'Precipitation',
+      type: 'bar',
+      yAxisIndex: 1,
+      data: [
+        2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+      ]
+    },
+    {
+      name: '订单量',
+      type: 'line',
+      yAxisIndex: 2,
+      data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+    }
+  ]
+};
+            option && myChart.setOption(option);
+        }
+
+    </script>
+{% endblock %}
+
+{% block content_main %}
+    <div class="col-lg-12">
+        <div class="classifyTotal">
+
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>可用余额</b></div>
+                    <div>
+                        {% if current_admin_dict.role_code == MERCHANT_ROLES.MERCHANT %}
+                            <span style="cursor: pointer;" class="card_tag_gl tag-purple" onclick="post_form_html({'action': 'getWithdrawHtml'}, '申请结算', 800)">点击结算</span>
+                        {% endif %} 
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        {% if is_merchant %}
+                        <span class="ds-text" style="font-size: 23px;">{{ format_money(current_admin_dict.balance_amount) or 0 }}</span>
+                        {% else %}
+                        <span class="ds-text" style="font-size: 23px;">{{ format_money(current_admin_dict.upper_data.balance_amount) or 0 }}</span>
+                        {% endif %}
+                        <div>
+                            <img src="/assets/images/qbao.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>冻结金额</span>
+                        <span>{{ format_money(current_admin_dict.freeze_amount) or '0' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>待出款金额</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-orange">待</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">0</span>
+                        <div>
+                            <img src="/assets/images/jine.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>&emsp;</span>
+                        <span>&emsp;</span>
+                    </div>
+                </div>
+            </div>
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>今日订单量</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-greenblue">日</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">{{ orderDayCount or 0 }}</span>
+                        <div>
+                            <img src="/assets/images/data.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>本月订单量</span>
+                        <span>{{ orderMonthCount or 0 }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>今日交易额</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-green">日</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">0</span>
+                        <div>
+                            <img src="/assets/images/ziyuan.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>本月交易额</span>
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="cardt">
+            <div class="cardt-head">
+                <span><b>订单统计</b></span>
+                <span class="cardt_tag tag-greenblue" style="margin: 10px 7px 10px 0">更新</span>
+            </div>
+            <div class="cardt-content">
+                <div id="orderTotal" style="height: 450px;"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

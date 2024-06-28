@@ -1,0 +1,479 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <script src="/static/ckeditor/ckeditor.js"></script>
+    <!-- 切换面板 -->
+    <style>
+        /* 信息组件部分 */
+        .portlet {
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            padding: 12px 20px 15px;
+            background-color: #fff;
+        }
+        /*组件标题部分*/
+        .portlet.light > .portlet-title {
+            padding: 0;
+            min-height: 48px;
+        }
+        .portlet > .portlet-title {
+            border-bottom: 1px solid #eee;
+            padding: 0;
+            margin-bottom: 10px;
+            min-height: 41px;
+            -webkit-border-radius: 4px 4px 0 0;
+            -moz-border-radius: 4px 4px 0 0;
+            -ms-border-radius: 4px 4px 0 0;
+            -o-border-radius: 4px 4px 0 0;
+            border-radius: 4px 4px 0 0;
+        }
+        .portlet.light > .portlet-title > .caption {
+            color: #666;
+            padding: 10px 0;
+        }
+        .portlet > .portlet-title > .caption {
+            float: left;
+            display: inline-block;
+            font-size: 18px;
+            line-height: 18px;
+            padding: 10px 0;
+        }
+        .portlet.light > .portlet-title > .caption > .caption-subject {
+            font-size: 17px;
+        }
+        .font-dark {
+            color: #2f353b !important;
+        }
+        .portlet > .portlet-title > .nav-tabs {
+            background: 0 0;
+            margin: 1px 0 0;
+            float: right;
+            display: inline-block;
+            border: 0;
+        }
+        .portlet.light > .portlet-title > .nav-tabs > li {
+            margin: 0;
+            padding: 0;
+        }
+        .tabbable-line > .nav-tabs > li.active {
+            background: 0 0;
+            border-bottom: 4px solid #36c6d3;
+            position: relative;
+        }
+        .portlet.light > .portlet-title > .nav-tabs > li.active > a,
+        .portlet.light > .portlet-title > .nav-tabs > li:hover > a {
+            margin: 0;
+            background: 0 0;
+            color: #333;
+        }
+        .portlet.light > .portlet-title > .nav-tabs > li > a {
+            margin: 0;
+            padding: 12px 13px 13px;
+            font-size: 13px;
+            color: #666;
+        }
+        .portlet > .portlet-title > .nav-tabs > li.active > a,
+        .portlet > .portlet-title > .nav-tabs > li:hover > a {
+            color: #333;
+            background: #fff;
+            border: 0;
+        }
+        .tabbable-line > .nav-tabs > li.active > a{
+            border: 0;
+            color: #333;
+        }
+        .portlet > .portlet-title > .nav-tabs > li > a{
+            background: 0 0;
+            margin: 5px 0 0 1px;
+            border: 0;
+            padding: 8px 10px;
+            color: #fff;
+        }
+        .tabbable-line > .nav-tabs > li > a{
+            background: 0 0 !important;
+            border: 0;
+            margin: 0;
+            padding-left: 15px;
+            padding-right: 15px;
+            color: #737373;
+        }
+        /*组件标题部分结束*/
+        /*面板内容部分*/
+        .portlet.light .portlet-body {
+            padding-top: 8px;
+            clear: both;
+        }
+        .slimScrollDiv{
+            position: relative;
+            overflow: hidden;
+            width: auto;
+            height: 339px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content_main %}
+    <div class="col-lg-12">
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">对齐</h2>
+                    </div>
+                    <div class="panel-body">
+                        <h1>标题 1<small>二级标题</small></h1>
+                        <h2>标题 2<small>二级标题</small></h2>
+                        <h3>标题 3<small>二级标题</small></h3>
+                        <h4>标题 4<small>二级标题</small></h4>
+                        <h5>标题 5<small>二级标题</small></h5>
+                        <h6>标题 6<small>二级标题</small></h6>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">引用</h2>
+                    </div>
+                    <div class="panel-body">
+                        <blockquote>
+                            <p>大弦嘈嘈如急雨，小弦切切如私雨。二十四桥明月夜，玉人何处教吹箫。</p>
+                            <small><strong>杜牧</strong>-<cite title="" data-original-title="">《寄扬州韩绰判官》</cite></small>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">完整验证表单</h2>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal m-t" id="signupForm" novalidate="novalidate">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">姓氏：</label>
+                                <div class="col-sm-8">
+                                    <input id="firstname" name="firstname" class="form-control" type="text">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 这里写点提示的内容</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">名字：</label>
+                                <div class="col-sm-8">
+                                    <input id="lastname" name="lastname" class="form-control" type="text" aria-required="true" aria-invalid="false">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">用户名：</label>
+                                <div class="col-sm-8">
+                                    <input id="username" name="username" class="form-control" type="text" aria-required="true" aria-invalid="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">密码：</label>
+                                <div class="col-sm-8">
+                                    <input id="password" name="password" class="form-control" type="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">确认密码：</label>
+                                <div class="col-sm-8">
+                                    <input id="confirm_password" name="confirm_password" class="form-control" type="password">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请再次输入您的密码</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">E-mail：</label>
+                                <div class="col-sm-8">
+                                    <input id="email" name="email" class="form-control" type="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" class="checkbox" id="agree" name="agree"> 我已经认真阅读并同意《H+使用协议》
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">示例：</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item noradius" id="upcontentimgdiv">
+                                <div class="form-group input-group">
+                                    <div class="input-group-addon">TXT路径</div>
+                                    <input type="text" class="form-control" id="file_path" placeholder="TXT路径" value="">
+                                    <div class="input-group-btn">
+                                        <span class="btn btn-primary file-button">
+                                            <span style="color:white">上传txt文件</span>
+                                            <input type="file" id="upload1" onchange="uploadfile($('#upload1'),$('#file_path'),'uptitletxt')">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 添加上传文件的进度条 -->
+                        <div id="showbar" style="display: none">
+                            <script>dumprogressbar();</script>
+                        </div>
+
+                        <div class="list-group-item noradius form-inline">
+                            <form action="" class="form-inline" method="get">
+                                <label for="">筛选：</label>
+                                <select class="form-control" name="state">
+                <option value="">状态:</option>
+                <option value="1">正常</option>
+                <option value="2">禁用</option>
+                                </select>
+                                <input type="text" name="userid" class="form-control" value="" placeholder="类型名">
+                                <button class="btn btn-primary" type="submit">筛选</button>
+                                <span class="btn btn-default" onclick="exitsearch()">取消筛选</span>
+                            </form>
+                        </div>
+
+                        <!-- bootstarp 模态框 -->
+                        <button class="btn btn-primary" data-backdrop="true" data-toggle="modal" onclick="$('#myModal').modal('show')" style="margin: 20px">删除</button>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden='true'>
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body"></div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- flask框架自带分页,需要导入bootstrap.css -->
+{#                        {% if pagination and pagination.links %}#}
+{#                            <div class="text-center">#}
+{#                                {{ pagination.links }}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">面板：</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-xs-12 col-sm-12">
+                                <div class="portlet light">
+                                    <div class="portlet-title tabbable-line">
+                                        <div class="caption">
+                                            <span class="caption-subject font-dark bold uppercase">提要</span>
+                                        </div>
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#tab_1_1" class="active" data-toggle="tab"> 系统 </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_2" data-toggle="tab"> 警示提醒 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab_1_1">
+                                                <div class="slimScrollDiv">tab_1_1</div>
+                                            </div>
+                                            <div class="tab-pane" id="tab_1_2">
+                                                <div class="slimScrollDiv" >tab_1_2</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel panel-default" style="border-radius: 0">
+                    <div class="panel-heading">
+                        <h2 class="h2">强调</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p class="text-muted">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <p class="text-primary">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <p class="text-success">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <p class="text-info">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <p class="text-warning">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <p class="text-danger">每个人都有一个死角， 自己走不出来，别人也闯不进去。</p>
+                        <button class="btn btn-green btn-outline">gfergr</button>
+                        <button class="btn btn-primary btn-outline">ferwfer</button>
+                        <button class="btn btn-primary">gregr</button>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" style="border-radius: 0">
+                    <div class="panel-heading">
+                        <h2 class="h2">引用</h2>
+                    </div>
+                    <div class="panel-body no-pading">
+                        <ul class="list-group no-mb no-radius">
+                            <li class="list-group-item">
+                                <span class="badge badge-primary">16</span> 每个人都有一个死角， 自己走不出来，别人也闯不进去。
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-info">12</span> 我把最深沉的秘密放在那里。
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-danger">10</span> 你不懂我，我不怪你。
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge badge-success">10</span> 每个人都有一道伤口， 或深或浅，盖上布，以为不存在。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">调出</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="bs-callout bs-callout-danger">
+                            <h4>不要将表单组和输入框组混合使用</h4>
+                            <p>不要将表单组直接和<a href="/">输入框组</a>混合使用。建议将输入框组嵌套到表单组中使用。</p>
+                        </div>
+                        <div class="bs-callout bs-callout-warning">
+                            <h4>不要将表单组和输入框组混合使用</h4>
+                            <p>不要将表单组直接和<a href="/">输入框组</a>混合使用。建议将输入框组嵌套到表单组中使用。</p>
+                        </div>
+                        <div class="bs-callout bs-callout-info">
+                            <h4>不要将表单组和输入框组混合使用</h4>
+                            <p>不要将表单组直接和<a href="/">输入框组</a>混合使用。建议将输入框组嵌套到表单组中使用。</p>
+                        </div>
+                        <div class="bs-callout bs-callout-success">
+                            <h4>不要将表单组和输入框组混合使用</h4>
+                            <p>不要将表单组直接和<a href="/">输入框组</a>混合使用。建议将输入框组嵌套到表单组中使用。</p>
+                            <code>role="button"</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">微章</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="ibox-content">
+                            <p>
+                                要添加徽章，只需要在元素上添加<code>.badge</code>即可，改变徽章的颜色可使用如下class，如<code>.badge-primary</code>。
+                            </p>
+                            <p><span class="badge">空</span>
+                            </p>
+                            <p><span class="badge badge-primary">badge-primary</span>
+                            </p>
+                            <p><span class="badge badge-info">badge-info</span>
+                            </p>
+                            <p><span class="badge badge-green">badge-success</span>
+                            </p>
+                            <p><span class="badge badge-warning">badge-warning</span>
+                            </p>
+                            <p><span class="badge badge-danger">badge-danger</span>
+                            </p>
+
+                            <span class="label label-default">Default</span>
+                            <span class="label label-primary">Primary</span>
+                            <span class="label label-success">Success</span>
+                            <span class="label label-info">Info</span>
+                            <span class="label label-warning">Warning</span>
+                            <span class="label label-danger">Danger</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default no-radius">
+                    <div class="panel-heading">
+                        <h2 class="h2">图形验证码</h2>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="graph_captcha" placeholder="图形验证码">
+                                <span class="input-group-addon captcha-addon" style="padding: 0">
+                                    <img src="{{ url_for('common.img_cap') }}" alt="" id="img-captcha-btn">
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- 时间区间，引入datechoice文件 -->
+                        <div class="input-group">
+                            <div class="input-group-addon">时间</div>
+                            <input type="text" class="form-control" id="choicedate" placeholder="选择时间" readonly>
+                        </div>
+
+                        <!-- 链接好的输入框组 -->
+                        <div class="list-group-item noradius">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <select class="form-control app_type_ls">
+                                        <option value="">app类型</option>
+                                    </select>
+                                    <div class="input-group-addon">用户名</div>
+                                    <input type="text" value="" placeholder="用户名" id="username" class="form-control">
+                                    <div class="input-group-addon">微信手机号</div>
+                                    <input type="text" value="" placeholder="手机号" id="wei_telephone" class="form-control">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-success" >添加</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group input-group">
+                            <div class="input-group-addon">个人提供她让：</div>
+                            <textarea class="form-control" name="content" placeholder="文章" id="content" cols="30" rows="15">{{ '' }}</textarea>
+                            <script>
+                                var content_text = CKEDITOR.replace('content',{height:380});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 选项卡菜单-->
+                <ul id="myTab" class="nav nav-pills" role="tablist" style="border-bottom: 1px solid #ddd;">
+                    <li class="active"><a href="#basic_configuration" role="tab" data-toggle="pill">基本配置</a></li>
+                    <li><a href="#seo_config" role="tab" data-toggle="pill">SEO配置</a></li>
+                    <li><a href="#forum" role="tab" data-toggle="pill">论坛</a></li>
+                </ul>
+                <!-- 选项卡面板 -->
+                <div id="myTabContent" class="tab-content" style="padding: 20px">
+                    <div class="tab-pane fade in active" id="basic_configuration">基本配置</div>
+                    <div class="tab-pane fade" id="seo_config">规则内容面板</div>
+                    <div class="tab-pane fade" id="forum">论坛内容面板</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

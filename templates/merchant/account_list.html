@@ -1,0 +1,124 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+        // 获取谷歌验证码
+        function getGoogleQrcode(data_uuid) {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'getGoogleQrcode', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertImg('Google验证码', data.data.generate_qrcode);
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function post_sub_data(action, muuid='') {
+            let account = $.trim($("#account").val());
+            let account_name = $.trim($("#account_name").val());
+            let password = $.trim($("#password").val());
+            let confirm_password = $.trim($("#confirm_password").val());
+            let note = $.trim($("#note").val());
+            if (!account){ return xtalert.alertError('请输入账户！') }
+            if (!account_name){ return xtalert.alertError('请输入账户名称！') }
+            if (!muuid){
+                if (!password){ return xtalert.alertError('请输入账户密码！') }
+            }
+            if (password &&!confirm_password){ return xtalert.alertError('请输入账户确认密码！') }
+            if (password){
+                if (password !== confirm_password){ return xtalert.alertError('账户密码与确认密码不一致！') }
+            }
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': action, 'data_uuid': muuid, 'account': account, 'account_name': account_name, 'password': password, 'note': note},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('处理成功！');
+                        reloadpage()
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+                <option value="">账户状态</option>
+                <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>正常</option>
+                <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>禁用</option>
+            </select>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="account_name" value="{{ search_res.account_name or '' }}" placeholder="账户名称" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="账户" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: white;" onclick="post_form_html({'action': 'add_submerchant_html'}, '添加子账户', 800)">添加子账户</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>账户名称</td>
+                <td>登录账户</td>
+                <td>状态</td>
+                <td>添加时间</td>
+                <td>备注</td>
+                <td>操作</td>
+            </tr>
+            {% for data in all_datas %}
+            <tr>
+                <td>{{ data.account_name }}</td>
+                <td>{{ data.account }}</td>
+                <td>{% if data.statu %}<span class="ant-tag ant-tag-green">正常</span>{% else %}<span class="ant-tag ant-tag-red">禁用</span>{% endif %}</td>
+                <td>{{ format_time_func(data.create_time) }}</td>
+                <td>{{ data.note or '' }}</td>
+                <td width="230">
+                    {% if data.statu %}
+                        <span class="ant-tag ant-tag-red mr-0" onclick="post_update_statu('update_statu', '{{ data.uuid }}')">禁用</span>
+                    {% else %}
+                        <span class="ant-tag ant-tag-green mr-0" onclick="post_update_statu('update_statu', '{{ data.uuid }}')">启用</span>
+                    {% endif %}
+                    <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_submerchant_html', 'data_uuid': '{{ data.uuid }}'}, '编辑信息', 800)">编辑</span>
+                    <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}', '该商户下绑定的有其它数据存在，删除后不可恢复，是否全部删除？')">删除</span>
+                    <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>
+                    <div class="dropdown-menu">
+                        <span class="dropdown-item" onclick="getGoogleQrcode('{{ data.uuid }}')">Google验证码</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

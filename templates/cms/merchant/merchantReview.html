@@ -1,0 +1,39 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="账户" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_name" value="{{ search_res.merchant_name or '' }}" placeholder="名称" aria-label="">
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户ID</td>
+                <td>商户名称</td>
+                <td>账户</td>
+                <td>审核状态</td>
+                <td>备注</td>
+                <td width="260">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.merchant_id }}</td>
+                    <td>{{ data.merchant_name }}</td>
+                    <td>{{ data.account }}</td>
+                    <td>{% if data.is_review %}<span class="ant-tag ant-tag-green">已审核</span>{% else %}<span class="ant-tag ant-tag-red">未审核</span>{% endif %}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td>
+                        <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_update_statu('update_is_review', '{{ data.uuid }}', '确定通过审核？')">通过审核</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

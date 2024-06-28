@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>{{ title }}</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/animate/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/bootstrap/font/bootstrap-icons.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='common/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/bootstrap/js/popper.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/bootstrap/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.css') }}">
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/promise.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/xtalert.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/daterangepicker/daterangepicker.css') }}">
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/daterangepicker.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/pickerDate.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/xtajax.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/js/upload.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/js/common.js') }}"></script>
+    <link rel="stylesheet" href="/assets/world/iconfont/iconfont.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            background: #f0f3f5;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 40px;
+            background-color: rgba(0, 0, 0, .22)
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+            width: 12px
+        }
+
+        html,
+        body {
+            font-size: 14px;
+        }
+
+        img,
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn:focus,
+        .btn:active:focus,
+        .btn.active:focus,
+        .btn.focus,
+        .btn:active.focus,
+        .btn.active.focus {
+            outline: none;
+            border-color: transparent;
+        }
+
+        /* 禁止换行 */
+        .ban-newline {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 强制换行 */
+        .require-newline {
+            word-break: break-all;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        /* 禁止选中 */
+        .no-touch {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+        /* 文件上传按钮美化 */
+        .file-button {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .file-button input {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            cursor: pointer;
+        }
+
+        ul,
+        li,
+        a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none
+        }
+
+        ul,
+        li,
+        ul>li {
+            list-style: none
+        }
+
+        a:hover {
+            text-decoration: none
+        }
+
+        .form-control {
+            border-color: #CCD1D9;
+            box-shadow: none;
+            border-radius: 4px;
+            color: #434A54;
+        }
+
+        .to_cursor {
+            cursor: pointer;
+        }
+
+        .noradius {
+            border-radius: 0;
+        }
+
+        .btn-default {
+            background-color: #fff;
+            border-color: #dbdbdb;
+            color: #303030;
+            white-space: nowrap;
+        }
+
+        .btn-default:hover {
+            background-color: #f0f0f0;
+            border-color: #e3e3e3;
+            color: #303030;
+        }
+
+        .background-white {
+            background: #ffffff
+        }
+
+        .table td {
+            padding: .68rem;
+        }
+
+        .btn-xs {
+            padding: .08rem .4rem;
+            font-size: .78rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+        }
+
+        .box-shadow {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08)
+        }
+
+        .card {
+            /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);*/
+            box-shadow: 0 0 2px 0 rgba(82, 63, 105, 0.05);
+        }
+
+        .card-header {
+            padding: 13px 20px;
+        }
+
+        .card-subtitle {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            border-top: 1px solid rgba(0, 0, 0, .125);
+            border-bottom: 1px solid rgba(0, 0, 0, .125);
+            background: #f0f1f2;
+            font-size: 16px;
+            font-weight: bolder;
+        }
+
+        .red {
+            color: red
+        }
+
+        ::placeholder {
+            color: #747f8a !important;
+            font-size: 13px;
+            opacity: .5 !important;
+        }
+
+        .card-border-bottom {
+            border-bottom: 1px solid rgba(0, 0, 0, .125)
+        }
+
+        /* 选项卡 */
+        .options_tab {
+            border: none;
+        }
+
+        .options_tab .card-header a {
+            color: rgba(0, 0, 0, .85);
+        }
+
+        .options_tab .card-header {
+            border: none;
+            padding: 0 20px;
+            background: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .options_tab .card-header .nav-pills {
+            border-bottom: 1px solid rgba(0, 0, 0, .125);
+            margin: 0;
+        }
+
+        .options_tab .card-header .nav-pills .nav-item {
+            padding: 10px 0 7px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .options_tab .card-header .nav-item .nav-link.active {
+            color: #007bff;
+            background: none;
+        }
+
+        .options_tab .card-header .nav-item .nav-link.active::after {
+            content: "";
+            position: absolute;
+            width: calc(100% - 30px);
+            height: 2px;
+            background: #007bff;
+            bottom: 0;
+            left: 15px;
+            -moz-transition: all .5s ease;
+            -webkit-transition: all .5s ease;
+            transition: all .5s ease;
+        }
+
+        /* 头部 */
+        #header {
+            width: auto;
+            height: 62px;
+            box-shadow: 0 2px 4px rgba(41, 48, 66, .1);
+            background-color: white !important;
+            position: fixed;
+            top: 0;
+            left: 210px;
+            right: 0;
+            padding: 0 18px;
+            box-sizing: border-box;
+            z-index: 999;
+            font-size: 15px;
+        }
+
+        #header .dropdown-menu {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+            top: 50px;
+            margin-top: 0;
+            padding: .3rem 0;
+            right: -10px;
+            min-width: 100px;
+            width: auto;
+            font-size: 14px;
+            border: none;
+        }
+
+        #header .dropdown-menu a {
+            padding: 12px;
+        }
+
+        #header .dropdown-menu svg {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: -.1em;
+        }
+
+        .navbar-brand i {
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav li.nav-item {
+            margin: 0 10px;
+        }
+
+        .navbar-nav li.nav-item a.nav-link {
+            color: #333333;
+        }
+
+        .navbar-nav li.nav-item a.nav-link svg {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: -.1em;
+        }
+
+        .dropdown-box a.nav-link {
+            line-height: 36px
+        }
+
+        .dropdown-box a.nav-link .avatar {
+            margin-top: -15px;
+            margin-bottom: -15px;
+            width: 30px;
+            height: 30px;
+            margin-right: .25rem !important;
+            border-radius: 50% !important;
+        }
+
+        #sidebar {
+            width: 210px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background-color: #001529;
+            z-index: 999;
+            font-size: 15px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        #sidebar .brand-logo {
+            width: 100%;
+            height: 62px;
+            line-height: 65px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sidebar .brand-logo img {
+            width: 35px;
+            margin-right: 5px;
+        }
+
+        #sidebar .brand-logo .logo-text {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
+            top: 3px;
+            letter-spacing: 2px;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        #sidebar .nav-box {
+            position: relative;
+            overflow: hidden auto;
+            width: 100%;
+            height: 100%;
+            padding-top: 10px;
+            padding-bottom: 100px;
+            overflow-y: scroll;
+        }
+
+        #sidebar .list-group-item {
+            background-color: #001529;
+            color: #ffffffb3;
+            border: none;
+            padding: 1rem 1.25rem;
+        }
+
+        #sidebar .list-group-item:hover,
+        #sidebar .secondGroup .list-group-item:hover {
+            color: #FFFFFF;
+        }
+
+        #sidebar a.active,
+        #sidebar .secondGroup a.active {
+            z-index: 2;
+            color: #FFFFFF;
+        }
+
+        #sidebar .secondGroup .list-group-item {
+            background-color: #0c2135;
+            border: none;
+        }
+
+        /* 内容 */
+        #content_box {
+            width: auto;
+            padding: 15px;
+            margin-left: 210px;
+            margin-top: 62px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #content_box .ol_box {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #fff
+        }
+
+        .no_data {
+            width: 100%;
+            height: 390px;
+            padding-top: 100px;
+            text-align: center;
+            background: white;
+            position: relative;
+            top: -14px;
+        }
+
+        /* 开关 */
+        .iconfont.icon-kaiguanguan {
+            color: rgb(210, 210, 210);
+        }
+
+        .iconfont.icon-kaiguan4 {
+            color: rgb(0, 201, 209);
+        }
+
+        .iconfont.icon-duoxuankuangweixuan {
+            color: #c2c2c2;
+        }
+
+        .iconfont.icon-duoxuankuang-fuxuan {
+            color: rgb(0, 201, 209);
+        }
+
+        /* 按钮 */
+        .ant-tag {
+            display: inline-block;
+            cursor: pointer;
+            line-height: 20px;
+            height: 22px;
+            padding: 0 8px;
+            border-radius: 4px;
+            border: 1px solid #e9e9e9;
+            background: #f3f3f3;
+            font-size: 12px;
+            transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+            opacity: 1;
+            margin-right: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .ant-tag:hover {
+            opacity: 0.85;
+        }
+
+        .ant-tag,
+        .ant-tag a,
+        .ant-tag a:hover {
+            color: rgba(0, 0, 0, 0.65);
+        }
+
+        .ant-tag-text a:first-child:last-child {
+            display: inline-block;
+            margin: 0 -8px;
+            padding: 0 8px;
+        }
+
+        .ant-tag .anticon-cross {
+            display: inline-block;
+            font-size: 12px;
+            transform: scale(0.83333333) rotate(0deg);
+            -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";
+            zoom: 1;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 3px;
+            transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+            opacity: 0.66;
+        }
+
+        :root .ant-tag .anticon-cross {
+            filter: none;
+        }
+
+        :root .ant-tag .anticon-cross {
+            font-size: 12px;
+        }
+
+        .ant-tag .anticon-cross:hover {
+            opacity: 1;
+        }
+
+        .ant-tag-has-color {
+            border-color: transparent;
+        }
+
+        .ant-tag-has-color,
+        .ant-tag-has-color a,
+        .ant-tag-has-color a:hover,
+        .ant-tag-has-color .anticon-cross,
+        .ant-tag-has-color .anticon-cross:hover {
+            color: #fff;
+        }
+
+        .ant-tag-checkable {
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {
+            color: #108ee9;
+        }
+
+        .ant-tag-checkable:active,
+        .ant-tag-checkable-checked {
+            color: #fff;
+        }
+
+        .ant-tag-checkable-checked {
+            background-color: #108ee9;
+        }
+
+        .ant-tag-checkable:active {
+            background-color: #0e77ca;
+        }
+
+        .ant-tag-close {
+            width: 0 !important;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ant-tag-zoom-enter,
+        .ant-tag-zoom-appear {
+            animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+            animation-fill-mode: both;
+        }
+
+        .ant-tag-zoom-leave {
+            animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+            animation-fill-mode: both;
+        }
+
+        .ant-tag-pink {
+            color: #f5317f;
+            background: #fdd8e7;
+            border-color: #fdd8e7;
+        }
+
+        .ant-tag-pink-inverse {
+            background: #f5317f;
+            border-color: #f5317f;
+            color: #fff;
+        }
+
+        .ant-tag-red {
+            color: #f04134;
+            background: #fcdbd9;
+            border-color: #fcdbd9;
+        }
+
+        .ant-tag-red-inverse {
+            background: #f04134;
+            border-color: #f04134;
+            color: #fff;
+        }
+
+        .ant-tag-orange {
+            color: #f56a00;
+            background: #fde3cf;
+            border-color: #fde3cf;
+        }
+
+        .ant-tag-orange-inverse {
+            background: #f56a00;
+            border-color: #f56a00;
+            color: #fff;
+        }
+
+        .ant-tag-chocolate {
+            color: chocolate;
+            background: #fff3cf;
+            border-color: #fff3cf;
+        }
+
+        .ant-tag-yellow {
+            color: #ffbf00;
+            background: #fff3cf;
+            border-color: #fff3cf;
+        }
+
+        .ant-tag-yellow-inverse {
+            background: #ffbf00;
+            border-color: #ffbf00;
+            color: #fff;
+        }
+
+        .ant-tag-cyan {
+            color: #00a2ae;
+            background: #cfedf0;
+            border-color: #cfedf0;
+        }
+
+        .ant-tag-cyan-inverse {
+            background: #00a2ae;
+            border-color: #00a2ae;
+            color: #fff;
+        }
+
+        .ant-tag-green {
+            color: #00a854;
+            background: #cfefdf;
+            border-color: #cfefdf;
+        }
+
+        .ant-tag-green-inverse {
+            background: #00a854;
+            border-color: #00a854;
+            color: #fff;
+        }
+
+        .ant-tag-blue {
+            color: #108ee9;
+            background: #d2eafb;
+            border-color: #d2eafb;
+        }
+
+        .ant-tag-blue-inverse {
+            background: #108ee9;
+            border-color: #108ee9;
+            color: #fff;
+        }
+
+        .ant-tag-purple {
+            color: #7265e6;
+            background: #e4e2fa;
+            border-color: #e4e2fa;
+        }
+
+        .ant-tag-purple-inverse {
+            background: #7265e6;
+            border-color: #7265e6;
+            color: #fff;
+        }
+
+        /* swal2弹窗 */
+        .formBox {
+            background: #FFFFFF;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .formBox .list-group-item {
+            border: none;
+            color: #545b62;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .formBox .list-group-item input {
+            font-size: 12px;
+        }
+
+        .formBox .list-group-item select {
+            font-size: 12px;
+        }
+
+        .loglable::before {
+            display: inline-block;
+            margin-right: 4px;
+            color: #ff4236;
+            font-size: 14px;
+            font-family: SimSun, sans-serif;
+            line-height: 1;
+            content: '*';
+        }
+
+        .swal2-popup .swal2-title {
+            color: rgba(4, 15, 66, .9);
+            font-size: 1.43em;
+        }
+
+        #swal2-title {
+            margin-bottom: 25px
+        }
+
+        .noti-title {
+            border-radius: 0.25rem 0.25rem 0 0;
+            background-color: #eff3f6;
+            margin: -4px 0px 0px 0px;
+            width: auto;
+            padding: 12px 20px !important;
+        }
+
+        .noti-title h5 {
+            margin: 0;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .notify-item {
+            padding: 10px 20px !important;
+            overflow: hidden;
+        }
+
+        .notify-item:hover {
+            background-color: #f8f9fa !important;
+        }
+
+        .bg-primary {
+            background-color: #0f9cf3 !important;
+        }
+
+        .notify-item .notify-icon {
+            float: left;
+            height: 36px;
+            width: 36px;
+            line-height: 36px;
+            text-align: center;
+            margin-right: 10px;
+            border-radius: 50%;
+            color: #ffffff;
+        }
+
+        .notify-details {
+            margin-bottom: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 10px 20px 10px 20px;
+            border-bottom: 1px solid #e9e9e9;
+        }
+
+        .notify-details small {
+            display: block;
+            white-space: normal;
+        }
+
+        /* The Modal (background) */
+        .modal-dlg {
+            display: none;
+            position: fixed;
+            z-index: 0;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-dlg2 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal-dlg Content */
+        .modal-dlg-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 4px;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        .close-btn {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+
+        function updateLanguage(language, title, msg) {
+            xtalert.alertConfirm({
+                'title': title,
+                'msg': msg,
+                'confirmCallback': function () {
+                    xtajax.post({
+                        'url': "{{ url_for('admin.setting_view') }}",
+                        'data': {'action': 'update_language', 'language': language},
+                        'success': function (data) {
+                            if (data.code === 200){
+                                xtalert.alertSuccessToast()
+                                window.location.reload();
+                            }else{
+                                return xtalert.alertError(data.message)
+                            }
+                        }
+                    })
+                },
+            })
+        }
+
+        function js_format_money(money) {
+            if(money === '') return '0'
+            data = money.toString()
+            data = data.replace(/,/g, '')
+            if (!/[^0-9,.]/.test(data)) {
+                if (data.toString().includes('.')) {
+                    var parts = data.toString().split('.');
+                    parts[0] = parseInt(parts[0]).toLocaleString();
+                    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return parts.join('.');
+                } else {
+                    data = parseInt(data).toLocaleString();
+                    return (data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                }
+            } else {
+                return "0";
+            }
+        }
+        // 生成uuid
+        function randomUuid() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            return s.join("");
+        }
+
+        function addToastHtml(msg, delay = 5000, title = '', small_title = '') {
+            if (!msg) { return xtalert.alertErrorToast('msg：不可为空！') }
+            let _title = title ? title : '';
+            let radID = randomUuid();
+            let toastHTML = '';
+            toastHTML += '<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="' + radID + '">' +
+                '<div class="toast-header" style="color: #f04134;background: #fcdbd9;border-color: #fcdbd9;">' +
+                '<span class="iconfont icon-tishi1 rounded mr-2" style="vertical-align: -2px;"></span>' +
+                '<strong class="mr-auto">' + _title + '</strong>' +
+                '<small class="text-muted">' + small_title + '</small>' +
+                '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '</div>' +
+                '<div class="toast-body" style="width: 300px;">' + msg + '</div>'
+            $("#toastBox").append(toastHTML);
+            $("#" + radID).toast({ delay: delay, animation: true });
+            $("#" + radID).toast('show');
+        }
+
+        $(function () {
+
+            // 日期选择器
+            $.picker_YY_HH_DD_HH_MM_SS('.pickerdate');
+            // 年月日选择器
+            $.single_YY_MM_DD('.selectDateYMD')
+            $.single_time('.singleTime')
+
+            // 当前菜单定位
+            var a_tags = $("#sidebar").find("a");
+            a_tags.each(function (index, data) {
+                if (window.location.pathname === $(this).attr('href')) {
+                    $(this).addClass('active');
+                    $(this).siblings().removeClass("active");
+                    if ($(this).parent().prev().attr('datatype') === 'menu-group') {
+                        $(this).parent().slideDown(0);
+                        $(this).parent().prev().find(".icon-fangxiangxia").removeClass("icon-fangxiangxia").addClass("icon-fangxiangshang");
+                    }
+                }
+            });
+
+            $("#sidebar a").on('click', function () {
+                if ($(this).attr('datatype') === 'menu-group') {
+                    if ($(this).next().css('display') === 'none') {
+                        $(this).find(".icon-fangxiangxia").removeClass("icon-fangxiangxia").addClass("icon-fangxiangshang");
+                        $(this).next().slideDown(200);
+                    } else {
+                        $(this).find(".icon-fangxiangshang").removeClass("icon-fangxiangshang").addClass("icon-fangxiangxia");
+                        $(this).next().slideUp(200);
+                    }
+                }
+            })
+
+            $("#sidebar a").each(function () {
+                if ($(this).attr('datatype') === 'menu-group') {
+                    if ($(this).next().find('.list-group-item').length <= 0) {
+                        $(this).next().remove();
+                        $(this).remove();
+                    }
+                }
+            })
+
+            $("#bellBtn").on("click", function () {
+                if ($(".fullscreen").css('display') === 'block') {
+                    let element = document.documentElement;
+                    if (element.requestFullscreencreen) {
+                        element.requestFullScreen();
+                    } else if (element.mozRequestFullScreen) {
+                        element.mozRequestFullScreen();
+                    } else if (element.webkitRequestFullScreen) {
+                        element.webkitRequestFullScreen();
+                    } else if (element.msRequestFullScreen) {
+                        element.msRequestFullScreen();
+                    }
+                    $(".fullscreen").css('display', 'none');
+                    $(".fullscreen-exit").css('display', 'block');
+                } else {
+
+                }
+            });
+
+        })
+
+        // upobj:触发对象; toobj:目标对象; types:类型方法; posturl:目标url; thumb_img:修改目标img的对象;
+        function upload_file_func(upobj, toobj, action, posturl, thumb_img, data_uuid, progress, callbackfunc) {
+            if (typeof (upobj) == 'undefined' || upobj == 'undefined') { xtalert.alertErrorToast('upobj不能为空!'); return false }
+            if (action == '' || typeof (action) == 'undefined' || action == 'undefined') { var action = 'upimg' }
+            if (typeof (toobj) == 'undefined' || toobj == 'undefined') { var toobj = '' }
+            if (typeof (posturl) == 'undefined' || posturl == 'undefined') { var posturl = '' }
+            if (typeof (thumb_img) == 'undefined' || thumb_img == 'undefined') { var thumb_img = '' }
+            if (typeof (data_uuid) == 'undefined' || data_uuid == 'undefined') { var data_uuid = '' }
+            if (typeof (progress) == 'undefined' || progress == 'undefined') { var progress = '' }
+            var imgpath = upobj.get(0).files[0];
+            if (imgpath == '') {
+                xtalert.alertErrorToast('请选择文件！')
+            } else {
+                let html = '<div class="boxHtml" style="position: relative; overflow: hidden;">';
+                html += '<div id="showbar">' +
+                    '<div class="progress">' +
+                    '<div id="progressbar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%">' +
+                    '0%</div></div>'
+                '</div>'
+                html += '</div>';
+                Swal({
+                    title: '数据提交中,请勿刷新页面',
+                    text: '数据提交中...',
+                    html: html,
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    showconfirmButton: false,
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                // 控制进度条
+                $('#showbar').show(500);
+                var formdata = new FormData();
+                formdata.append("upload", imgpath);
+                formdata.append("action", action);
+                formdata.append("data_uuid", data_uuid);
+                params = {
+                    'url': posturl,
+                    'data': formdata,
+                    'contentType': false,
+                    'processData': false,
+                    'success': function (data) {
+                        if (data.code == 200) {
+                            toobj.val(data.message)
+                            if (callbackfunc) {
+                                return callbackfunc(data)
+                            } else {
+                                return xtalert.alertSuccessToast('文件上传成功！')
+                            }
+                        } else {
+                            xtalert.alertError(data.message)
+                        }
+                        if (progress === 'progress') {
+                            console.log('666999')
+                            hideprogressbar();
+                        }
+                    }
+                };
+                if (progress === 'progress') {
+                    params['progress'] = showprogress;
+                }
+                xtajax.post(params);
+            }
+        }
+
+        function edit_udata_info_func(action, data_uuid) {
+            let bankcard_info = $.trim($("#bankcard_info").val());
+            if (!bankcard_info) { return xtalert.showValidationError('请输入出款账户信息！') }
+            xtajax.post({
+                'url': '{{ url_for('admin.userList') }}',
+                'data': { 'action': action, 'data_uuid': data_uuid, 'bankcard_info': bankcard_info },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        return xtalert.alertSuccessToast('操作成功！');
+                    } else {
+                        return xtalert.alertError();
+                    }
+                }
+            })
+        }
+
+        // 重置密码
+        function resetPassword_func() {
+            let data_uuid = '{{ current_admin_dict.uuid }}';
+            let password = $.trim($("#password").val());
+            let confirmPassword = $.trim($("#confirmPassword").val());
+            let low_password = $.trim($("#low_password").val());
+            if (!password) { return xtalert.showValidationError('请输入新密码！') }
+            if (!confirmPassword) { return xtalert.showValidationError('请输入确认密码！') }
+            if (!low_password) { return xtalert.showValidationError('请输入原密码！') }
+            if (password !== confirmPassword) { return xtalert.showValidationError('新密码和确认密码不一致！') }
+            xtajax.post({
+                'url': '{{ url_for('admin.userList') }}',
+                'data': { 'action': 'resetPassword', 'password': password, 'data_uuid': data_uuid, 'low_password': low_password },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        return xtalert.alertSuccessToast('操作成功！')
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 请求表单
+        function post_form_html(data, title, width, url, timeout = 60000) {
+            Swal({
+                title: false,
+                text: '数据请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'url': url ? url : '',
+                'timeout': timeout,
+                'data': data,
+                'success': function (data) {
+                    if (data.code === 200) {
+                        Swal({
+                            title: title ? title : '操作',
+                            width: width ? width : '',
+                            html: data.message,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                        })
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                },
+                'error': function (jqXHR, textStatus, errorThrown) {
+                    if (textStatus === "timeout") {
+                        return xtalert.alertError('网络超时！')
+                    } else {
+                        // 处理其他错误
+                    }
+                }
+            })
+        }
+    </script>
+    <script>
+        function closeSelectButton() {
+            $("#selectCardBox").css("display", "none");
+            Swal.close();
+        }
+        function closeQRButton() {
+            $("#qrcodeBox").css("display", "none");
+            Swal.close();
+        }
+    </script>
+    {% block head %}{% endblock %}
+    {% block other_head %}{% endblock %}
+</head>
+
+<body>
+
+    <header id="header" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" aria-hidden="true"
+                style="width: 1.1em; height: 1.1em; vertical-align: -3px;">
+                <path
+                    d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 000 13.8z">
+                </path>
+            </svg>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto"></ul>
+            <div class="my-2 my-lg-0">
+                <ul class="navbar-nav navbar-align dropdown-box">
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <a class="nav-link d-none d-sm-inline-block" href="{{ url_for('admin.withdrawList') }}"
+                            style="color: #333333; font-size: 14px; padding: 0;">
+                            <span class="nav-link d-none d-sm-inline-block"
+                                style=" color: #333333; font-size: 14px;">提现:</span><span class="ant-tag ant-tag-pink"
+                                style="padding: 0 5px;">{{ txianCount or 0 }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <a class="nav-link d-none d-sm-inline-block" href="{{ url_for('admin.behalfPay') }}"
+                            style="color: #333333; font-size: 14px; padding: 0;">
+                            <span class="nav-link d-none d-sm-inline-block"
+                                style=" color: #333333; font-size: 14px;">代付:</span><span class="ant-tag ant-tag-pink"
+                                style="padding: 0 5px;">{{ dfwcl_count or 0 }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <a class="nav-link d-none d-sm-inline-block" href="{{ url_for('admin.loseOrderList') }}"
+                            style="color: #333333; font-size: 14px; padding: 0;">
+                            <span class="nav-link d-none d-sm-inline-block"
+                                style=" color: #333333; font-size: 14px;">掉单:</span><span class="ant-tag ant-tag-pink"
+                                style="padding: 0 5px;">{{ ddan_count or 0 }}</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <a class="nav-link d-none d-sm-inline-block" href="{{ url_for('admin.unknownIncome') }}"
+                            style="color: #333333; font-size: 14px; padding: 0;">
+                            <span class="nav-link d-none d-sm-inline-block"
+                                style=" color: #333333; font-size: 14px;">不明收入:</span><span class="ant-tag ant-tag-pink"
+                                style="padding: 0 5px;">{{ bmsr_count or 0 }}</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <a class="nav-link d-none d-sm-inline-block" href="/public/world/apk/v2rayNG_1.8.5.apk"
+                            style="color: #333333; font-size: 14px;">VPN软件下载</a>
+                    </li>
+                    <li class="nav-item" style="display: flex; align-items: center; cursor: pointer; color: #333333;">
+                        <span class="nav-link d-none d-sm-inline-block" onclick="$('#toastBox').children().remove();"
+                            style="color: #333333; font-size: 14px;">清空通知</span>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" data-toggle="dropdown">
+                            {% if current_admin_user.role_code == ROlE_ALL.OUT_MONEY_USER or
+                            current_admin_user.role_code == ROlE_ALL.SYS_OUT_MONEY_USER %}
+                            {% if current_admin_user.is_online %}
+                            <div
+                                style="background-color: rgb(101, 209, 101); width: 6px; height: 6px; border-radius: 3px; position: absolute; left: 2px; top:12px;">
+                            </div>
+                            {% else %}
+                            <div
+                                style="background-color: rgb(141, 155, 141); width: 6px; height: 6px; border-radius: 3px; position: absolute; left: 2px; top:12px;">
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                            <img src="/public/world/img/logo6.jpeg" class="avatar img-fluid rounded-circle mr-1"
+                                alt="Chris Wood">
+                            <span style="font-size: 13px;">{{ current_admin_dict.username }}</span>
+                            <span class="iconfont icon-fangxiangxia"
+                                style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 38px; margin-left: 3px;"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <span class="dropdown-item" style="padding: 12px; cursor: pointer; text-align: center;"
+                                onclick="post_form_html({'action': 'resetPasswordHtml'}, '重置密码', 800, '{{ url_for('admin.userList') }}')">
+                                <svg viewBox="64 64 896 896" focusable="false" data-icon="lock" width="1em" height="1em"
+                                    fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M832 464h-68V240c0-70.7-57.3-128-128-128H388c-70.7 0-128 57.3-128 128v224h-68c-17.7 0-32 14.3-32 32v384c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V496c0-17.7-14.3-32-32-32zM332 240c0-30.9 25.1-56 56-56h248c30.9 0 56 25.1 56 56v224H332V240zm460 600H232V536h560v304zM484 701v53c0 4.4 3.6 8 8 8h40c4.4 0 8-3.6 8-8v-53a48.01 48.01 0 10-56 0z">
+                                    </path>
+                                </svg>
+                                重置密码
+                            </span>
+                            <div class="dropdown-item" style="padding: 0.25rem 1.5rem; cursor: pointer; text-align: center; display: flex; align-items: center; " data-toggle="dropdown" aria-expanded="false">
+                                <div style="display: flex; align-items: center; margin-left: 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em"><path d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5v39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9v39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7v-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1H257c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+                                    </svg>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-right: 10px;">
+                                    <span>{{ LANGUAGE.name_dict.get(current_admin_dict.language or 'zh_CN') }}</span>
+                                    <i class="iconfont icon-fangxiang" style="font-size: 12px; line-height: 12px; margin-left: 5px; position: relative;top: -1px;"></i>
+                                </div>
+                                <div class="dropdown-menu" id="selectLangen">
+                                    {% for ldd in LANGUAGE_HINT_ALL %}
+                                    <span class="dropdown-item" data-language="{{ ldd.code }}" onclick="updateLanguage('{{ ldd.code }}', '{{ ldd.title }}', '{{ ldd.text }}')">{{ LANGUAGE.name_dict.get(ldd.code) }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if current_admin_user.role_code == ROlE_ALL.OUT_MONEY_USER or
+                            current_admin_user.role_code == ROlE_ALL.SYS_OUT_MONEY_USER %}
+                            <span class="dropdown-item" style="padding: 12px; cursor: pointer; text-align: center;"
+                                onclick="post_update_statu('updateOnlineStatu', '{{ current_admin_user.uuid }}', '确定切换状态？', '', '{{ url_for('admin.userList') }}')">
+                                <svg fill="none" viewBox="0 0 20 20" stroke-width="2" stroke="currentColor" width="1em"
+                                    height="1em">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12.75 19.5v-.75a7.5 7.5 0 0 0-7.5-7.5H4.5m0-6.75h.75c7.87 0 14.25 6.38 14.25 14.25v.75M6 18.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                </svg>
+                                {% if current_admin_user.is_online %}
+                                切换离线
+                                {% else %}
+                                切换在线
+                                {% endif %}
+                            </span>
+                            <span class="dropdown-item" style="padding: 12px; cursor: pointer; text-align: center;"
+                                onclick="post_form_html({'action': 'edit_udata_info_html', 'data_uuid': '{{ current_admin_user.uuid }}'}, '信息编辑', 800, '{{ url_for('admin.userList') }}')">
+                                <svg viewBox="64 64 896 896" focusable="false" data-icon="user" width="1em" height="1em"
+                                    fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z">
+                                    </path>
+                                </svg>
+                                信息编辑
+                            </span>
+                            {% endif %}
+                            <a class="dropdown-item" href="{{ url_for('admin.cms_login_out') }}"
+                                style="text-align: center; padding: 0.25rem 1.5rem;">
+                                <span style="color: red;">
+                                    <svg viewBox="64 64 896 896" focusable="false" data-icon="logout" width="1em"
+                                        height="1em" fill="currentColor" aria-hidden="true">
+                                        <path
+                                            d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 01-112.7 75.9A352.8 352.8 0 01512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 01-112.7-75.9 353.28 353.28 0 01-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 000-12.6z">
+                                        </path>
+                                    </svg>
+                                    退出登录
+                                </span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebar">
+        <div class="brand-logo">
+            <img src="/public/world/img/logo6.jpeg" alt="login-icon">
+            <h2 class="logo-text">世界付</h2>
+        </div>
+        <div class="nav-box">
+            <div class="list-group">
+                <a class="list-group-item noradius" href="{{ url_for('admin.cms_index') }}" datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="home" fill="currentColor"
+                        aria-hidden="true"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;">
+                        <path
+                            d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 00-44.4 0L77.5 505a63.9 63.9 0 00-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0018.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z">
+                        </path>
+                    </svg>
+                    <span>首页</span>
+                </a>
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="money-collect"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M911.5 700.7a8 8 0 00-10.3-4.8L840 718.2V180c0-37.6-30.4-68-68-68H252c-37.6 0-68 30.4-68 68v538.2l-61.3-22.3c-.9-.3-1.8-.5-2.7-.5-4.4 0-8 3.6-8 8V763c0 3.3 2.1 6.3 5.3 7.5L501 910.1c7.1 2.6 14.8 2.6 21.9 0l383.8-139.5c3.2-1.2 5.3-4.2 5.3-7.5v-59.6c0-1-.2-1.9-.5-2.8zM512 837.5l-256-93.1V184h512v560.4l-256 93.1zM660.6 312h-54.5c-3 0-5.8 1.7-7.1 4.4l-84.7 168.8H511l-84.7-168.8a8 8 0 00-7.1-4.4h-55.7c-1.3 0-2.6.3-3.8 1-3.9 2.1-5.3 7-3.2 10.8l103.9 191.6h-57c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76v39h-76c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76V704c0 4.4 3.6 8 8 8h49.9c4.4 0 8-3.6 8-8v-63.5h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8h-76.3v-39h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8H564l103.7-191.6c.6-1.2 1-2.5 1-3.8-.1-4.3-3.7-7.9-8.1-7.9z">
+                        </path>
+                    </svg>
+                    <span>收款管理</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and 'tunnleManage'
+                    in current_admin_user.permissions) %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.tunnle_view') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">收款通道</span>
+                    </a>
+                    {% endif %}
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and 'conBankManage'
+                    in current_admin_user.permissions) %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.bank_view') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">收款银行</span>
+                    </a>
+                    {% endif %}
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and
+                    'bankScriptManage' in current_admin_user.permissions) %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.bankScript') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">银行脚本</span>
+                    </a>
+                    {% endif %}
+                    {% if 'bankCard' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.bankCard_view') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">银行卡管理</span>
+                    </a>
+                    {% endif %}
+                    {% if 'zaloManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.ZaloListView') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">Zalo管理</span>
+                    </a>
+                    {% endif %}
+                    {% if 'viettelPayManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.ViettelPayView') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">ViettelPay管理</span>
+                    </a>
+                    {% endif %}
+                    {% if 'momoyManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.MomoView') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">Momo管理</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="shop"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M882 272.1V144c0-17.7-14.3-32-32-32H174c-17.7 0-32 14.3-32 32v128.1c-16.7 1-30 14.9-30 31.9v131.7a177 177 0 0014.4 70.4c4.3 10.2 9.6 19.8 15.6 28.9v345c0 17.6 14.3 32 32 32h676c17.7 0 32-14.3 32-32V535a175 175 0 0015.6-28.9c9.5-22.3 14.4-46 14.4-70.4V304c0-17-13.3-30.9-30-31.9zM214 184h596v88H214v-88zm362 656.1H448V736h128v104.1zm234 0H640V704c0-17.7-14.3-32-32-32H416c-17.7 0-32 14.3-32 32v136.1H214V597.9c2.9 1.4 5.9 2.8 9 4 22.3 9.4 46 14.1 70.4 14.1s48-4.7 70.4-14.1c13.8-5.8 26.8-13.2 38.7-22.1.2-.1.4-.1.6 0a180.4 180.4 0 0038.7 22.1c22.3 9.4 46 14.1 70.4 14.1 24.4 0 48-4.7 70.4-14.1 13.8-5.8 26.8-13.2 38.7-22.1.2-.1.4-.1.6 0a180.4 180.4 0 0038.7 22.1c22.3 9.4 46 14.1 70.4 14.1 24.4 0 48-4.7 70.4-14.1 3-1.3 6-2.6 9-4v242.2zm30-404.4c0 59.8-49 108.3-109.3 108.3-40.8 0-76.4-22.1-95.2-54.9-2.9-5-8.1-8.1-13.9-8.1h-.6c-5.7 0-11 3.1-13.9 8.1A109.24 109.24 0 01512 544c-40.7 0-76.2-22-95-54.7-3-5.1-8.4-8.3-14.3-8.3s-11.4 3.2-14.3 8.3a109.63 109.63 0 01-95.1 54.7C233 544 184 495.5 184 435.7v-91.2c0-.3.2-.5.5-.5h655c.3 0 .5.2.5.5v91.2z">
+                        </path>
+                    </svg>
+                    <span>商家管理</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    {% if 'merchantMange' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.merchant_view') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">商户列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'collectionOrderMageer' in current_admin_user.permissions or current_admin_user.is_superadmin
+                    or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.collectionOrder') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">订单列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'merchantReview' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.merchantReview') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">审核列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'rechargeMoney' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.rechargeMoney') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">内充列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'reduceMoney' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.reduceMoney') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">减少列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'loseOrderManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.loseOrderList') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">掉单列表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'withdrawManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.withdrawList') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">提现申请</span>
+                    </a>
+                    {% endif %}
+                    {% if 'callbackLogManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.callbackLog') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">回调记录</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="account-book"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v584zM639.5 414h-45c-3 0-5.8 1.7-7.1 4.4L514 563.8h-2.8l-73.4-145.4a8 8 0 00-7.1-4.4h-46c-1.3 0-2.7.3-3.8 1-3.9 2.1-5.3 7-3.2 10.9l89.3 164h-48.6c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1v33.7h-65.1c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1V752c0 4.4 3.6 8 8 8h41.3c4.4 0 8-3.6 8-8v-53.8h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-65.4v-33.7h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-49.1l89.3-164.1c.6-1.2 1-2.5 1-3.8.1-4.4-3.4-8-7.9-8z">
+                        </path>
+                    </svg>
+                    <span>财务管理</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    {% if 'reconciliationForm' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.reconciliationForm') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">对账日报</span>
+                    </a>
+                    {% endif %}
+                    {% if 'merchantTunnleTotal' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.merchantTunnleTotal') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">商户通道报表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'merchantForm' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.merchantForm') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">商户报表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'bankcardForm' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.bankcardForm') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">银行卡报表</span>
+                    </a>
+                    {% endif %}
+                    {% if 'unknownIncome' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.unknownIncome') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">不明收入</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="property-safety" width="1em" height="1em"
+                        fill="currentColor" aria-hidden="true"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M866.9 169.9L527.1 54.1C523 52.7 517.5 52 512 52s-11 .7-15.1 2.1L157.1 169.9c-8.3 2.8-15.1 12.4-15.1 21.2v482.4c0 8.8 5.7 20.4 12.6 25.9L499.3 968c3.5 2.7 8 4.1 12.6 4.1s9.2-1.4 12.6-4.1l344.7-268.6c6.9-5.4 12.6-17 12.6-25.9V191.1c.2-8.8-6.6-18.3-14.9-21.2zM810 654.3L512 886.5 214 654.3V226.7l298-101.6 298 101.6v427.6zM430.5 318h-46c-1.7 0-3.3.4-4.8 1.2a10.1 10.1 0 00-4 13.6l88 161.1h-45.2c-5.5 0-10 4.5-10 10v21.3c0 5.5 4.5 10 10 10h63.1v29.7h-63.1c-5.5 0-10 4.5-10 10v21.3c0 5.5 4.5 10 10 10h63.1V658c0 5.5 4.5 10 10 10h41.3c5.5 0 10-4.5 10-10v-51.8h63.4c5.5 0 10-4.5 10-10v-21.3c0-5.5-4.5-10-10-10h-63.4v-29.7h63.4c5.5 0 10-4.5 10-10v-21.3c0-5.5-4.5-10-10-10h-45.7l87.7-161.1a10.05 10.05 0 00-8.8-14.8h-45c-3.8 0-7.2 2.1-8.9 5.5l-73.2 144.3-72.9-144.3c-1.7-3.4-5.2-5.5-9-5.5z">
+                        </path>
+                    </svg>
+                    <span>代付管理</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    {% if 'behalfPayConfig' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN%}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.behalfPayConfig_view') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">代付配置</span>
+                    </a>
+                    {% endif %}
+                    {% if 'CnBankCard' in current_admin_user.permissions or current_admin_user.is_superadmin%}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.CnBankCardView') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">姓名检测</span>
+                    </a>
+                    {% endif %}
+                    {% if 'behalfPayOrderList' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.behalfPay') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">代付订单</span>
+                    </a>
+                    {% endif %}
+                    {% if 'behalfPayCallbackLog' in current_admin_user.permissions or current_admin_user.is_superadmin
+                    or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.behalfPay_callbackLog') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">回调记录</span>
+                    </a>
+                    {% endif %}
+                    {% if 'WithdrawalCard' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN%}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.WithdrawalBankCard') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">出款银行卡</span>
+                    </a>
+                    {% endif %}
+                    {% if 'TransactionFlow' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN%}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.TransactionFlow') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">交易流水</span>
+                    </a>
+                    {% endif %}
+                    {% if 'behalfPay_scriptConfig' in current_admin_user.permissions or current_admin_user.is_superadmin
+                    or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.behalfPay_scriptConfig') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">自动脚本</span>
+                    </a>
+                    {% endif %}
+                    {% if ('behalfPayTaskList' in current_admin_user.permissions and current_admin_user.role_code ==
+                    ROlE_ALL.ADMINISTRATOR) or current_admin_user.is_superadmin %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.behalfPay_taskList') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">任务列表</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% if 'adminUserManage' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                <a class="list-group-item noradius" href="{{ url_for('admin.userList') }}" datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="team"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M824.2 699.9a301.55 301.55 0 00-86.4-60.4C783.1 602.8 812 546.8 812 484c0-110.8-92.4-201.7-203.2-200-109.1 1.7-197 90.6-197 200 0 62.8 29 118.8 74.2 155.5a300.95 300.95 0 00-86.4 60.4C345 754.6 314 826.8 312 903.8a8 8 0 008 8.2h56c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5A226.62 226.62 0 01612 684c60.9 0 118.2 23.7 161.3 66.8C814.5 792 838 846.3 840 904.3c.1 4.3 3.7 7.7 8 7.7h56a8 8 0 008-8.2c-2-77-33-149.2-87.8-203.9zM612 612c-34.2 0-66.4-13.3-90.5-37.5a126.86 126.86 0 01-37.5-91.8c.3-32.8 13.4-64.5 36.3-88 24-24.6 56.1-38.3 90.4-38.7 33.9-.3 66.8 12.9 91 36.6 24.8 24.3 38.4 56.8 38.4 91.4 0 34.2-13.3 66.3-37.5 90.5A127.3 127.3 0 01612 612zM361.5 510.4c-.9-8.7-1.4-17.5-1.4-26.4 0-15.9 1.5-31.4 4.3-46.5.7-3.6-1.2-7.3-4.5-8.8-13.6-6.1-26.1-14.5-36.9-25.1a127.54 127.54 0 01-38.7-95.4c.9-32.1 13.8-62.6 36.3-85.6 24.7-25.3 57.9-39.1 93.2-38.7 31.9.3 62.7 12.6 86 34.4 7.9 7.4 14.7 15.6 20.4 24.4 2 3.1 5.9 4.4 9.3 3.2 17.6-6.1 36.2-10.4 55.3-12.4 5.6-.6 8.8-6.6 6.3-11.6-32.5-64.3-98.9-108.7-175.7-109.9-110.9-1.7-203.3 89.2-203.3 199.9 0 62.8 28.9 118.8 74.2 155.5-31.8 14.7-61.1 35-86.5 60.4-54.8 54.7-85.8 126.9-87.8 204a8 8 0 008 8.2h56.1c4.3 0 7.9-3.4 8-7.7 1.9-58 25.4-112.3 66.7-153.5 29.4-29.4 65.4-49.8 104.7-59.7 3.9-1 6.5-4.7 6-8.7z">
+                        </path>
+                    </svg>
+                    <span>账户管理</span>
+                </a>
+                {% endif %}
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="setting" fill="currentColor"
+                        aria-hidden="true"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;">
+                        <path
+                            d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 009.3-35.2l-.9-2.6a443.74 443.74 0 00-79.7-137.9l-1.8-2.1a32.12 32.12 0 00-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 00-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 00-25.8 25.7l-15.8 85.4a351.86 351.86 0 00-99 57.4l-81.9-29.1a32 32 0 00-35.1 9.5l-1.8 2.1a446.02 446.02 0 00-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 00-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0035.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0025.8 25.7l2.7.5a449.4 449.4 0 00159 0l2.7-.5a32.05 32.05 0 0025.8-25.7l15.7-85a350 350 0 0099.7-57.6l81.3 28.9a32 32 0 0035.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 01-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 01-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L781.8 426l6.5 39.9zM512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 01512 614c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 01400 502c0-29.9 11.7-58 32.8-79.2C454 401.6 482.1 390 512 390c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 01624 502c0 29.9-11.7 58-32.8 79.2z">
+                        </path>
+                    </svg>
+                    <span>系统管理</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    {% if 'settingMange' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.setting_view') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">系统设置</span>
+                    </a>
+                    {% endif %}
+                    {% if 'systemLogMange' in current_admin_user.permissions or current_admin_user.is_superadmin or
+                    current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.systemLog') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">系统操作记录</span>
+                    </a>
+                    {% endif %}
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and 'vpnManage' in
+                    current_admin_user.permissions) %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.vpnList') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">VPN 列表</span>
+                    </a>
+                    {% endif %}
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and
+                    'ExportFilesManage' in current_admin_user.permissions) or current_admin_user.role_code ==
+                    ROlE_ALL.AGENTADMIN %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.ExportFilesView') }}"
+                        datatype="second-menu">
+                        <span style="margin-left: 43px">导出文件</span>
+                    </a>
+                    {% endif %}
+                    {% if current_admin_user.is_superadmin or ( current_admin_user.is_administrator and 'ApiLogView' in
+                    current_admin_user.permissions) %}
+                    <a class="list-group-item noradius" href="{{ url_for('admin.ApiLogView') }}" datatype="second-menu">
+                        <span style="margin-left: 43px">API请求日志</span>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <a class="list-group-item noradius" datatype="menu-group" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="api"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M917.7 148.8l-42.4-42.4c-1.6-1.6-3.6-2.3-5.7-2.3s-4.1.8-5.7 2.3l-76.1 76.1a199.27 199.27 0 00-112.1-34.3c-51.2 0-102.4 19.5-141.5 58.6L432.3 308.7a8.03 8.03 0 000 11.3L704 591.7c1.6 1.6 3.6 2.3 5.7 2.3 2 0 4.1-.8 5.7-2.3l101.9-101.9c68.9-69 77-175.7 24.3-253.5l76.1-76.1c3.1-3.2 3.1-8.3 0-11.4zM769.1 441.7l-59.4 59.4-186.8-186.8 59.4-59.4c24.9-24.9 58.1-38.7 93.4-38.7 35.3 0 68.4 13.7 93.4 38.7 24.9 24.9 38.7 58.1 38.7 93.4 0 35.3-13.8 68.4-38.7 93.4zm-190.2 105a8.03 8.03 0 00-11.3 0L501 613.3 410.7 523l66.7-66.7c3.1-3.1 3.1-8.2 0-11.3L441 408.6a8.03 8.03 0 00-11.3 0L363 475.3l-43-43a7.85 7.85 0 00-5.7-2.3c-2 0-4.1.8-5.7 2.3L206.8 534.2c-68.9 69-77 175.7-24.3 253.5l-76.1 76.1a8.03 8.03 0 000 11.3l42.4 42.4c1.6 1.6 3.6 2.3 5.7 2.3s4.1-.8 5.7-2.3l76.1-76.1c33.7 22.9 72.9 34.3 112.1 34.3 51.2 0 102.4-19.5 141.5-58.6l101.9-101.9c3.1-3.1 3.1-8.2 0-11.3l-43-43 66.7-66.7c3.1-3.1 3.1-8.2 0-11.3l-36.6-36.2zM441.7 769.1a131.32 131.32 0 01-93.4 38.7c-35.3 0-68.4-13.7-93.4-38.7a131.32 131.32 0 01-38.7-93.4c0-35.3 13.7-68.4 38.7-93.4l59.4-59.4 186.8 186.8-59.4 59.4z">
+                        </path>
+                    </svg>
+                    <span>接入指南</span>
+                    <span class="iconfont icon-fangxiangxia"
+                        style="font-size: 15px;margin-right: 7px;float: right;position: relative;line-height: 18px;top: 3px;"></span>
+                </a>
+                <div class="secondGroup" style="display: none;">
+                    <a class="list-group-item noradius" href="{{ url_for('front.doc_view', payType='payDoc') }}"
+                        datatype="second-menu" target="_blank">
+                        <span style="margin-left: 43px">代收Api</span>
+                    </a>
+                    <a class="list-group-item noradius" href="{{ url_for('front.doc_view', payType='behalfPay') }}"
+                        datatype="second-menu" target="_blank">
+                        <span style="margin-left: 43px">代付Api</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="content_box">
+        <nav aria-label="breadcrumb" style="border-radius: 5px">
+            <ol class="breadcrumb" style="box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05); background-color: #ffffff;">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('admin.cms_index') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" fill="currentColor"
+                            class="bi bi-stack" viewBox="0 0 16 16">
+                            <path
+                                d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z" />
+                            <path
+                                d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z" />
+                        </svg>&ensp;控制台
+                    </a>
+                </li>
+                {% block ol %}<li class="breadcrumb-item active">{{ title }}</li>{% endblock %}
+            </ol>
+        </nav>
+
+        <div class="row">
+            {% block content_main %}{% endblock %}
+        </div>
+    </div>
+
+    <div id="toastBox" style="position: absolute; top: 65px; right: 10px; z-index: 99999999999999"></div>
+    <div id="selectCardBox" class="modal-dlg2">
+        <div class="modal-dlg-content">
+            <span class="close-btn" onclick="closeSelectButton()">&times;</span>
+            <div class="modal-dlg-body"></div>
+        </div>
+    </div>
+    <div id="qrcodeBox" class="modal-dlg">
+        <div class="modal-dlg-content">
+            <span class="close-btn" onclick="closeQRButton()">&times;</span>
+            <h3 style="text-align: center; margin: 30px;" id="title-qr"></h3>
+            <div class="modal-dlg-body"></div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

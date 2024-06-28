@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>世界付 - 代付API文档</title>
+    <link rel="stylesheet" href="/static/common/bootstrap/css/bootstrap.min.css">
+    <script src="/static/common/jquery.js"></script>
+    <script src="/static/common/md5/md5.min.js"></script>
+    <style>
+        *{margin: 0;padding: 0;box-sizing: border-box;}
+        ul > li{ list-style: none; }
+        html,body{margin: 0;max-width: 100vw;min-height: 100vh;position: relative;overflow-x: hidden;font: 14px NotoSansSC;color: #2c3e50;font-family: PingFang SC,Helvetica Neue,Helvetica,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8f6f\96c5\9ed1,Arial,sans-serif;}
+        body{line-height: normal;margin: 0;padding: 0;}
+        .main{position: relative;box-sizing: border-box;overflow: hidden;}
+        .apiBox{display: block;position: relative;padding: 50px;overflow: hidden;box-sizing: border-box;width: 1200px;margin: auto;}
+        .apiBox .tit{position: relative;height: 50px;line-height: 50px;border-left: 5px solid #44bfa2;box-sizing: border-box;background-color: #f5f5f5;padding: 0 0 0 20px;margin-bottom: 20px;font-size: 18px;}
+        .apiBox P{margin-bottom: 10px;line-height: 1.5;}
+        table {display: table;border-collapse: separate;box-sizing: border-box;text-indent: initial;border-spacing: 2px;border-color: gray;width: 870px;}
+        table thead{display: table-header-group;vertical-align: middle;border-color: inherit;}
+        table thead td{box-sizing: border-box; padding: 8px; max-width: 200px; border-top: 0px; border-bottom-width: 2px; vertical-align: top; line-height: 1.42857; background-color: rgb(245, 245, 245);}
+        table tbody {display: table-row-group;vertical-align: middle;border-color: inherit;}
+        table tbody td{box-sizing: border-box; padding: 8px; max-width: 200px; vertical-align: top; line-height: 1.6; height: 30px;}
+        code{font-size: .875em;color: #d63384;word-wrap: break-word;}
+        .codeDemo{box-sizing: border-box;overflow: auto;font-size: 13px;font-family: Menlo, Monaco, Consolas, "Courier New", monospace;margin-top: 30px;margin-bottom: 10px;padding: 9.5px;border: 1px solid rgb(204, 204, 204);border-radius: 4px;background-color: rgb(245, 245, 245);color: rgb(51, 51, 51);word-wrap: break-word;line-height: 1.42857;word-break: break-all;white-space: pre-wrap;position: relative;}
+        .footer{width: 1200px;position: relative;box-sizing: border-box;text-align: center;line-height: 30px;font-size: 16px;margin: 40px auto 15px;}
+    </style>
+    <script>
+        function objKeySort(arys) {
+            //先用Object内置类的keys方法获取要排序对象的属性名数组，再利用Array的sort方法进行排序
+            var newkey = Object.keys(arys).sort();
+            var newObj = ''; //创建一个新的对象，用于存放排好序的键值对
+            for (var i = 0; i < newkey.length; i++) {
+            //遍历newkey数组
+            newObj += [newkey[i]] + '=' + arys[newkey[i]] + '&';
+            }
+            return newObj.substring(0, newObj.length - 1);
+        }
+
+        $(function () {
+
+            $("#code222").text('mchId=10000&mchOrderId=123456&amount=100000&bankCode=ACB&bankAccount=123456789&bankOwner=TEST&notifyUrl=https://www.google.com&sign=商戶密钥')
+
+            $("#getDataMd5").on('click', function () {
+                let mchId = $.trim($("#mchId").val());
+                let mchOrderId = $.trim($("#mchOrderId").val());
+                let bankCode = $.trim($("#bankCode").val());
+                let bankAccount = $.trim($("#bankAccount").val());
+                let bankOwner = $.trim($("#bankOwner").val());
+                let notifyUrl = $.trim($("#notifyUrl").val());
+                let amount = $.trim($("#amount").val());
+                let sjsign = $.trim($("#sjsign").val());
+                if (!mchId){ return alert('请输入商户ID mchId！') }
+                if (!mchOrderId){ return alert('请输入订单号mchOrderId！') }
+                if (!amount){ return alert('请输入订单金额！') }
+                if (!bankCode){ return alert('请输入開戶銀行的銀行代碼！') }
+                if (!bankAccount){ return alert('请输入銀行帳號！') }
+                if (!bankOwner){ return alert('请输入收款人姓名！') }
+                if (!notifyUrl){ return alert('请输入回调网址notifyUrl！') }
+                if (!sjsign){ return alert('请输入商户密钥！') }
+                let ddd = ['mchId', 'mchOrderId', 'bankCode', 'bankAccount', 'bankOwner', 'notifyUrl', 'amount'];
+                ddd.sort()
+                let mtext = '';
+                for (let i=0; i < ddd.length; i++){
+                    if (i !== 0){
+                        mtext +='&'
+                    }
+                    let _k = ddd[i];
+                    if (_k === 'mchId'){
+                        mtext += 'mchId='+mchId
+                    }else if(_k === 'mchOrderId'){
+                        mtext += 'mchOrderId='+mchOrderId
+                    }else if(_k === 'bankCode'){
+                        mtext += 'bankCode='+bankCode
+                    }else if(_k === 'bankAccount'){
+                        mtext += 'bankAccount='+bankAccount
+                    }else if(_k === 'notifyUrl'){
+                        mtext += 'notifyUrl='+notifyUrl
+                    }else if(_k === 'bankOwner'){
+                        mtext += 'bankOwner='+bankOwner
+                    }else if(_k === 'amount'){
+                        mtext += 'amount='+amount
+                    }
+                }
+                mtext+='&sign='+sjsign
+                let etext = md5(mtext);
+                $("#sign").val(etext);
+                $(".low_datatext").show();
+                $(".low_datatext").find('code').text(mtext);
+            })
+
+        })
+    </script>
+
+</head>
+<body>
+
+    <div class="main">
+
+        <h1 style="display: block; text-align: center; margin: 39px auto 20px;">世界付 - 代付API文档</h1>
+
+        <div class="apiBox">
+            <h2 class="tit">订单创建接口</h2>
+            <div class="cont" style="position: relative; box-sizing: border-box; padding-left: 20px;">
+                <p><b>地址：</b><code>https://pay2world.co/api/behalfPay/bill</code></p>
+                <p><b>调用方式：</b><code>POST</code></p>
+                <p><b>数据格式：</b><code>JSON</code></p>
+                <p><b>注意事项：</b>获取到支付链接后请不要直接使用window.open进行跳转，否则部分手机浏览器(如safari)会阻挡跳窗，可以直接使用location.href</p>
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户ID，请于商户后台->基本信息查看ID</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户订单号，必须为唯一订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >bankCode</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >開戶銀行的銀行代碼,請參考 <a href="/public/world/bank/bankCode.xlsx">銀行編碼</a>, 使用code字段。</td>
+                        </tr>
+                        <tr>
+                            <td >bankAccount</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >銀行帳號</td>
+                        </tr>
+                        <tr>
+                            <td >bankOwner</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >收款人姓名，用於核對</td>
+                        </tr>
+                        <tr>
+                            <td >amount</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >订单金额，具体限额请咨询客服。</td>
+                        </tr>
+                        <tr>
+                            <td >notifyUrl</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >支付结果回调网址，当订单成功到帐时，我司将发送支付结果</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >Number</td>
+                            <td >否</td>
+                            <td >请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code id="code222"></code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 0px;"><b>请求返回内容</b></p>
+                <p style="font-size: 13px; margin: 5px 0 15px;">若錯誤結果不是JSON格式，例如timeout等等的網路錯誤，請不要再次發起訂單，利用訂單查詢接口查詢或是在商戶後台確認沒有成功後，確認我司沒有產生訂單，才再次發起代付，否則我司不負責。</p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >code</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >状态码200表示成功，其它都视为失败<br>
+401：数据解析错误。<br>
+402：缺少参数。<br>
+403：参数错误。<br>
+405：无效订单。<br>
+406：ip异常。<br>
+407：维护中，暂不可用。<br>
+408：余额不足。<br>
+409：签名错误。<br>
+410：金额过小。<br>
+411：金额过大。<br>
+412：账户姓名不符。<br>
+其他返回代码访问异常，请到商户后台确认订单
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >message</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >失败原因，当订单创建失败时将显示创建失败原因</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>异步回调</b></p>
+                <p>当付款成功时，我方将传送回调至提单时填入的notifyUrl，回调内容如下，接收到我司回调时，请回传小写success 已表示成功</p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >Integer</td>
+                            <td >商户编号</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >商户订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >amount</td>
+                            <td >Integer</td>
+                            <td >订单金额</td>
+                        </tr>
+                        <tr>
+                            <td >costFee</td>
+                            <td >number</td>
+                            <td >代付手续费</td>
+                        </tr>
+                        <tr>
+                            <td >isPaid</td>
+                            <td >Integer</td>
+                            <td >支付状态，0为未支付，1为已支付，2为支付失败</td>
+                        </tr>
+                        <tr>
+                            <td >msg</td>
+                            <td >String</td>
+                            <td >异常消息</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >String(32)</td>
+                            <td >签名，请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&mchOrderId=123456&amount=100000&payAmount=1000&costFee=10&isPaid=1&msg=success&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="codeDemo">
+                    <h2 style="position: relative; display: block; text-align: center; ">代付生成订单接口测试</h2>
+<div style="width: 60%; position: relative; box-sizing: border-box; overflow: hidden; margin: auto; padding: 5px;">
+<div class="form-group mb-0"><label for="login_account">商户ID mchId</label><input type="text" class="form-control" id="mchId" aria-describedby="emailHelp"></div>
+<div class="form-group mb-0"><label for="password">订单号mchOrderId</label><input type="text" class="form-control" id="mchOrderId"></div>
+<div class="form-group mb-0"><label for="password">银行代码bankCode</label><input type="text" class="form-control" id="bankCode"></div>
+<div class="form-group mb-0"><label for="password">銀行帳號bankAccount</label><input type="text" class="form-control" id="bankAccount"></div>
+<div class="form-group mb-0"><label for="password">收款人姓名bankOwner</label><input type="text" class="form-control" id="bankOwner"></div>
+<div class="form-group mb-0"><label for="password">订单金额amount</label><input type="text" class="form-control" id="amount"></div>
+<div class="form-group mb-0"><label for="password">支付结果回调网址</label><input type="text" class="form-control" id="notifyUrl"></div>
+<div class="form-group mb-0"><label for="password">商户密钥</label><input type="text" class="form-control" id="sjsign"></div>
+<div class="form-group mb-0"><label for="password">请求签名sign</label><input type="text" class="form-control" id="sign"></div>
+<div style="display: none; text-align: left;" class="low_datatext">原数据：<code></code></div>
+<div style="display: block; text-align: center;"><button id="getDataMd5" type="button" class="btn btn-primary">生成sign</button><!-- <button type="button" class="btn btn-primary ml-2">提交支付</button> --></div>
+</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="apiBox" style="margin-top: 20px;">
+            <h2 class="tit">代付订单查询接口</h2>
+            <div class="cont" style="position: relative; box-sizing: border-box; padding-left: 20px;">
+                <p><b>地址：</b><code>https://pay2world.co/api/behalfPay/Query/bill</code></p>
+                <p><b>调用方式：</b><code>POST</code></p>
+                <p><b>数据格式：</b><code>JSON</code></p>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >商户ID，请于商户后台->基本信息查看ID</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户订单号，必须为唯一订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&mchOrderId=123456&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求返回内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >code</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >状态码200 表示成功，其它都视为失败</td>
+                        </tr>
+                        <tr>
+                            <td >data.isPaid</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >支付状态，0为未支付，1为已支付，2为支付失败</td>
+                        </tr>
+                        <tr>
+                            <td >data.isGotReceipt</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >回执状态1为已回调、0为未回调</td>
+                        </tr>
+                        <tr>
+                            <td >data.amount</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >代付金额</td>
+                        </tr>
+                        <tr>
+                            <td >data.costFee</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >代付手续费</td>
+                        </tr>
+                        <tr>
+                            <td >data.createdAt</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >订单时间</td>
+                        </tr>
+                        <tr>
+                            <td >data.paidAt</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >支付时间</td>
+                        </tr>
+                        <tr>
+                            <td >message</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >失败原因，当订单创建失败时将显示创建失败原因</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="apiBox" style="margin-top: 20px;">
+            <h2 class="tit">餘額查詢接口</h2>
+            <div class="cont" style="position: relative; box-sizing: border-box; padding-left: 20px;">
+                <p><b>地址：</b><code>https://pay2world.co/api/behalfPay/Query/balance</code></p>
+                <p><b>调用方式：</b><code>POST</code></p>
+                <p><b>数据格式：</b><code>JSON</code></p>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >商户ID，请于商户后台->基本信息查看ID</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求返回内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >code</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >状态码200 表示成功，其它都视为失败</td>
+                        </tr>
+                        <tr>
+                            <td >data.mchId</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >商户ID</td>
+                        </tr>
+                        <tr>
+                            <td >data.balance</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >余额</td>
+                        </tr>
+                        <tr>
+                            <td >message</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >失败原因，当订单创建失败时将显示创建失败原因</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="footer">
+        <p style="text-align: center; color: #cacaca; font-size: 14px;">@世界付，2023~2024</p>
+    </div>
+
+</body>
+</html>

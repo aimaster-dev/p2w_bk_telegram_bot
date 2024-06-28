@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>thanh toán thành công</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <script src="/static/common/jquery.js"></script>
+    <style>
+        *{margin: 0;padding: 0;box-sizing: border-box;}
+        html, body{ font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif; font-size: 14px; color: #333;background: white;}
+
+        .mainBox{
+            margin: 150px auto 0;
+            display: block;
+            align-items: center;
+            padding: 20px;
+            width: 500px;
+        }
+        .amountText{
+            display: block;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 25px;
+            color: #555555;
+        }
+    </style>
+    <script>
+        $(function () {
+            var callback_url = '';
+            if (callback_url){
+                let ttt = setTimeout(function () {
+                    window.location.href = callback_url;
+                }, 5000)
+            }
+        })
+    </script>
+</head>
+<body>
+
+    <div class="mainBox">
+        <div style="display: block; margin: 20px 0; position: relative; overflow: hidden; text-align: center;">
+            <img src="/public/world/img/paysuccess5.png" alt="" style="display: block; height: 150px; margin: auto;">
+        </div>
+        <h2 style="color: #b5b5b5;text-align: center;margin-top: 20px;font-weight: inherit; ">Thanh toán đơn hàng thành công</h2>
+        <div class="amountText">{{ amount }} VND</div>
+    </div>
+
+</body>
+</html>

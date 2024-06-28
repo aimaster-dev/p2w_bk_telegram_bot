@@ -1,0 +1,261 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+        function post_merchant_data(action, data_uuid) {
+            if (!action){return xtalert.alertError('缺少参数："action"！')}
+
+            let merchant_name = $.trim($("#merchant_name").val());
+            let account = $.trim($("#account").val());
+            let password = $.trim($("#password").val());
+            let confirm_password = $.trim($("#confirm_password").val());
+            let note = $.trim($("#note").val());
+            let issued_money_rate = $.trim($("#issued_money_rate").val());
+            let payment_rate = $.trim($("#payment_rate").val());
+            let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+            let ip_whitelist = $.trim($("#ip_whitelist").val());
+            let paybehalf_switch = $.trim($("#paybehalf_switch").val());
+            let collect_money_switch = $.trim($("#collect_money_switch").val());
+            let paybehalf_min_money = $.trim($("#paybehalf_min_money").val());
+            let paybehalf_max_money = $.trim($("#paybehalf_max_money").val());
+            if (!account) {return xtalert.showValidationError('请输入账户！')}
+            if (!merchant_name) {return xtalert.showValidationError('请输入商户名称！')}
+            if (!data_uuid){
+                if (!password) {return xtalert.showValidationError('请输入密码！')}
+                if (!confirm_password) {return xtalert.showValidationError('请输入确认密码！')}
+                if (password !== confirm_password){return xtalert.showValidationError('密码不一致！')}
+            }
+            if (password&&!confirm_password){return xtalert.showValidationError('请输入确认密码！')}
+            if (!password&&confirm_password){return xtalert.showValidationError('请确认密码！')}
+            let _data = {
+                'action': action,
+                'account': account,
+                'merchant_name': merchant_name,
+                'password': password,
+                'note': note,
+                'data_uuid': data_uuid ? data_uuid : '',
+                'issued_money_rate': issued_money_rate,
+                'payment_rate': payment_rate,
+                'recharge_money_rate': recharge_money_rate,
+                'ip_whitelist': ip_whitelist,
+                'paybehalf_switch': paybehalf_switch,
+                'collect_money_switch': collect_money_switch,
+                'paybehalf_min_money': paybehalf_min_money,
+                'paybehalf_max_money': paybehalf_max_money,
+            }
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                if (!data_uuid){
+                    let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+                    if (!agentadmin_uuid) {return xtalert.showValidationError('请选择绑定的代理！')}
+                    _data['agentadmin_uuid'] = agentadmin_uuid
+                }
+            {% endif %}
+            xtajax.post({
+                'data': _data,
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('商户添加成功！')
+                        return reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message)
+                    }
+                }
+            })
+        }
+
+        // 获取谷歌验证码
+        function getGoogleQrcode(data_uuid) {
+            xtajax.post({
+                'data': {'action': 'getGoogleQrcode', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertImg('Google验证码', data.data.generate_qrcode);
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        
+        function monitorRechargeMoney() {
+            let cz_amount = $.trim($("#cz_amount").val());
+            let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+            if (!cz_amount){ return $("#repay_amount_text").text('0') }
+            if (recharge_money_rate){
+                let ccc = parseFloat(cz_amount) * parseFloat(recharge_money_rate) / 100
+                return $("#repay_amount_text").text(ccc)
+            }
+
+            return $("#repay_amount_text").text(cz_amount)
+        }   
+        
+        function post_recharge_money(data_uuid) {
+            let note = $.trim($("#note").val());
+            let cz_amount = $.trim($("#cz_amount").val());
+            let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+            if (!cz_amount){ return xtalert.showValidationError('请输入充值金额！')}
+            xtajax.post({
+                'data': {'action': 'rechargeMoney', 'cz_amount': cz_amount, 'recharge_money_rate': recharge_money_rate, 'data_uuid': data_uuid, 'note': note},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('充值成功！');
+                        return reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function post_reduce_money(data_uuid) {
+            let note = $.trim($("#note").val());
+            let reduce_amount = $.trim($("#reduce_amount").val());
+            if (!reduce_amount){ return xtalert.showValidationError('请输入充值金额！')}
+            xtajax.post({
+                'data': {'action': 'reduceMoney', 'reduce_amount': reduce_amount, 'data_uuid': data_uuid, 'note': note},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('充值成功！');
+                        return reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 开关
+        function switch_func(obj) {
+            if (obj.hasClass('icon-kaiguanguan')){
+                obj.parent().prev().val('1');
+                obj.removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+            }else {
+                obj.parent().prev().val('0');
+                obj.removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+            }
+        }
+
+        //
+        function post_sub_data(muuid) {
+            let account = $.trim($("#account").val());
+            let account_name = $.trim($("#account_name").val());
+            let password = $.trim($("#password").val());
+            let confirm_password = $.trim($("#confirm_password").val());
+            let note = $.trim($("#note").val());
+            if (!account){ return xtalert.alertError('请输入账户！') }
+            if (!account_name){ return xtalert.alertError('请输入账户名称！') }
+            if (!password){ return xtalert.alertError('请输入账户密码！') }
+            if (!confirm_password){ return xtalert.alertError('请输入账户确认密码！') }
+            if (password !== confirm_password){ return xtalert.alertError('账户密码与确认密码不一致！') }
+            xtajax.post({
+                'data': {'action': 'add_sub_data', 'data_uuid': muuid, 'account': account, 'account_name': account_name, 'password': password, 'note': note},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('添加成功！');
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">账户状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>开启</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>关闭</option>
+    </select>
+    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="agentadmin_account" value="{{ search_res.agentadmin_account or '' }}" placeholder="代理账户" aria-label="">
+    {% endif %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_id" value="{{ search_res.merchant_id or '' }}" placeholder="商户ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="商户账户" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_name" value="{{ search_res.merchant_name or '' }}" placeholder="商户名称" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="" >
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="注册时间" aria-label="">
+    <select class="form-control mr-sm-2 mb-2" name="sort_type" aria-label="">
+        <option value="">排序方式</option>
+        <option value="create_time_0" {% if search_res.sort_type == 'create_time_0' %}selected{% endif %}>按注册时间倒序</option>
+        <option value="create_time_1" {% if search_res.sort_type == 'create_time_1' %}selected{% endif %}>按注册时间顺序</option>
+        <option value="balance_amount_1" {% if search_res.sort_type == 'balance_amount_1' %}selected{% endif %}>按余额顺序</option>
+        <option value="balance_amount_0" {% if search_res.sort_type == 'balance_amount_0' %}selected{% endif %}>按余额倒序</option>
+        <option value="ds_success_money0" {% if search_res.sort_type == 'ds_success_money0' %}selected{% endif %}>按今日流水倒序</option>
+    </select>
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-primary ml-1 mb-2" onclick="post_form_html({'action': 'add_merchant_html'}, '添加商户', 800)">添加商户</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户ID</td>
+                <td>商户名称</td>
+                <td>商户账户</td>
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                <td>代理账户</td>
+                <td>代理名称</td>
+                {% endif %}
+                <td>可用余额</td>
+                <td>审核状态</td>
+                <td>账户状态</td>
+                <td>登录地址</td>
+                <td>备注</td>
+                <td>注册时间</td>
+                <td width="260">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.merchant_id }}</td>
+                    <td>{{ data.merchant_name }}</td>
+                    <td>{{ data.account }}</td>
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                    <td>{{ data.agentadmin_data.account }}</td>
+                    <td>{{ data.agentadmin_data.username }}</td>
+                    {% endif %}
+                    <td>{{ format_money(data.balance_amount or 0) }}</td>
+                    <td>{% if data.is_review %}<span class="ant-tag ant-tag-green">已审核</span>{% else %}<span class="ant-tag ant-tag-red">未审核</span>{% endif %}</td>
+                    <td>{% if data.statu %}<span class="ant-tag ant-tag-green">正常</span>{% else %}<span class="ant-tag ant-tag-red">禁用</span>{% endif %}</td>
+                    <td>{{ req_host }}{{ url_for('merchant.merchant_login', merchant_uid=data.uuid) }}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td>{{ format_time_func(data.create_time) }}</td>
+                    <td>
+                        {% if current_admin_user.is_syscard or current_admin_user.system_paybehalf %}
+                        <span class="ant-tag to_cursor ant-tag-gray mr-0" >内充</span>
+                        {%else%}
+                        <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_form_html({'action': 'cz_html', 'data_uuid': '{{ data.uuid }}'}, '内充', 800)">内充</span>
+                        {%endif%}
+                        <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_merchant_html', 'data_uuid': '{{ data.uuid }}'}, '编辑商户信息', 800)">编辑</span>
+                        <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}', '该商户下绑定的有其它数据存在，删除后不可恢复，是否全部删除？')">删除</span>
+                        <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>
+                        <div class="dropdown-menu">
+                            {% if not data.is_review %}
+                            <span class="dropdown-item" onclick="post_update_statu('update_is_review', '{{ data.uuid }}', '确定通过审核？')">审核</span>
+                            {% endif %}
+                            {% if data.statu %}
+                            <span class="dropdown-item" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定冻结该账户？')">冻结账号</span>
+                            {% else %}
+                            <span class="dropdown-item" onclick="post_update_statu('update_statu', '{{ data.uuid }}', '确定解冻该账户？')">解冻账号</span>
+                            {% endif %}
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'add_sub_html', 'data_uuid': '{{ data.uuid }}'}, '内充', 800)">添加子账户</span>
+                            <a class="dropdown-item" href="{{ url_for('admin.SubMerchantView', muid=data.uuid) }}">查看子账户</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.collectionOrder') }}?merchant_id={{ data.merchant_id }}">查看订单</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.merchant_fundsDetail', muid=data.uuid) }}">资金流水</a>
+                            <span class="dropdown-item" onclick="getGoogleQrcode('{{ data.uuid }}')">Google验证码</span>
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'reduce_html', 'data_uuid': '{{ data.uuid }}'}, '减余额', 650) ">减余额</span>
+                            <a class="dropdown-item" href="{{ url_for('admin.merchant_info', merchantId=data.merchant_id) }}">详细信息</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{#'输入减去的金额', '输入减去的金额'#}

@@ -1,0 +1,175 @@
+{% extends 'merchant/base.html' %}
+
+{% block head %}
+    <style>
+        /* 面板 */
+        .cardt{position: relative;background-color: #FFFFFF;overflow: hidden;border-radius: 5px;margin-bottom: 20px; transition: all .3s;}
+        .cardt:hover{box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);border-color: rgba(0, 0, 0, 0.2);}
+        .cardt .cardt-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 39px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .cardt .cardt-content{position: relative;overflow: hidden;padding: 20px;}
+        .cardt .cardt_tag{box-sizing: border-box; cursor: pointer; margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .cardt .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .cardt .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .cardt .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .cardt .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+    </style>
+    <script>
+        // upobj:触发对象; toobj:目标对象; types:类型方法; posturl:目标url; thumb_img:修改目标img的对象;
+        function upload_file_func333(upobj,toobj,action,posturl,thumb_img,data_uuid,progress,callbackfunc) {
+            if (typeof(upobj)=='undefined' || upobj=='undefined') {xtalert.alertErrorToast('upobj不能为空!');return false}
+            if (action=='' || typeof(action)=='undefined' || action=='undefined') {var action='upimg'}
+            if (typeof(toobj)=='undefined' || toobj=='undefined') {var toobj=''}
+            if (typeof(posturl)=='undefined' || posturl=='undefined') {var posturl=''}
+            if (typeof(thumb_img)=='undefined' || thumb_img=='undefined') {var thumb_img=''}
+            if (typeof(data_uuid)=='undefined' || data_uuid=='undefined') {var data_uuid=''}
+            if (typeof(progress)=='undefined' || progress=='undefined') {var progress=''}
+            var imgpath = upobj.get(0).files[0];
+            if(imgpath==''){
+                xtalert.alertErrorToast('请选择文件！')
+            }else{
+                let html = '<div class="boxHtml" style="position: relative; overflow: hidden;">';
+                html += '<div id="showbar">' +
+                    '<div class="progress">' +
+                    '<div id="progressbar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%">' +
+                    '0%</div></div>'
+                    '</div>'
+                html += '</div>';
+                Swal({
+                    title: '数据提交中,请勿刷新页面',
+                    text: '数据提交中...',
+                    html: html,
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    showconfirmButton: false,
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                // 控制进度条
+                $('#showbar').show(500);
+                var formdata = new FormData();
+                formdata.append("upload",imgpath);
+                formdata.append("action",action);
+                formdata.append("data_uuid",data_uuid);
+                params = {
+                    'url':posturl,
+                    'data':formdata,
+                    'contentType':false,
+                    'processData': false,
+                    'success':function (data) {
+                        if(data.code===200){
+                            toobj.text(data.data.logoNmae);
+                            toobj.attr('data-logourl', data.data.filePath);
+                            return xtalert.alertSuccessToast('文件上传成功！');
+                        }else{
+                            xtalert.alertError(data.message);
+                        }
+                         if(progress==='progress'){
+                            hideprogressbar();
+                        }
+                    }
+                };
+                if(progress === 'progress'){
+                    params['progress'] = showprogress;
+                }
+                xtajax.post(params);
+            }
+        }
+        
+        function delLogoFunc() {
+            xtajax.post({
+                'data': {'action': 'delLogo'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        $('#logoPath').text('');
+                        $('#logoPath').attr('data-logourl', '');
+                        return xtalert.alertSuccessToast('操作成功！');
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        
+    </script>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-lg-12">
+        <div class="cardt">
+
+            <div class="cardt-head">
+                <span>商户信息</span>
+            </div>
+            <div class="cardt-content">
+                <div class="alert alert-primary" role="alert">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">姓名：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ current_admin_dict.merchant_name }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">用戶ID：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ current_admin_dict.merchant_id }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">用类型：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">商户</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">账户：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ current_admin_dict.account }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">注册时间：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ format_time_func(current_admin_dict.create_time) }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">商户密钥：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ current_admin_dict.secret_key }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">代收利率%：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ (current_admin_dict.payment_rate or 0)*100 }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">下发利率%：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ (current_admin_dict.issued_money_rate or 0)*100 }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">内充利率%：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ (current_admin_dict.recharge_money_rate or 0)*100 }}</div>
+                    </div>
+                    {% for tdl in tunnle_datas %}
+                        {% if tdl.statu %}
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 200px; text-align: right;">{{ tdl.tunnle_data.tunnel_name }}-代收利率%：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ tdl.rate }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div style="position: relative; width: 200px; text-align: right;">商户Logo：</div>
+                        <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px; justify-content: space-between;">
+                            <span id="logoPath" data-logourl="{{ logoUrl or '' }}">{{ logoName or '' }}</span>
+                            <span style="width: 80px;">
+                                <div class="file-button uploadBtn" style="display: inline-block;padding: 0;height: 23px;line-height: 25px;top: 2px;">
+                                    <i class="iconfont icon-yunshangchuan" style="font-size: 23px; cursor: pointer; margin-right: 5px;"></i>
+                                    <input type="file" aria-label="" id="uploadSiteIcon" style="-ms-filter: 'alpha(opacity=0)';" onchange="upload_file_func333($('#uploadSiteIcon'), $('#logoPath'), 'uploadLogo')">
+                                </div>
+                                <i class="iconfont icon-shanchu" onclick="delLogoFunc()" style="margin-right: 5px;position: relative;top: -3px;font-size: 15px; cursor: pointer;"></i>
+                                <i class="iconfont icon-chakan2" style="font-size: 12px;cursor: pointer;margin-right: 5px;position: relative;top: -4px;" onclick="xtalert.alertImg('Logo', $('#logoPath').attr('data-logourl'))"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+{% endblock %}

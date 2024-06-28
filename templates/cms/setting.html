@@ -1,0 +1,242 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <style>
+        .siteSetting{width: 100%;position: relative;overflow: hidden;box-sizing: border-box;}
+        /*白色面板*/
+        .white_panel{padding: 20px;background-color: #FFFFFF;overflow: hidden;box-sizing: border-box; margin-bottom: 15px; border-radius: 5px;position: relative;}
+        .white_panel input, .white_panel textarea{font-size: 12px !important;}
+        .groupHead{height: 60px;line-height: 60px;padding: 0 20px;font-size: 16px;font-weight: normal;font-stretch: normal;letter-spacing: 0.3px;color: #235077;position: relative;background-color: #fafafa;padding-top: 0;display: flex;justify-content: space-between;align-items: center;}
+        .groupHead h2{margin: 5px 0;display: block;font-size: 16px;color: #235077;}
+        .groupHead .back{cursor: pointer;}
+        .groupHead .back:hover{color: #00c9d1;}
+
+        .iconfont.icon-kaiguanguan{color: rgb(210, 210, 210); line-height: 20px;}
+        .iconfont.icon-kaiguan4{color: rgb(0, 201, 209); line-height: 20px;}
+        .iconfont.icon-duoxuankuangweixuan{color: #c2c2c2;}
+        .iconfont.icon-duoxuankuang-fuxuan{color: rgb(0, 201, 209);}
+    </style>
+    <script>
+
+        $(function () {
+            reset_siteSetting()
+        })
+
+        // 开关
+        function switch_func(obj) {
+            if (obj.hasClass('icon-kaiguanguan')){
+                obj.prev().val('1');
+                obj.removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+            }else {
+                obj.prev().val('0');
+                obj.removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+            }
+        }
+        
+        function reset_siteSetting() {
+            xtajax.post({
+                'data': {'action': 'getSiteConfig'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let data_json = data.data;
+                        $("#cms_ip_whitelist").val(data_json.cms_ip_whitelist);
+                        {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                        $("#bank_collect_api_sleep").val(data_json.bank_collect_api_sleep);
+                        $("#bank_collect_api_reqcount").val(data_json.bank_collect_api_reqcount);
+                        $("#site_domain").val(data_json.site_domain);
+                        {% endif %}
+                        if (data_json.login_google_verify_statu === true){
+                            $("#login_google_verify_statu").val('1');
+                            $("#login_google_verify_statu").next().removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+                        }else {
+                            $("#login_google_verify_statu").val('0');
+                            $("#login_google_verify_statu").next().removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+                        }
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+
+        // 保存网站配置信息
+        function post_save_siteSetting() {
+            let cms_ip_whitelist = $.trim($("#cms_ip_whitelist").val());
+            let login_google_verify_statu = $.trim($("#login_google_verify_statu").val());
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            let bank_collect_api_reqcount = $.trim($("#bank_collect_api_reqcount").val());
+            let bank_collect_api_sleep = $.trim($("#bank_collect_api_sleep").val());
+            let site_domain = $.trim($("#site_domain").val());
+            {% endif %}
+            Swal({
+                title: false,
+                text: '操作中，请稍等...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            let _data = {
+                'action': 'updateConfig',
+                'cms_ip_whitelist': cms_ip_whitelist,
+                'login_google_verify_statu': login_google_verify_statu,
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                'bank_collect_api_reqcount': bank_collect_api_reqcount,
+                'bank_collect_api_sleep': bank_collect_api_sleep,
+                'site_domain': site_domain,
+                {% endif %}
+            }
+            xtajax.post({
+                'data': _data,
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('保存成功！')
+                    }else{
+                        return xtalert.alertError(data.message)
+                    }
+                }
+            })
+        }
+        
+        function seleBankCode_func(crrObj) {
+            let crrActivation = crrObj.attr('data-activation');
+            if (crrActivation === '0'){
+                crrObj.addClass('ant-tag-red');
+                crrObj.attr('data-activation', '1');
+            }
+            if (crrActivation === '1'){
+                crrObj.removeClass('ant-tag-red');
+                crrObj.attr('data-activation', '0');
+            }
+        }
+
+    </script>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-lg-12">
+
+        <div class="siteSetting">
+
+            <div class="alert alert-primary" role="alert">
+                <i class="iconfont icon-tishi" style="color: rgb(24, 128, 255); font-size: 18px; vertical-align: -2px; margin-right: 3px;"></i> 部分设置保存后，需刷新页面后起效！
+            </div>
+
+            <div class="groupHead">
+                <div>
+                    <h2><span class="back" onclick="siteAccess_func()">系统配置</span></h2>
+                </div>
+                <div>
+                    <span class="btn btn-primary" onclick="post_save_siteSetting()">提交</span>
+                    <span class="btn btn-default" onclick="reset_siteSetting()">重置</span>
+                </div>
+            </div>
+
+            <div class="white_panel" style="border-radius: 0 0 5px 5px;padding: 0 40px 20px;">
+                <div class="row" style="max-width: 600px;">
+                    <div class="col-lg-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12" style="color:#3c6082;">网站登录IP白名单（限制可登录IP，未设置则全部IP可登录）</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3 pointer">
+                                <textarea class="form-control" id="cms_ip_whitelist" rows="6" aria-label="" placeholder="网站登录IP白名单，一行一个">{{ site_data.cms_ip_whitelist or '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <div class="white_panel" style="border-radius: 0 0 5px 5px;padding: 0 40px 20px;">
+                <div class="row" style="max-width: 600px;">
+                    <div class="col-lg-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12" style="color:#3c6082;">网站子域名配置，访问网站的子域名（配置后会重载服务，谨慎填写，只需输入域名即可不用携带前缀http://或https://）</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3 pointer">
+                                <textarea class="form-control" id="site_domain" rows="6" aria-label="" placeholder="网站子域名配置，一行一个">{{ site_data.site_domain or '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="white_panel" style="border-radius: 0 0 5px 5px;padding: 0 40px 20px;">
+                <div class="row" style="max-width: 600px;">
+                    <div class="col-lg-12 mb-3 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12" style="color:#3c6082;">银行收款脚本配置</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12 mt-2">
+                                <div class="row">
+                                    <div class="col-lg-8" style="color:#3c6082;">API单次获取交易订单数量</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mt-2">
+                                <div class="row">
+                                    <div class="col-lg-12 pointer">
+                                        <input type="text" class="form-control" aria-label="" placeholder="API单次获取交易订单数量" id="bank_collect_api_reqcount">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 mt-4">
+                                <div class="row">
+                                    <div class="col-lg-8" style="color:#3c6082;">API单次请求后休眠/秒</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-12 mt-2 pointer">
+                                        <input type="text" class="form-control" aria-label="" placeholder="API单次请求后休眠/秒" id="bank_collect_api_sleep">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+
+            <div class="white_panel" style="padding: 0 40px 20px;">
+                <div class="ukefu-webim-prop" style="padding-left: 0; padding-right: 0px;">
+                    <div class="row" style="max-width: 600px; margin-bottom: 0px;">
+                        <div class="col-lg-12 mt-3 mb-4">
+                            <div class="row">
+                                <div class="col-lg-12" style="color:#3c6082;">登录谷歌验证，需要使用Google Authenticator客户端，扫描二维码，进行获取动态验证码</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-3">
+                            <div class="row">
+                                <div class="col-lg-8" style="color:#3c6082;">登录谷歌验证开关</div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" alt="" aria-label="" value="{{ '1' if site_data.login_google_verify_statu else '0' }}" id="login_google_verify_statu">
+                                    <i class="iconfont {{ 'icon-kaiguan4' if site_data.login_google_verify_statu else 'icon-kaiguanguan' }} pointer float-right" style="font-size: 40px;" onclick="switch_func($(this))"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

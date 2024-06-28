@@ -1,0 +1,92 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+<script>
+    let search_type = "merchant_search";
+
+    function search_data_func() {
+        let dataDate = $.trim($("input[name='dataDate']").val());
+        let ppp = {
+            'action': 'search_data',
+            'dataDate': dataDate,
+            'search_type': search_type
+        };
+        $("#tableLoding").css('display', 'flex');
+        xtajax.get({
+            'data': ppp,
+            'success': function (data) {
+                if (data.code === 200) {
+                    let repo_data = data.data.mch_report_data;
+                    if (!repo_data){
+                            $(".no_data").show()
+                        }else{
+                            $(".no_data").hide()
+                        }
+                    let html = '';
+
+                    html += '<tr>'
+                    html += '<td>' + repo_data.merchant_id + '</td>'
+                    html += '<td>' + repo_data.merchant_name + '</td>'
+                    html += '<td>' + repo_data.ds_aomunt_total + '</td>'
+                    html += '<td>' + repo_data.dssxf_aomunt_total + '</td>'
+                    html += '<td>' + repo_data.df_aomunt_total + '</td>'
+                    html += '<td>' + repo_data.dfsxf_aomunt_total + '</td>'
+                    html += '<td>' + repo_data.sdxf_aomunt_total + '</td>'
+                    html += '<td>' + repo_data.sdxfsxf_aomunt_total + '</td>'
+                    html += '<td>' + js_format_money(repo_data.internal_charge_amount) + '</td>'
+                    html += '<td>' + js_format_money(repo_data.internal_fee_amount) + '</td>'
+                    html += '<td>' + js_format_money(repo_data.start_balance_amount) + '</td>'
+                    html += '<td>' + js_format_money(repo_data.end_balance_amount) + '</td>'
+                    html += '<td>' + js_format_money(repo_data.wc_vv) + '</td>'
+                    html += '</tr>'
+
+
+                    var parent = $(".table > tbody");
+                    var allChildren = parent.children();
+                    var unwantedChildren = allChildren.slice(1);
+                    unwantedChildren.remove();
+                    parent.append(html);
+                    $("#tableLoding").css('display', 'none');
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+</script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="dataDate" value="{{ search_res.dataDate or '' }}"placeholder="日期" aria-label="">
+            <span class="btn btn-primary mb-2" onclick="search_data_func()">搜索</span>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+        </form>
+    </div>
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            <td>商户ID</td>
+            <td>商户名称</td>
+            <td>代收金额</td>
+            <td>代收手续费</td>
+            <td>代付金额</td>
+            <td>代付手续费</td>
+            <td>手动下发</td>
+            <td>手动下发手续费</td>
+            <td>内部费用金额</td>
+            <td>内部收费</td>
+            <td>起始商户余额</td>
+            <td>结尾商户余额</td>
+            <td>误差值</td>
+        </tr>
+    </tbody>
+</table>
+<div id="tableLoding"
+    style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+    <img src="/assets/world/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+</div>
+{% endblock %}

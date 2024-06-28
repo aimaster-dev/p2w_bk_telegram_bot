@@ -1,0 +1,300 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <link rel="stylesheet" href="/static/common/layui/layui/css/layui.css">
+    <script>
+
+        var djss = 30;
+        var refreshOrderSeter = null;
+        var is_search = {{ 'true' if search_res.is_search else 'false' }};
+
+        $(function () {
+            if (!is_search){
+                refreshOrderSeter = setInterval(function () {
+                    if (djss < 0){
+                        clearInterval(refreshOrderSeter);
+                        refreshOrderList_func();
+                    }else{
+                        $("#refreshOrderBtn").find('text').text('刷新('+ djss +')')
+                    }
+                    djss --;
+                }, 1000)
+            }
+        })
+
+        // 回调测试
+        function test_callback(data_uuid) {
+            Swal({
+                title: '',
+                text: '数据请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'testCallback', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('回调成功！')
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 刷新订单
+        function refreshOrderList_func(isClick=false) {
+            let pageValue = 1
+            var url = window.location.href;
+            var queryString = url.split('?')[1];
+            if (queryString){
+                var params = {};
+                var queries = queryString.split("&");
+                for (var i = 0; i < queries.length; i++) {
+                    let temp = queries[i].split('=');
+                    params[temp[0]] = temp[1];
+                }
+                pageValue = parseInt(params['page']);
+            }
+            let pay_statu = $.trim($("select[name='pay_statu']").val());
+            let callback_statu = $.trim($("select[name='callback_statu']").val());
+            let callbank_type = $.trim($("select[name='callbank_type']").val());
+            let order_time = $.trim($("input[name='order_time']").val());
+            let pay_time = $.trim($("input[name='pay_time']").val());
+            let searchValue = $.trim($("input[name='searchValue']").val());
+            let searchType = $.trim($("select[name='searchType']").val());
+            let _pp = {
+                'action': 'refreshOrderList',
+                'pay_statu': pay_statu,
+                'callback_statu': callback_statu,
+                'callbank_type': callbank_type,
+                'order_time': order_time,
+                'pay_time': pay_time,
+                'searchType': searchType,
+                'searchValue': searchValue,
+                'page': pageValue ? pageValue : 1,
+            }
+            xtajax.get({
+                'url': '{{ url_for('admin.collectionOrder') }}',
+                'data': _pp,
+                'success': function(data){
+                    if (data.code === 200){
+                        if (data.data.is_data){
+                            $(".no_data").hide()
+                        }else {
+                            $(".no_data").show()
+                        }
+                        $("#tableLoding").css('display', 'flex');
+                        $(".table tbody").empty().append(data.data.table_html);
+                        let dd = setTimeout(function () {
+                            $("#tableLoding").css('display', 'none');
+                        }, 1000)
+
+                        if (!isClick){
+                            let sv = $("#refreshSends").val();
+                            djss = parseInt(sv);
+                            refreshOrderSeter = setInterval(function () {
+                                if (djss < 0){
+                                    clearInterval(refreshOrderSeter);
+                                    refreshOrderList_func();
+                                }else{
+                                    $("#refreshOrderBtn").find('text').text('刷新('+ djss +')')
+                                }
+                                djss --;
+                            }, 1000)
+                        }
+                    }else{
+
+                    }
+                }
+            })
+        }
+        
+        // 
+        function refreshOrderBtn_func(crrobj, sv) {
+            crrobj.siblings().removeClass('active').css('color', '#212529');
+            crrobj.addClass('active').css('color', 'rgb(204, 155, 18)').css('background-color', '#fff');
+            $("#refreshSends").val(sv);
+            djss = parseInt(sv);
+            clearInterval(refreshOrderSeter);
+            if (sv === 0){
+                $("#refreshOrderBtn").find('text').text('暂不处理')
+            }else{
+                refreshOrderSeter = setInterval(function () {
+                    if (djss < 0){
+                        clearInterval(refreshOrderSeter);
+                        refreshOrderList_func();
+                    }else{
+                        $("#refreshOrderBtn").find('text').text('刷新('+ djss +')')
+                    }
+                    djss --;
+                }, 1000)
+            }
+        }
+
+        // 获取谷歌验证码
+        function getPayQrcode(data_uuid) {
+            xtajax.post({
+                'data': {'action': 'get_pay_qrcode', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertImg('支付二维码', data.data.generate_qrcode);
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        //
+        function delSearchConfig() {
+            $("input[name='pay_statu']").val('');
+            $("input[name='pay_method']").val('');
+            $("input[name='callback_statu']").val('');
+            $("input[name='callbank_type']").val('');
+            $("input[name='sort_type']").val('');
+            $("input[name='searchType']").val('');
+            $("input[name='searchValue']").val('');
+            $("input[name='order_time']").val('');
+            $("input[name='callback_time']").val('');
+        }
+
+        function clearCallbackTime() {
+            $("input[name='callback_time']").val('');
+        }
+
+        function clearOrderTime() {
+            $("input[name='order_time']").val('');
+        }
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="pay_statu" aria-label="">
+        <option value="">支付状态</option>
+        <option value="1" {% if search_res.pay_statu == '1' %}selected{% endif %}>已支付</option>
+        <option value="0" {% if search_res.pay_statu == '0' %}selected{% endif %}>未支付</option>
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="pay_method" aria-label="">
+        <option value="">支付模式</option>
+        {% for PAY_M in PAY_METHOD.name_arr %}
+        <option value="{{ PAY_M }}" {% if search_res.pay_method == PAY_M %}selected{% endif %}>{{ PAY_METHOD.name_dict.get(PAY_M) }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="callback_statu" aria-label="">
+        <option value="">回调状态</option>
+        {% for callback in CallbackState.name_arr %}
+        <option value="{{ callback }}" {% if search_res.callback_statu == callback %}selected{% endif %}>{{ CallbackState.name_dict.get(callback) }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="callbank_type" aria-label="">
+        <option value="">回调类型</option>
+        {% for callback in CallbankType.name_arr %}
+        <option value="{{ callback }}" {% if search_res.callbank_type == callback %}selected{% endif %}>{{ CallbankType.name_dict.get(callback) }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="bank_uid" aria-label="" style="width: 100px;">
+        <option value="">银行类型</option>
+        {% for back_data in back_datas %}
+            <option value="{{ back_data.uuid }}" {% if search_res.bank_uid == back_data.uuid %}selected{% endif %}>{{ back_data.code }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="searchType" aria-label="" style="width: 120px;">
+        <option value="">选择搜索类型</option>
+        <option value="merchant_id" {% if search_res.searchType == 'merchant_id' %}selected{% endif %}>商户Id</option>
+        <option value="merchant_name" {% if search_res.searchType == 'merchant_name' %}selected{% endif %}>商户名称</option>
+        <option value="bankcard_account" {% if search_res.searchType == 'bankcard_account' %}selected{% endif %}>收款卡号</option>
+        <option value="order_id" {% if search_res.searchType == 'order_id' %}selected{% endif %}>订单号</option>
+        <option value="merchant_order_id" {% if search_res.searchType == 'merchant_order_id' %}selected{% endif %}>商户订单号</option>
+        <option value="order_amount" {% if search_res.searchType == 'order_amount' %}selected{% endif %}>订单金额</option>
+        <option value="actual_amount" {% if search_res.searchType == 'actual_amount' %}selected{% endif %}>实际支付金额</option>
+        <option value="note" {% if search_res.searchType == 'note' %}selected{% endif %}>备注</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="searchValue" value="{{ search_res.searchValue or '' }}" placeholder="搜索内容" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="order_time" value="{{ search_res.order_time }}" placeholder="订单时间" aria-label="" onchange="clearCallbackTime()">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="callback_time" value="{{ search_res.callback_time }}" placeholder="回调时间" aria-label="" onchange="clearOrderTime()">
+{% endblock %}
+
+{% block other_function %}
+{#    <span class="btn btn-default ml-1 mb-2" onclick="delSearchConfig()">清空</span>#}
+    <span id="refreshOrderBtn" data-toggle="dropdown" aria-expanded="false" type="button" class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" ><svg viewBox="64 64 896 896" focusable="false" data-icon="sync" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M168 504.2c1-43.7 10-86.1 26.9-126 17.3-41 42.1-77.7 73.7-109.4S337 212.3 378 195c42.4-17.9 87.4-27 133.9-27s91.5 9.1 133.8 27A341.5 341.5 0 01755 268.8c9.9 9.9 19.2 20.4 27.8 31.4l-60.2 47a8 8 0 003 14.1l175.7 43c5 1.2 9.9-2.6 9.9-7.7l.8-180.9c0-6.7-7.7-10.5-12.9-6.3l-56.4 44.1C765.8 155.1 646.2 92 511.8 92 282.7 92 96.3 275.6 92 503.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8zm756 7.8h-60c-4.4 0-7.9 3.5-8 7.8-1 43.7-10 86.1-26.9 126-17.3 41-42.1 77.8-73.7 109.4A342.45 342.45 0 01512.1 856a342.24 342.24 0 01-243.2-100.8c-9.9-9.9-19.2-20.4-27.8-31.4l60.2-47a8 8 0 00-3-14.1l-175.7-43c-5-1.2-9.9 2.6-9.9 7.7l-.7 181c0 6.7 7.7 10.5 12.9 6.3l56.4-44.1C258.2 868.9 377.8 932 512.2 932c229.2 0 415.5-183.7 419.8-411.8a8 8 0 00-8-8.2z"></path></svg><text style="margin-left: 10px;">暂不处理</text></span>
+    <input type="hidden" id="refreshSends" value="30" aria-label="">
+    <div class="dropdown-menu refreshOrderBtnList">
+        <span class="dropdown-item active" onclick="refreshOrderBtn_func($(this), 0)">暂不处理</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 10)">10秒自动刷新</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 20)">20秒自动刷新</span>
+        <span class="dropdown-item" onclick="refreshOrderBtn_func($(this), 30)">30秒自动刷新</span>
+    </div>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="post_form_html({'action': 'totalData', 'data_uuid': '6'}, '总计', 800)">总计</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="post_update_statu('export_order', '666', '确认导出当前订单数据？')">导出订单数据</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>订单号[{{ total }}]</td>
+                <td>商户名称</td>
+                <td>商户订单号</td>
+                <td>收款账号</td>
+                <td>收款人</td>
+                <td>支付模式</td>
+                <td>订单金额</td>
+                <td>手续费</td>
+                <td>支付金额</td>
+                <td>订单时间</td>
+                <td>支付状态</td>
+                <td>回调状态</td>
+                <td>回调类型</td>
+                <td>回调时间</td>
+                <td width="190">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.order_id }}</td>
+                    <td>{{ data.merchant_data.merchant_name }}</td>
+                    <td>{{ data.merchant_order_id }}</td>
+                    <td>{{ data.bankcard_data.account or data.payee_bankcard or '' }}</td>
+                    <td>{{ data.bankcard_data.account_username or data.payee_username or '' }}</td>
+                    <td>{{ PAY_METHOD.name_dict.get(data.pay_method) }}</td>
+                    <td>{{ format_money(data.order_amount or 0) }}</td>
+                    <td>{{ format_money(data.repay_amount or 0) }}</td>
+                    <td>{{ format_money(data.actual_amount or 0) }}</td>
+                    <td>{{ format_time_func(data.order_time, '%H:%M:%S') }}</td>
+                    <td>{% if data.pay_statu %}<span class="ant-tag ant-tag-green">已支付</span>{% else %}<span class="ant-tag ant-tag-red">未支付</span>{% endif %}</td>
+                    <td>
+                        {% if data.callback_statu == CallbackState.SUCCESS %}
+                            <span class="ant-tag ant-tag-green">已回调</span>
+                        {% elif data.callback_statu == CallbackState.FAILED %}
+                            <span class="ant-tag ant-tag-red">回调失败</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-cyan">未回调</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ CallbankType.name_dict.get(data.callbank_type) or '' }}</td>
+                    <td>{{ format_time_func(data.callback_time, '%H:%M:%S') }}</td>
+                    <td>
+                        <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_update_statu('forceIsPay', '{{ data.uuid }}', '确定强制入款？')">强制入款</span>
+                        <span class="ant-tag to_cursor ant-tag-blue mr-0" onclick="post_form_html({'action': 'detailsInfo_html', 'data_uuid': '{{ data.uuid }}'}, '订单详细信息', 800)">详细</span>
+                        <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>
+                        <div class="dropdown-menu">
+                            <span class="dropdown-item" onclick="getPayQrcode('{{ data.uuid }}')">支付码</span>
+                            <span class="dropdown-item" onclick="post_update_statu('callbackOrder', '{{ data.uuid }}', '确认回调该订单？')">订单回调</span>
+                            <span class="dropdown-item" onclick="oneinput('updateNote', '{{ data.uuid }}', '输入备注内容', '输入备注内容')">更新备注</span>
+                            <a class="dropdown-item" href="{{ url_for('admin.callbackLog', order_id=data.order_id) }}" target="_blank">回调记录</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.BankCardBillLog', bc_id=data.bankcard_id) }}" target="_blank">爬虫明细</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

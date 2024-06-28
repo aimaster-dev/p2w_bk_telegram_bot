@@ -1,0 +1,94 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+        function post_script_data(action, data_uuid='') {
+            let name = $.trim($("#name").val());
+            let back_code = $.trim($("#back_code").val());
+            let bankcard_account = $.trim($("#bankcard_account").val());
+            let note = $.trim($("#note").val());
+            if (!name){ return xtalert.alertError('请输入脚本名称！') }
+            if (!back_code){ return xtalert.alertError('请输入银行卡Code！') }
+            if (!bankcard_account){ return xtalert.alertError('请输入银行卡号！') }
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': action, 'back_code': back_code, 'bankcard_account': bankcard_account, 'note': note,  'name': name, 'data_uuid': data_uuid},
+                'success':function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('添加成功！')
+                        reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+
+        }
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">任务状态</option>
+        {% for taskStatu in taskStatus.name_arr %}
+        <option value="{{ taskStatu }}" {% if search_res.statu == taskStatu %}selected{% endif %}>{{ taskStatus.name_dict.get(taskStatu) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="bankcard_account" value="{{ search_res.bankcard_account or '' }}" placeholder="银行卡账号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>订单ID[{{ total }}]</td>
+                <td>执行脚本名称</td>
+                <td>执行桌面编号</td>
+                <td>执行设备Id</td>
+                <td>付款银行</td>
+                <td>付款银行卡</td>
+                <td>收款人</td>
+                <td>任务状态</td>
+                <td>开始时间</td>
+                <td>结束时间</td>
+                <td>备注</td>
+                <td width="120">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.order_id }}</td>
+                    <td>{{ data.script_data.name or '' }}</td>
+                    <td>{{ data.script_data.desktop_id or '' }}</td>
+                    <td>{{ data.script_data.device_id or '' }}</td>
+                    <td>{{ data.order_data.receive_bank_code or '' }}</td>
+                    <td>{{ data.order_data.receive_account or '' }}</td>
+                    <td>{{ data.order_data.receive_owner or '' }}</td>
+                    <td>{{ taskStatus.name_dict.get(data.statu) }}</td>
+                    <td>{{ format_time_func(data.create_time, '%H:%M:%S') }}</td>
+                    <td>{{ format_time_func(data.end_time, '%H:%M:%S') }}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td>
+                        <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}', '确定删除？删除后不可恢复')">删除</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

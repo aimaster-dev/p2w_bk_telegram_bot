@@ -1,0 +1,147 @@
+{% extends 'merchant/base.html' %}
+
+{% block head %}
+    <style>
+        .table-bordered td,
+        .table-bordered th{border: 1px solid #e9e9e9;}
+        .table thead th{border-bottom: 2px solid #e9e9e9;}
+        .ant-tag {display: inline-block; cursor:pointer; line-height: 20px;height: 22px;padding: 0 8px;border-radius: 4px;border: 1px solid #e9e9e9;background: #f3f3f3;font-size: 12px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 1;margin-right: 5px;cursor: pointer;white-space: nowrap;}
+        .ant-tag:hover {opacity: 0.85;}
+        .ant-tag,
+        .ant-tag a,
+        .ant-tag a:hover {color: rgba(0, 0, 0, 0.65);}
+        .ant-tag-text a:first-child:last-child {display: inline-block;margin: 0 -8px;padding: 0 8px;}
+        .ant-tag .anticon-cross {display: inline-block;font-size: 12px;transform: scale(0.83333333) rotate(0deg);-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";zoom: 1;cursor: pointer;font-weight: bold;margin-left: 3px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 0.66;}
+        :root .ant-tag .anticon-cross {filter: none;}
+        :root .ant-tag .anticon-cross {font-size: 12px;}
+        .ant-tag .anticon-cross:hover {opacity: 1;}
+        .ant-tag-has-color {border-color: transparent;}
+        .ant-tag-has-color,
+        .ant-tag-has-color a,
+        .ant-tag-has-color a:hover,
+        .ant-tag-has-color .anticon-cross,
+        .ant-tag-has-color .anticon-cross:hover {color: #fff;}
+        .ant-tag-checkable {background-color: transparent;border-color: transparent;}
+        .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {color: #108ee9;}
+        .ant-tag-checkable:active, .ant-tag-checkable-checked {color: #fff;}
+        .ant-tag-checkable-checked {background-color: #108ee9;}
+        .ant-tag-checkable:active {background-color: #0e77ca;}
+        .ant-tag-close {width: 0 !important;padding: 0;margin: 0;}
+        .ant-tag-zoom-enter,
+        .ant-tag-zoom-appear {animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-zoom-leave {animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-pink {color: #f5317f;background: #fdd8e7;border-color: #fdd8e7;}
+        .ant-tag-pink-inverse {background: #f5317f;border-color: #f5317f;color: #fff;}
+        .ant-tag-red {color: #f04134;background: #fcdbd9;border-color: #fcdbd9;}
+        .ant-tag-red-inverse {background: #f04134;border-color: #f04134;color: #fff;}
+        .ant-tag-orange {color: #f56a00;background: #fde3cf;border-color: #fde3cf;}
+        .ant-tag-orange-inverse {background: #f56a00;border-color: #f56a00;color: #fff;}
+        .ant-tag-yellow {color: #ffbf00;background: #fff3cf;border-color: #fff3cf;}
+        .ant-tag-yellow-inverse {background: #ffbf00;border-color: #ffbf00;color: #fff;}
+        .ant-tag-cyan {color: #00a2ae;background: #cfedf0;border-color: #cfedf0;}
+        .ant-tag-cyan-inverse {background: #00a2ae;border-color: #00a2ae;color: #fff;}
+        .ant-tag-green {color: #00a854;background: #cfefdf;border-color: #cfefdf;}
+        .ant-tag-green-inverse {background: #00a854;border-color: #00a854;color: #fff;}
+        .ant-tag-blue {color: #108ee9;background: #d2eafb;border-color: #d2eafb;}
+        .ant-tag-blue-inverse {background: #108ee9;border-color: #108ee9;color: #fff;}
+        .ant-tag-purple {color: #7265e6;background: #e4e2fa;border-color: #e4e2fa;}
+        .ant-tag-purple-inverse {background: #7265e6;border-color: #7265e6;color: #fff;}
+        .swal2-popup .swal2-title {color: rgba(4,15,66,.9);font-size: 1.43em;}
+        .table tr:last-child td {border-bottom: 1px solid #e9e9e9;}
+
+        .table{ font-size: 12px; color: rgba(0, 0, 0, 0.65); }
+        .table-hover tbody tr:hover {color: rgba(0, 0, 0, 0.65);background-color: rgba(195, 195, 195, 0.07)}
+        .table-bordered td,
+        .table-bordered th{
+            /* border: none;  */
+            border-bottom: 1px solid #e9e9e9;
+        }
+        .table thead th{border-bottom: 2px solid #e9e9e9;}
+        .table td, .table th {border-top: none;border-bottom: 1px solid #e9e9e9;}
+
+        .formBox{background: #FFFFFF;padding: 20px;position: relative;width: 100%;}
+        .formBox .list-group-item{border: none;color: #545b62;font-size: 12px;margin-bottom: 5px;}
+        .formBox .list-group-item input{font-size: 12px;}
+        .formBox .list-group-item select{font-size: 12px;}
+        .loglable::before{display: inline-block;margin-right: 4px;color: #ff4236;font-size: 14px;font-family: SimSun,sans-serif;line-height: 1;content: '*';}
+
+        .tableBox{position: relative;background-color: #FFFFFF;height: 500px;padding: 20px;box-sizing: border-box;overflow-y: scroll;box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05);}
+        .dropdown-item{cursor: pointer;font-size: 12px;padding: 0.25rem 1rem;}
+
+    </style>
+    <script>
+        $(function () {
+            var pageHeight = $(window).height();
+            let tableBox_h = pageHeight - 62 - 15 - 42 - 16 - 20;
+            $(".tableBox").css('height', tableBox_h + 'px')
+        })
+
+        function _update_statu(params) {
+            var method = params['method'];
+            var ajax_params = {
+                'url':params['get_url'],
+                'data':{'data_uuid':params['data_uuid'],'action':params['action']},
+                'success':function (data) {
+                    if(data.code==200){
+                        if (data.message){xtalert.alertSuccessToast(data.message);}else {xtalert.alertSuccessToast('操作成功');}
+                        if (params['redi_url']){reloadpage(params['redi_url']);}else { location.reload(true); }
+                    }else{xtalert.alertError(data.message)}
+                }
+            };
+            if(method=='post'){xtajax.post(ajax_params)}else{xtajax.get(ajax_params)}
+        }
+
+        function post_update_statu(action,data_uuid,msg,redi_url,get_url,method='post') {
+            if (data_uuid=='' || typeof(data_uuid)=='undefined' || data_uuid=='undefined') {xtalert.alertError('要更新的ID不能为空!');return false}
+            if (action=='' || typeof(action)=='undefined' || action=='undefined') {var action='statu'}
+            if( typeof(redi_url)=='undefined' || redi_url=='undefined'){var redi_url = ''}
+            if( typeof(get_url)=='undefined' || get_url=='undefined'){var get_url = ''}
+            if( typeof(msg)=='undefined' || msg=='undefined'){var msg = '确定操作？'}
+            xtalert.alertConfirm({'msg':msg,'confirmCallback':_update_statu,'funcargs':{'data_uuid':data_uuid,'action':action,'redi_url':redi_url,'get_url':get_url,'method': method}})
+        }
+
+        // 关闭搜索
+        function exitsearch() {
+            var c_url = window.location.href;
+            var new_url = c_url.split('?')[0];
+            window.location.href = new_url;
+        }
+
+    </script>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-lg-12">
+        <div class="tableBox">
+{#            <div id="searchBox" class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">#}
+{#                <form class="form-inline">#}
+{#                    <label for=""><strong>搜索：</strong></label>#}
+{#                    {% block searchInput %}{% endblock %}#}
+{#                    {% block searchBtn %}#}
+{#                    <button class="btn btn-primary mb-2">搜索</button>#}
+{#                    <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>#}
+{#                    {% endblock %}#}
+{#                    {% block other_function %}{% endblock %}#}
+{#                </form>#}
+{#            </div>#}
+
+            {% block other_info %}{% endblock %}
+
+            {% block table_con %}{% endblock %}
+
+            {% if not all_datas %}
+            <div class="no_data">
+                <img src="/static/common/images/no_data.png" alt="暂无数据">
+                <p>暂无数据</p>
+            </div>
+            {% endif %}
+            {% if pagination and pagination.links %}
+            <div class="text-center">{{ pagination.links }}</div>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+{% endblock %}

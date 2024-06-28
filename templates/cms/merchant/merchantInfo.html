@@ -1,0 +1,443 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <script src="/static/common/echarts/echarts.min.js"></script>
+    <style>
+        .table-bordered td,
+        .table-bordered th{border: none; border-bottom: 1px solid #e9e9e9; vertical-align: middle;}
+        .table thead th{border-bottom: 2px solid #e9e9e9;}
+        .table td, .table th {border-top: none;border-bottom: 1px solid #e9e9e9; vertical-align: middle;}
+        .table{ font-size: 12px; color: rgba(0, 0, 0, 0.65); }
+        .table-hover tbody tr:hover {color: rgba(0, 0, 0, 0.65);background-color: rgba(195, 195, 195, 0.07); vertical-align: middle;}
+
+        .ant-tag {display: inline-block; cursor:pointer; line-height: 20px;height: 22px;padding: 0 8px;border-radius: 4px;border: 1px solid #e9e9e9;background: #f3f3f3;font-size: 12px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 1;margin-right: 5px;cursor: pointer;white-space: nowrap;}
+        .ant-tag:hover {opacity: 0.85;}
+        .ant-tag,
+        .ant-tag a,
+        .ant-tag a:hover {color: rgba(0, 0, 0, 0.65);}
+        .ant-tag-text a:first-child:last-child {display: inline-block;margin: 0 -8px;padding: 0 8px;}
+        .ant-tag .anticon-cross {display: inline-block;font-size: 12px;transform: scale(0.83333333) rotate(0deg);-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";zoom: 1;cursor: pointer;font-weight: bold;margin-left: 3px;transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);opacity: 0.66;}
+        :root .ant-tag .anticon-cross {filter: none;}
+        :root .ant-tag .anticon-cross {font-size: 12px;}
+        .ant-tag .anticon-cross:hover {opacity: 1;}
+        .ant-tag-has-color {border-color: transparent;}
+        .ant-tag-has-color,
+        .ant-tag-has-color a,
+        .ant-tag-has-color a:hover,
+        .ant-tag-has-color .anticon-cross,
+        .ant-tag-has-color .anticon-cross:hover {color: #fff;}
+        .ant-tag-checkable {background-color: transparent;border-color: transparent;}
+        .ant-tag-checkable:not(.ant-tag-checkable-checked):hover {color: #108ee9;}
+        .ant-tag-checkable:active, .ant-tag-checkable-checked {color: #fff;}
+        .ant-tag-checkable-checked {background-color: #108ee9;}
+        .ant-tag-checkable:active {background-color: #0e77ca;}
+        .ant-tag-close {width: 0 !important;padding: 0;margin: 0;}
+        .ant-tag-zoom-enter,
+        .ant-tag-zoom-appear {animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-zoom-leave {animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);animation-fill-mode: both;}
+        .ant-tag-pink {color: #f5317f;background: #fdd8e7;border-color: #fdd8e7;}
+        .ant-tag-pink-inverse {background: #f5317f;border-color: #f5317f;color: #fff;}
+        .ant-tag-red {color: #f04134;background: #fcdbd9;border-color: #fcdbd9;}
+        .ant-tag-red-inverse {background: #f04134;border-color: #f04134;color: #fff;}
+        .ant-tag-orange {color: #f56a00;background: #fde3cf;border-color: #fde3cf;}
+        .ant-tag-orange-inverse {background: #f56a00;border-color: #f56a00;color: #fff;}
+        .ant-tag-yellow {color: #ffbf00;background: #fff3cf;border-color: #fff3cf;}
+        .ant-tag-yellow-inverse {background: #ffbf00;border-color: #ffbf00;color: #fff;}
+        .ant-tag-cyan {color: #00a2ae;background: #cfedf0;border-color: #cfedf0;}
+        .ant-tag-cyan-inverse {background: #00a2ae;border-color: #00a2ae;color: #fff;}
+        .ant-tag-green {color: #00a854;background: #cfefdf;border-color: #cfefdf;}
+        .ant-tag-green-inverse {background: #00a854;border-color: #00a854;color: #fff;}
+        .ant-tag-blue {color: #108ee9;background: #d2eafb;border-color: #d2eafb;}
+        .ant-tag-blue-inverse {background: #108ee9;border-color: #108ee9;color: #fff;}
+        .ant-tag-purple {color: #7265e6;background: #e4e2fa;border-color: #e4e2fa;}
+        .ant-tag-purple-inverse {background: #7265e6;border-color: #7265e6;color: #fff;}
+        .swal2-popup .swal2-title {color: rgba(4,15,66,.9);font-size: 1.43em;}
+        .table tr:last-child td {border-bottom: 1px solid #e9e9e9;}
+
+        .classifyTotal{display: flex;position: relative;box-sizing: border-box;justify-content: space-between;align-items: center;margin-bottom: 20px;}
+        .classifyTotal .totalItem{width: 24%;position: relative;box-sizing: border-box;overflow: hidden;background-color: #FFFFFF;border-radius: 5px; border: 1px solid #f0f0f0; }
+        .totalItem .card-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 38px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0; background-color: #f7f7f7;}
+        .totalItem .card_tag_gl{box-sizing: border-box;margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .totalItem .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .totalItem .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .totalItem .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .totalItem .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+        .totalItem .card-content{padding: 15px;position: relative;box-sizing: border-box;overflow: hidden;}
+
+        /* 面板 */
+        .cardt{position: relative;background-color: #FFFFFF;overflow: hidden;border-radius: 5px;margin-bottom: 20px; transition: all .3s;}
+        .cardt:hover{box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);border-color: rgba(0, 0, 0, 0.2);}
+        .cardt .cardt-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 39px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .cardt .cardt-content{position: relative;overflow: hidden;padding: 20px;}
+        .cardt .cardt_tag{box-sizing: border-box; cursor: pointer; margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .cardt .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .cardt .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .cardt .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .cardt .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+
+        .no_data{height: 200px;}
+    </style>
+    <script>
+        $(function () {
+            update_jyTotal();
+        })
+        function update_jyTotal() {
+            var chartDom = document.getElementById('jyTotal');
+            var myChart = echarts.init(chartDom);
+            var option;
+                const colors = ['#5470C6', '#91CC75', '#EE6666'];
+                option = {
+                  color: colors,
+                  tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                      type: 'cross'
+                    }
+                  },
+                  grid: {
+                    right: '20%'
+                  },
+                  toolbox: {
+                    feature: {
+                      dataView: { show: true, readOnly: false },
+                      restore: { show: true },
+                      saveAsImage: { show: true }
+                    }
+                  },
+                  legend: {
+                    data: ['越南银行扫码', 'Precipitation', '订单量']
+                  },
+                  xAxis: [
+                    {
+                      type: 'category',
+                      axisTick: {
+                        alignWithLabel: true
+                      },
+                      data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    }
+                  ],
+                  yAxis: [
+                    {
+                      type: 'value',
+                      name: '',
+                      position: 'right',
+                      alignTicks: true,
+                      axisLine: {
+                        show: false,
+                        lineStyle: {
+                          color: colors[0]
+                        }
+                      },
+                      axisLabel: {
+                        formatter: '{value} ml'
+                      }
+                    },
+                    {
+                      type: 'value',
+                      name: 'Precipitation',
+                      position: 'right',
+                      alignTicks: true,
+                      axisLine: {
+                        show: true,
+                        lineStyle: {
+                          color: colors[1]
+                        }
+                      },
+                      axisLabel: {
+                        formatter: '{value} ml'
+                      }
+                    },
+                    {
+                      type: 'value',
+                      name: '订单量',
+                      position: 'left',
+                      alignTicks: true,
+                      axisLine: {
+                        show: true,
+                        lineStyle: {
+                          color: colors[2]
+                        }
+                      },
+                      axisLabel: {
+                        formatter: '{value}'
+                      }
+                    }
+                  ],
+                  series: [
+                    {
+                      name: '越南银行扫码',
+                      type: 'bar',
+                      yAxisIndex: 1,
+
+                      data: [
+                        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+                      ]
+                    },
+                    {
+                      name: 'Precipitation',
+                      type: 'bar',
+                      yAxisIndex: 1,
+                      data: [
+                        2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+                      ]
+                    },
+                    {
+                      name: '订单量',
+                      type: 'line',
+                      yAxisIndex: 2,
+                      data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                    }
+                  ]
+                };
+            option && myChart.setOption(option);
+        }
+        
+        function edit_tunble_func(crrobj) {
+            crrobj.parent().find('.saveBtn').show();
+            crrobj.parent().find('.qxBtn').show();
+            let rateTd = crrobj.parent().parent().find('.rateTd');
+            rateTd.find('.rateText').hide();
+            rateTd.find('.rate').show().removeClass('is-invalid');
+
+            let single_amount_max_td = rateTd.prev();
+            single_amount_max_td.find('.single_amount_max_text').hide();
+            single_amount_max_td.find('.single_amount_max').show().removeClass('is-invalid');
+
+            let single_amount_min_td = single_amount_max_td.prev();
+            single_amount_min_td.find('.single_amount_min_text').hide();
+            single_amount_min_td.find('.single_amount_min').show().removeClass('is-invalid');
+
+            crrobj.hide();
+
+        }
+        
+        function save_update_tunnleInfo(crrobj, data_uuid) {
+            let rateTd = crrobj.parent().parent().find('.rateTd');
+            let single_amount_max_td = rateTd.prev();
+            let single_amount_min_td = single_amount_max_td.prev();
+            let rate = $.trim(rateTd.find('.rate').val());
+            let single_amount_max = $.trim(single_amount_max_td.find('.single_amount_max').val());
+            let single_amount_min = $.trim(single_amount_min_td.find('.single_amount_min').val());
+            if (!rate){ return rateTd.find('.rate').addClass('is-invalid')}
+            if (!single_amount_max){ return rateTd.find('.single_amount_max').addClass('is-invalid')}
+            if (!single_amount_min){ return rateTd.find('.single_amount_min').addClass('is-invalid')}
+            xtajax.post({
+                'data': {'action': 'update_tunnleInfo', 'rate': rate, 'single_amount_max': single_amount_max, 'single_amount_min': single_amount_min, 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        rateTd.find('.rateText').text(rate)
+                        single_amount_max_td.find('.single_amount_max_text').text(single_amount_max)
+                        single_amount_min_td.find('.single_amount_min_text').text(single_amount_min)
+
+                        rateTd.find('.rateText').show();
+                        rateTd.find('.rate').hide();
+                        single_amount_max_td.find('.single_amount_max_text').show();
+                        single_amount_max_td.find('.single_amount_max').hide().removeClass('is-invalid');
+                        crrobj.prev().show();
+                        crrobj.next().hide();
+                        crrobj.hide();
+
+                        single_amount_min_td.find('.single_amount_min_text').show();
+                        single_amount_min_td.find('.single_amount_min').hide().removeClass('is-invalid');
+                        return xtalert.alertSuccessToast('数据更新成功！')
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        
+        function cancel_update_func(crrobj) {
+            crrobj.parent().find('.saveBtn').hide();
+            crrobj.parent().find('.updateBtn').show();
+            let rateTd = crrobj.parent().parent().find('.rateTd');
+            rateTd.find('.rateText').show();
+            rateTd.find('.rate').hide();
+
+            let single_amount_max_td = rateTd.prev();
+            single_amount_max_td.find('.single_amount_max_text').show();
+            single_amount_max_td.find('.single_amount_max').hide().removeClass('is-invalid');
+
+            let single_amount_min_td = single_amount_max_td.prev();
+            single_amount_min_td.find('.single_amount_min_text').show();
+            single_amount_min_td.find('.single_amount_min').hide().removeClass('is-invalid');
+
+            crrobj.hide();
+        }
+        
+    </script>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-lg-12">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="cardt">
+
+                    <div class="cardt-head">
+                        <span>用户信息</span>
+                        <span class="cardt_tag tag-greenblue">更新</span>
+                    </div>
+                    <div class="cardt-content" style="height: 370px;">
+                        <div class="alert alert-primary" role="alert">
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">姓名：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ merchant_data.merchant_name }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">用戶ID：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ merchant_data.merchant_id }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">用类型：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">商户</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">账户：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ merchant_data.account }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">密钥：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ merchant_data.secret_key }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div style="position: relative; width: 150px; text-align: right;">注册时间：</div>
+                                <div style="position: relative; width: 40%; background-color: #FFFFFF; height: 35px; display: flex; align-items: center; padding: 0 15px;">{{ format_time_func(merchant_data.create_time) }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="cardt">
+
+                    <div class="cardt-head">
+                        <span>最近登录记录</span>
+                        <span class="cardt_tag tag-greenblue">更新</span>
+                    </div>
+                    <div class="cardt-content" style="height: 370px;">
+                        <table class="table table-hover text-left" style="background-color: #ffffff;">
+                            <tbody>
+                                <tr style="background-color: #f7f7f7;">
+                                    <td style="border: none;">时间</td>
+                                    <td style="border: none;">登录IP</td>
+                                    <td style="border: none;">地址</td>
+                                </tr>
+                            {% for mlog in mlogs %}
+                            <tr>
+                                <td>{{ format_time_func(mlog.create_time) }}</td>
+                                <td>{{ mlog.ip }}</td>
+                                <td>{{ mlog.address }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if not mlogs %}
+                        <div class="no_data" style="padding-top: 10px;">
+                            <img src="/static/common/images/no_data.png" alt="暂无数据">
+                            <p style="color: rgba(0, 0, 0, 0.65);">暂无数据</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="row">
+
+            <div class="col-lg-6 col-12">
+                <div class="cardt">
+
+                    <div class="cardt-head">
+                        <span>代收通道</span>
+                    </div>
+                    <div class="cardt-content" style="height: 390px; overflow-y: scroll;">
+                        <table class="table table-hover text-left" style="background-color: #ffffff;">
+                            <tbody>
+                                <tr style="background-color: #f7f7f7;">
+                                    <td style="border: none;">通道类型</td>
+                                    <td style="border: none;">状态</td>
+                                    <td style="border: none;">单笔最小</td>
+                                    <td style="border: none;">单笔最大</td>
+                                    <td style="border: none;">利率%</td>
+                                    <td style="border: none;">操作</td>
+                                </tr>
+                                {% for mdata in mdatas %}
+                                <tr>
+                                    <td>{{ mdata.tunnle_data.tunnel_name }}</td>
+                                    <td>
+                                        {% if mdata.statu %}
+                                        <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>已开启</span>
+                                        {% else %}
+                                        <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已关闭</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="single_amount_min_td"><span class="single_amount_min_text">{{ mdata.single_amount_min or 0 }}</span><input type="text" class="form-control mb-0 mr-sm-2 single_amount_min" value="{{ format_money(mdata.single_amount_min) or 0 }}" placeholder="利率%" aria-label="" style="width: 160px; display: none;"></td>
+                                    <td class="single_amount_max_td"><span class="single_amount_max_text">{{ format_money(mdata.single_amount_max) or 0 }}</span><input type="text" class="form-control mb-0 mr-sm-2 single_amount_max" value="{{ mdata.single_amount_max or 0 }}" placeholder="利率%" aria-label="" style="width: 160px; display: none;"></td>
+                                    <td width="180" class="rateTd"><span class="rateText">{{ mdata.rate }}</span><input type="text" class="form-control mb-0 mr-sm-2 rate" value="{{ mdata.rate }}" placeholder="利率%" aria-label="" style="width: 160px; display: none;"></td>
+                                    <td>
+                                        {% if mdata.statu %}
+                                        <span class="cardt_tag tag-orange" onclick="post_update_statu('update_tunble_statu', '{{ mdata.uuid }}', '确定关闭该通道？')">关闭</span>
+                                        {% else %}
+                                        <span class="cardt_tag tag-greenblue" onclick="post_update_statu('update_tunble_statu', '{{ mdata.uuid }}', '确定开启该通道？')">开启</span>
+                                        {% endif %}
+                                        <span class="cardt_tag tag-greenblue updateBtn" onclick="edit_tunble_func($(this))">编辑</span>
+                                        <span class="cardt_tag tag-orange saveBtn" onclick="save_update_tunnleInfo($(this), '{{ mdata.uuid }}')" style="display: none;">保存</span>
+                                        <span class="cardt_tag qxBtn" onclick="cancel_update_func($(this))" style="display: none;">取消</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if not mdatas %}
+                        <div class="no_data" style="padding-top: 10px;">
+                            <img src="/static/common/images/no_data.png" alt="暂无数据">
+                            <p style="color: rgba(0, 0, 0, 0.65);">暂无数据</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="cardt">
+
+                    <div class="cardt-head">
+                        <span>银行卡</span>
+                        <span class="cardt_tag tag-orange">更新</span>
+                    </div>
+                    <div class="cardt-content" style="height: 390px; overflow-y: scroll;">
+                        <table class="table table-hover text-left" style="background-color: #ffffff;">
+                            <tbody>
+                                <tr style="background-color: #f7f7f7;">
+                                    <td style="border: none;">银行名称</td>
+                                    <td style="border: none;">银行卡号</td>
+                                    <td style="border: none;">收款人</td>
+                                </tr>
+                            {% for mbcard_data in mbcard_datas %}
+                            <tr>
+                                <td>{{ mbcard_data.bank_data.code }}</td>
+                                <td>{{ mbcard_data.account }}</td>
+                                <td>{{ mbcard_data.account_username }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if not mbcard_datas %}
+                        <div class="no_data" style="padding-top: 10px;">
+                            <img src="/static/common/images/no_data.png" alt="暂无数据">
+                            <p style="color: rgba(0, 0, 0, 0.65);">暂无数据</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

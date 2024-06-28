@@ -1,0 +1,11 @@
+ * Serving Flask app 'create_app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5030
+ * Running on http://192.168.59.128:5030
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 515-892-973
+127.0.0.1 - - [19/Feb/2024 20:33:39] "GET /pay2Admin/behalfPay?action=refreshOrderList&pay_statu=&callback_statu=&sort_type=&order_time=2024-02-19%2000:00:00|2024-02-19%2023:59:59&pay_time=&searchType=&searchValue=&page=1 HTTP/1.1" 200 -

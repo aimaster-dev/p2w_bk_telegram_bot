@@ -1,0 +1,49 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">回调状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>成功</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>失败</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="order_id" value="{{ search_res.order_id or '' }}" placeholder="订单号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="时间" aria-label="" readonly>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>订单ID</td>
+                <td>商户名称</td>
+                <td>商家订单ID</td>
+                <td>回调地址</td>
+                <td>回调内容</td>
+                <td>状态</td>
+                <td>响应CODE</td>
+                <td>响应内容</td>
+                <td>备注</td>
+                <td>时间</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.order_data.order_id }}</td>
+                    <td>{{ data.merchant_data.merchant_name }}</td>
+                    <td>{{ data.order_data.merchant_order_id }}</td>
+                    <td>{{ data.callback_url }}</td>
+                    <td>{{ data.request_text }}</td>
+                    <td>{% if data.statu %}<span class="ant-tag ant-tag-green">成功</span>{% else %}<span class="ant-tag ant-tag-red">失败</span>{% endif %}</td>
+                    <td>{% if data.response_code == 200 %}<span class="ant-tag ant-tag-green">200</span>{% else %}<span class="ant-tag ant-tag-red">{{ data.response_code }}</span>{% endif %}</td>
+                    <td>{{ data.response_text }}</td>
+                    <td>{{ data.note }}</td>
+                    <td>{{ format_time_func(data.create_time) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

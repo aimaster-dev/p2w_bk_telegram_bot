@@ -1,0 +1,87 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+        // 统计信息
+        function getTotalInfo() {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_total_info'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox">'
+                        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>结算成功笔数：</b>'+data.data.number_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>结算成功金额：</b>'+js_format_money(data.data.amount_total)+'</p>'
+                        html += '</div></div>'
+                        Swal({
+                            title: '订单数据统计',
+                            width: 550,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            //position: 'top-start'
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+                <option value="">结算状态</option>
+                {% for WITHDRAW_STATU in WITHDRAW_STATUS.name_arr %}
+                <option value="{{ WITHDRAW_STATU }}" {% if search_res.statu == WITHDRAW_STATU %}selected{% endif %}>{{ WITHDRAW_STATUS.name_dict.get(WITHDRAW_STATU) }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="amount" value="{{ search_res.amount or '' }}" placeholder="金额" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="时间" aria-label="">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="getTotalInfo()">统计</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>申请时间</td>
+                <td>收款银行</td>
+                <td>收款银行卡</td>
+                <td>持卡人姓名</td>
+                <td>结算金额</td>
+                <td>结算状态</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ format_time_func(data.create_time) }}</td>
+                    <td>{{ data.bank_data.shortName or '' }}</td>
+                    <td>{{ data.bankcard_account or '' }}</td>
+                    <td>{{ data.payee_username or '' }}</td>
+                    <td>{{ format_money(data.amount) or 0 }}</td>
+                    <td>{{ WITHDRAW_STATUS.name_dict.get(data.statu) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

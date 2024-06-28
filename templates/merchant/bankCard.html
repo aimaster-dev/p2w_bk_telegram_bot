@@ -1,0 +1,86 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+        function post_bankcard_data(action, data_uuid) {
+            let bank_uid = $.trim($("#bank_uid").val());
+            let account = $.trim($("#account").val());
+            let account_username = $.trim($("#account_username").val());
+            if (!bank_uid){ return xtalert.showValidationError('请选择银行！') }
+            if (!account){ return xtalert.showValidationError('请输入银行卡号！') }
+            if (!account_username){ return xtalert.showValidationError('请输入持卡人！') }
+            xtajax.post({
+                'data': {'action': action, 'data_uuid': data_uuid ? data_uuid : '', 'bank_uid': bank_uid, 'account': account, 'account_username': account_username},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('操作成功！')
+                        location.reload(true);
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function seleBankCode_func(crrObj) {
+            let bankuid = crrObj.attr('data-bankuid');
+            let crrbankuid = $("#bank_uid").val();
+            if (!crrbankuid){
+                crrObj.addClass('ant-tag-red');
+                $("#bank_uid").val(bankuid);
+            }else{
+                if (crrbankuid !== bankuid){
+                    crrObj.addClass('ant-tag-red');
+                    $("#bank_uid").val(bankuid);
+                    crrObj.siblings().removeClass('ant-tag-red');
+                }
+            }
+        }
+
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <select class="form-control mr-sm-2 mb-2" name="bank_uid" aria-label="">
+                <option value="">银行类型</option>
+                {% for bank_data in bank_datas %}
+                <option value="{{ bank_data.uuid }}" {% if search_res.bank_uid == bank_data.uuid %}selected{% endif %}>{{ bank_data.code }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="账户" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="account_username" value="{{ search_res.account_username or '' }}" placeholder="持卡人" aria-label="">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+            <span class="btn btn-primary ml-1 mb-2" onclick="post_form_html({'action': 'add_bankcard_html'}, '添加银行卡', 800)">添加银行卡</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: #FFFFFF;" onclick="post_form_html({'action': 'getWithdrawHtml'}, '申请结算', 800, '{{ url_for('merchant.merchant_index') }}')">申请结算</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>银行</td>
+                <td>银行卡号</td>
+                <td>持卡人</td>
+                <td>添加时间</td>
+                <td width="260">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.bank_data.shortName }}</td>
+                    <td>{{ data.account }}</td>
+                    <td>{{ data.account_username }}</td>
+                    <td>{{ format_time_func(data.create_time, '%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        <span class="ant-tag to_cursor ant-tag-blue-inverse mr-0" onclick="post_form_html({'action': 'edit_bankcard_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行卡信息', 800)">编辑</span>
+                        <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

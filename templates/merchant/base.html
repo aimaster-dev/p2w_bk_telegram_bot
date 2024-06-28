@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>{{ title }}</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/bootstrap/font/bootstrap-icons.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='common/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/bootstrap/js/popper.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/bootstrap/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.css') }}">
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/promise.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/xtalert.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/daterangepicker/daterangepicker.css') }}">
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/daterangepicker.js') }}"></script>
+    <script type="text/javascript"
+        src="{{ url_for('static', filename='common/daterangepicker/pickerDate.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common/xtajax.js') }}"></script>
+    <link rel="stylesheet" href="/assets/world/iconfont/iconfont.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            /*
+            font-family: "Arial","Microsoft YaHei","黑体","宋体",sans`1-serif,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            */
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+            font-size: 14px;
+            line-height: 1.5715;
+            color: #333;
+            background: #f0f3f5;
+        }
+
+        html,
+        body {
+            font-size: 14px;
+        }
+
+        img,
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            text-decoration: none;
+            outline: none;
+        }
+
+        .btn:focus,
+        .btn:active:focus,
+        .btn.active:focus,
+        .btn.focus,
+        .btn:active.focus,
+        .btn.active.focus {
+            outline: none;
+            border-color: transparent;
+        }
+
+        /* 禁止换行 */
+        .ban-newline {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 强制换行 */
+        .require-newline {
+            word-break: break-all;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        /* 禁止选中 */
+        .no-touch {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+
+        /* 文件上传按钮美化 */
+        .file-button {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .file-button input {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            cursor: pointer;
+        }
+
+        ul,
+        li,
+        a {
+            margin: 0;
+            padding: 0;
+            text-decoration: none
+        }
+
+        ul,
+        li,
+        ul>li {
+            list-style: none
+        }
+
+        a:hover {
+            text-decoration: none
+        }
+
+        .form-control {
+            border-color: #CCD1D9;
+            box-shadow: none;
+            border-radius: 4px;
+            color: #434A54;
+        }
+
+        .to_cursor {
+            cursor: pointer;
+        }
+
+        .noradius {
+            border-radius: 0;
+        }
+
+        .btn-default {
+            background-color: #fff;
+            border-color: #dbdbdb;
+            color: #303030;
+            white-space: nowrap;
+        }
+
+        .btn-default:hover {
+            background-color: #f0f0f0;
+            border-color: #e3e3e3;
+            color: #303030;
+        }
+
+        .background-white {
+            background: #ffffff
+        }
+
+        .table td {
+            padding: .68rem;
+        }
+
+        .btn-xs {
+            padding: .08rem .4rem;
+            font-size: .78rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+        }
+
+        .box-shadow {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08)
+        }
+
+        .card {
+            /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);*/
+            box-shadow: 0 0 2px 0 rgba(82, 63, 105, 0.05);
+        }
+
+        .card-header {
+            padding: 13px 20px;
+        }
+
+        .card-subtitle {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            border-top: 1px solid rgba(0, 0, 0, .125);
+            border-bottom: 1px solid rgba(0, 0, 0, .125);
+            background: #f0f1f2;
+            font-size: 16px;
+            font-weight: bolder;
+        }
+
+        .red {
+            color: red
+        }
+
+        ::placeholder {
+            color: #747f8a !important;
+            font-size: 13px;
+            opacity: .5 !important;
+        }
+
+        .card-border-bottom {
+            border-bottom: 1px solid rgba(0, 0, 0, .125)
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 40px;
+            background-color: rgba(0, 0, 0, .22)
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+            width: 12px
+        }
+
+        /* 选项卡 */
+        .options_tab {
+            border: none;
+        }
+
+        .options_tab .card-header a {
+            color: rgba(0, 0, 0, .85);
+        }
+
+        .options_tab .card-header {
+            border: none;
+            padding: 0 20px;
+            background: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .options_tab .card-header .nav-pills {
+            border-bottom: 1px solid rgba(0, 0, 0, .125);
+            margin: 0;
+        }
+
+        .options_tab .card-header .nav-pills .nav-item {
+            padding: 10px 0 7px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .options_tab .card-header .nav-item .nav-link.active {
+            color: #007bff;
+            background: none;
+        }
+
+        .options_tab .card-header .nav-item .nav-link.active::after {
+            content: "";
+            position: absolute;
+            width: calc(100% - 30px);
+            height: 2px;
+            background: #007bff;
+            bottom: 0;
+            left: 15px;
+            -moz-transition: all .5s ease;
+            -webkit-transition: all .5s ease;
+            transition: all .5s ease;
+        }
+
+        /* 头部 */
+        #header {
+            width: auto;
+            height: 62px;
+            box-shadow: 0 2px 4px rgba(41, 48, 66, .1);
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 210px;
+            right: 0;
+            padding: 0 18px;
+            box-sizing: border-box;
+            z-index: 999;
+            font-size: 15px;
+        }
+
+        #header .dropdown-menu {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+            top: 60px;
+            margin-top: 0;
+            padding: .3rem 0;
+            right: -10px;
+            min-width: 100px;
+            width: auto;
+            font-size: 14px;
+            border: none;
+        }
+
+        #header .dropdown-menu a {
+            padding: 12px;
+        }
+
+        #header .dropdown-menu svg {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: -.1em;
+        }
+
+        .navbar-brand i {
+            font-size: 1.5rem;
+        }
+
+        .navbar-nav li.nav-item {
+            margin: 0 10px;
+        }
+
+        .navbar-nav li.nav-item a.nav-link {
+            color: #333333;
+        }
+
+        .navbar-nav li.nav-item a.nav-link svg {
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: -.1em;
+        }
+
+        .dropdown-box a.nav-link {
+            line-height: 36px
+        }
+
+        .dropdown-box a.nav-link .avatar {
+            margin-top: -15px;
+            margin-bottom: -15px;
+            width: 40px;
+            height: 40px;
+            margin-right: .25rem !important;
+            border-radius: 50% !important;
+        }
+
+        #swal2-title {
+            margin-bottom: 25px
+        }
+
+        #sidebar {
+            width: 210px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background-color: #001529;
+            z-index: 999;
+            font-size: 15px;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        #sidebar .brand-logo {
+            width: 100%;
+            height: 62px;
+            line-height: 65px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sidebar .brand-logo img {
+            width: 35px;
+            margin-right: 5px;
+        }
+
+        #sidebar .brand-logo .logo-text {
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
+            top: 3px;
+            letter-spacing: 2px;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        #sidebar .nav-box {
+            position: relative;
+            overffflow: hidden auto;
+            width: 100%;
+            height: 100%;
+            padding-top: 10px;
+        }
+
+        #sidebar .list-group-item {
+            background-color: #001529;
+            color: #ffffffb3;
+            border: none;
+            padding: 1rem 1.25rem;
+        }
+
+        #sidebar .list-group-item:hover,
+        #sidebar .secondGroup .list-group-item:hover {
+            color: #FFFFFF;
+        }
+
+        #sidebar a.active,
+        #sidebar .secondGroup a.active {
+            z-index: 2;
+            color: #FFFFFF;
+        }
+
+        #sidebar .secondGroup .list-group-item {
+            background-color: #0c2135;
+            border: none;
+        }
+
+        /* 内容 */
+        #content_box {
+            width: auto;
+            padding: 15px;
+            margin-left: 210px;
+            margin-top: 62px;
+            margin-bottom: 0px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #content_box .ol_box {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 12px;
+            margin-bottom: 15px;
+            background-color: #fff
+        }
+
+        .no_data {
+            width: 100%;
+            height: 390px;
+            padding-top: 100px;
+            text-align: center;
+            background: white;
+            position: relative;
+            top: -14px;
+        }
+
+        .formBox {
+            background: #FFFFFF;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .formBox .list-group-item {
+            border: none;
+            color: #545b62;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .formBox .list-group-item input {
+            font-size: 12px;
+        }
+
+        .formBox .list-group-item select {
+            font-size: 12px;
+        }
+
+        .loglable::before {
+            display: inline-block;
+            margin-right: 4px;
+            color: #ff4236;
+            font-size: 14px;
+            font-family: SimSun, sans-serif;
+            line-height: 1;
+            content: '*';
+        }
+
+        #balance_amount,
+        #end_balance_amount {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    <script>
+        $(function () {
+            // 日期选择器
+            $.picker_YY_HH_DD_HH_MM_SS('.pickerdate');
+
+            // 年月日选择器
+            $.single_YY_MM_DD('.selectDateYMD')
+
+            // 当前菜单定位
+            var a_tags = $("#sidebar").find("a");
+            a_tags.each(function (index, data) {
+                if (window.location.pathname === $(this).attr('href')) {
+                    $(this).addClass('active');
+                    $(this).siblings().removeClass("active");
+                    if ($(this).parent().prev().attr('datatype') === 'menu-group') {
+                        $(this).parent().slideDown(0);
+                        $(this).parent().prev().find(".icon-fangxiangxia").removeClass("icon-fangxiangxia").addClass("icon-fangxiangshang");
+                    }
+                }
+            });
+
+            $("#sidebar a").on('click', function () {
+                if ($(this).attr('datatype') === 'menu-group') {
+                    if ($(this).next().css('display') === 'none') {
+                        $(this).find(".icon-fangxiangxia").removeClass("icon-fangxiangxia").addClass("icon-fangxiangshang");
+                        $(this).next().slideDown(200);
+                    } else {
+                        $(this).find(".icon-fangxiangshang").removeClass("icon-fangxiangshang").addClass("icon-fangxiangxia");
+                        $(this).next().slideUp(200);
+                    }
+                }
+            })
+
+            DaoJiShi('{{ endd_time }}', '{{ crr_time }}');
+        })
+        function js_format_money(money) {
+            data = money.toString()
+            data = data.replace(/,/g, '')
+            if (!/[^0-9,.]/.test(data)) {
+                if (data.toString().includes('.')) {
+                    var parts = data.toString().split('.');
+                    parts[0] = parseInt(parts[0]).toLocaleString();
+                    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    return parts.join('.');
+                } else {
+                    data = parseInt(data).toLocaleString();
+                    return (data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                }
+            } else {
+                return "0";
+            }
+        }
+        // 请求表单
+        function post_form_html(data, title, width, url) {
+            Swal({
+                title: false,
+                text: '数据请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'url': url ? url : '',
+                'data': data,
+                'success': function (data) {
+                    if (data.code === 200) {
+                        Swal({
+                            title: title ? title : '操作',
+                            width: width ? width : '',
+                            html: data.message,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                        })
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 重置密码
+        function resetPassword_func() {
+            let data_uuid = '{{ current_admin_dict.uuid }}';
+            let password = $.trim($("#password").val());
+            let confirmPassword = $.trim($("#confirmPassword").val());
+            let verify_code = $.trim($("#verify_code").val());
+            if (!password) { return xtalert.showValidationError('请输入新密码！') }
+            if (!confirmPassword) { return xtalert.showValidationError('请输入确认密码！') }
+            if (!verify_code) { return xtalert.showValidationError('请输入Google验证码！') }
+            if (password !== confirmPassword) { return xtalert.showValidationError('新密码和确认密码不一致！') }
+            xtajax.post({
+                'url': '{{ url_for('merchant.merchant_user') }}',
+                'data': { 'action': 'resetPassword', 'password': password, 'data_uuid': data_uuid, 'verify_code': verify_code },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        return xtalert.alertSuccessToast('操作成功！')
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 申请结算
+        function post_jsamount() {
+            let bancardk_uid = $.trim($("#bancardk_uid").val());
+            let jsamount = $.trim($("#jsamount").val());
+            if (!bancardk_uid) { return xtalert.showValidationError('请选择结算银行卡！') }
+            if (!jsamount) { return xtalert.showValidationError('请输入结算金额！') }
+            xtajax.post({
+                'url': '{{ url_for('merchant.merchant_index') }}',
+                'data': { 'action': 'jsamount', 'bancardk_uid': bancardk_uid, 'jsamount': jsamount },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        return xtalert.alertSuccessToast('申请提交成功！');
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 申请结算
+        function monitorRechargeMoney() {
+            let jsamount = $.trim($("#jsamount").val());
+            let balance_amount = $.trim($("#balance_amount").attr('data-amount'));
+            if (!jsamount) { $("#balance_amount").text(balance_amount); $("#end_balance_amount").text(balance_amount); }
+            if (jsamount) {
+                let ccc = parseFloat(balance_amount) - parseFloat(jsamount)
+                return $("#end_balance_amount").text(ccc)
+            }
+        }
+
+
+        function getDate(strDate) {
+            var _date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
+                function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+            return _date;
+        }
+        function getLocalTime(nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+        }
+        function DaoJiShi(openTime1, serverTime1) {
+            if (!openTime1 || !serverTime1) { return false; }
+            var openTime = getDate(openTime1);
+            var serverTime = getDate(serverTime1);
+            var difftime = (openTime - serverTime) / 1000;
+
+            var data_func = function () {
+                if (difftime > 0) {
+                    var hours = parseInt(difftime / 3600);    // 小时 60*60 总小时数-过去的小时数=现在的小时数
+                    var minutes = parseInt(difftime % 3600 / 60); // 分钟 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
+                    var seconds = parseInt(difftime % 60);  // 以60秒为一整份 取余 剩下秒数
+                    if (hours < 10) {
+                        var hours = '0' + hours;
+                    }
+                    if (minutes < 10) {
+                        var minutes = '0' + minutes;
+                    }
+                    if (seconds < 10) {
+                        var seconds = '0' + seconds;
+                    }
+                    var dj_str = hours + ':' + minutes + ':' + seconds
+                } else {
+                    window.location.href = '{{ url_for('merchant.merchant_login_out') }}';
+                    clearInterval(timer);
+                    return
+                }
+                --difftime;
+            }
+            var timer = setInterval(function () {
+                try {
+                    data_func();
+                } catch (e) {
+                    clearInterval(timer);
+                    window.location.replace(window.location.href);
+                }
+            }, 1000);
+
+        }
+
+
+
+    </script>
+    {% block head %}{% endblock %}
+    {% block other_head %}{% endblock %}
+
+</head>
+
+<body>
+
+    <header id="header" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <svg viewBox="64 64 896 896" focusable="false" fill="currentColor" aria-hidden="true"
+                style="width: 1.1em; height: 1.1em; vertical-align: -3px;">
+                <path
+                    d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 000 13.8z">
+                </path>
+            </svg>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            <div class="my-2 my-lg-0">
+                <ul class="navbar-nav navbar-align dropdown-box">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" data-toggle="dropdown">
+                            <img src="/public/world/img/paylogo4.png" class="avatar img-fluid rounded-circle mr-1"
+                                alt="Chris Wood">
+                            <span style="color: #8e8f95; font-size: 14px;">{{ current_admin_dict.merchant_name }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <span class="dropdown-item" style="padding: 12px; cursor: pointer;"
+                                onclick="post_form_html({'action': 'resetPasswordHtml'}, '重置密码', 800, '{{ url_for('merchant.merchant_user') }}')">
+                                <svg viewBox="64 64 896 896" focusable="false" data-icon="lock" width="1em" height="1em"
+                                    fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M832 464h-68V240c0-70.7-57.3-128-128-128H388c-70.7 0-128 57.3-128 128v224h-68c-17.7 0-32 14.3-32 32v384c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V496c0-17.7-14.3-32-32-32zM332 240c0-30.9 25.1-56 56-56h248c30.9 0 56 25.1 56 56v224H332V240zm460 600H232V536h560v304zM484 701v53c0 4.4 3.6 8 8 8h40c4.4 0 8-3.6 8-8v-53a48.01 48.01 0 10-56 0z">
+                                    </path>
+                                </svg>
+                                重置密码
+                            </span>
+                            <a class="dropdown-item" id="merchant_login_out"
+                                href="{{ url_for('merchant.merchant_login_out') }}">
+                                <span style="color: red;">
+                                    <svg viewBox="64 64 896 896" focusable="false" data-icon="logout" width="1em"
+                                        height="1em" fill="currentColor" aria-hidden="true">
+                                        <path
+                                            d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 01-112.7 75.9A352.8 352.8 0 01512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 01-112.7-75.9 353.28 353.28 0 01-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 000-12.6z">
+                                        </path>
+                                    </svg>
+                                    退出登录
+                                </span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebar">
+        <div class="brand-logo">
+            <img src="/public/world/img/logo6.jpeg" alt="login-icon">
+            <h2 class="logo-text">世界付</h2>
+        </div>
+        <div class="nav-box">
+            <div class="list-group">
+                <a class="list-group-item noradius" href="{{ url_for('merchant.merchant_index') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="home" fill="currentColor"
+                        aria-hidden="true"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;">
+                        <path
+                            d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 00-44.4 0L77.5 505a63.9 63.9 0 00-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0018.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z">
+                        </path>
+                    </svg>
+                    <span>我的账户</span>
+                </a>
+                {% if current_admin_dict.role_code == MERCHANT_ROLES.MERCHANT %}
+                <a class="list-group-item noradius" href="{{ url_for('merchant.merchant_user') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="solution"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M688 264c0-4.4-3.6-8-8-8H296c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48zm-8 136H296c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM480 544H296c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zm-48 308H208V148h560v344c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V108c0-17.7-14.3-32-32-32H168c-17.7 0-32 14.3-32 32v784c0 17.7 14.3 32 32 32h264c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm356.8-74.4c29-26.3 47.2-64.3 47.2-106.6 0-79.5-64.5-144-144-144s-144 64.5-144 144c0 42.3 18.2 80.3 47.2 106.6-57 32.5-96.2 92.7-99.2 162.1-.2 4.5 3.5 8.3 8 8.3h48.1c4.2 0 7.7-3.3 8-7.6C564 871.2 621.7 816 692 816s128 55.2 131.9 124.4c.2 4.2 3.7 7.6 8 7.6H880c4.6 0 8.2-3.8 8-8.3-2.9-69.5-42.2-129.6-99.2-162.1zM692 591c44.2 0 80 35.8 80 80s-35.8 80-80 80-80-35.8-80-80 35.8-80 80-80z">
+                        </path>
+                    </svg>
+                    <span>账户信息</span>
+                </a>
+                {% endif %}
+                {% if current_admin_dict.role_code == MERCHANT_ROLES.MERCHANT %}
+                <a class="list-group-item noradius" href="{{ url_for('merchant.merchantBankCard') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="credit-card"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-792 72h752v120H136V232zm752 560H136V440h752v352zm-237-64h165c4.4 0 8-3.6 8-8v-72c0-4.4-3.6-8-8-8H651c-4.4 0-8 3.6-8 8v72c0 4.4 3.6 8 8 8z">
+                        </path>
+                    </svg>
+                    <span>银行卡信息</span>
+                </a>
+                {% endif %}
+                {% if current_admin_dict.role_code == MERCHANT_ROLES.MERCHANT %}
+                <a class="list-group-item noradius" href="{{ url_for('merchant.merchantReport') }}"
+                    datatype="second-menu" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="account-book"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v584zM639.5 414h-45c-3 0-5.8 1.7-7.1 4.4L514 563.8h-2.8l-73.4-145.4a8 8 0 00-7.1-4.4h-46c-1.3 0-2.7.3-3.8 1-3.9 2.1-5.3 7-3.2 10.9l89.3 164h-48.6c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1v33.7h-65.1c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1V752c0 4.4 3.6 8 8 8h41.3c4.4 0 8-3.6 8-8v-53.8h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-65.4v-33.7h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-49.1l89.3-164.1c.6-1.2 1-2.5 1-3.8.1-4.4-3.4-8-7.9-8z">
+                        </path>
+                    </svg>
+                    <span>商户报表</span>
+                </a>
+                {% endif %}
+                {% if current_admin_dict.role_code == MERCHANT_ROLES.MERCHANT %}
+                <a class="list-group-item noradius" href="{{ url_for('merchant.SubAccountListView') }}"
+                    datatype="second-menu" style="cursor: pointer;">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="account-book"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v584zM639.5 414h-45c-3 0-5.8 1.7-7.1 4.4L514 563.8h-2.8l-73.4-145.4a8 8 0 00-7.1-4.4h-46c-1.3 0-2.7.3-3.8 1-3.9 2.1-5.3 7-3.2 10.9l89.3 164h-48.6c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1v33.7h-65.1c-4.4 0-8 3.6-8 8v21.3c0 4.4 3.6 8 8 8h65.1V752c0 4.4 3.6 8 8 8h41.3c4.4 0 8-3.6 8-8v-53.8h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-65.4v-33.7h65.4c4.4 0 8-3.6 8-8v-21.3c0-4.4-3.6-8-8-8h-49.1l89.3-164.1c.6-1.2 1-2.5 1-3.8.1-4.4-3.4-8-7.9-8z">
+                        </path>
+                    </svg>
+                    <span>子账户列表</span>
+                </a>
+                {% endif %}
+                <a class="list-group-item noradius" href="{{ url_for('merchant.MerchantOrderListView') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="profile"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M880 112H144c-17.7 0-32 14.3-32 32v736c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V144c0-17.7-14.3-32-32-32zm-40 728H184V184h656v656zM492 400h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zm0 144h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zm0 144h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H492c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8zM340 368a40 40 0 1080 0 40 40 0 10-80 0zm0 144a40 40 0 1080 0 40 40 0 10-80 0zm0 144a40 40 0 1080 0 40 40 0 10-80 0z">
+                        </path>
+                    </svg>
+                    <span>代收订单</span>
+                </a>
+                <a class="list-group-item noradius" href="{{ url_for('merchant.MerchPayBehalfOrder') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="dollar"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372zm47.7-395.2l-25.4-5.9V348.6c38 5.2 61.5 29 65.5 58.2.5 4 3.9 6.9 7.9 6.9h44.9c4.7 0 8.4-4.1 8-8.8-6.1-62.3-57.4-102.3-125.9-109.2V263c0-4.4-3.6-8-8-8h-28.1c-4.4 0-8 3.6-8 8v33c-70.8 6.9-126.2 46-126.2 119 0 67.6 49.8 100.2 102.1 112.7l24.7 6.3v142.7c-44.2-5.9-69-29.5-74.1-61.3-.6-3.8-4-6.6-7.9-6.6H363c-4.7 0-8.4 4-8 8.7 4.5 55 46.2 105.6 135.2 112.1V761c0 4.4 3.6 8 8 8h28.4c4.4 0 8-3.6 8-8.1l-.2-31.7c78.3-6.9 134.3-48.8 134.3-124-.1-69.4-44.2-100.4-109-116.4zm-68.6-16.2c-5.6-1.6-10.3-3.1-15-5-33.8-12.2-49.5-31.9-49.5-57.3 0-36.3 27.5-57 64.5-61.7v124zM534.3 677V543.3c3.1.9 5.9 1.6 8.8 2.2 47.3 14.4 63.2 34.4 63.2 65.1 0 39.1-29.4 62.6-72 66.4z">
+                        </path>
+                    </svg>
+                    <span>代付订单</span>
+                </a>
+                <a class="list-group-item noradius" href="{{ url_for('merchant.merchantBillStatement') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="bar-chart"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M888 792H200V168c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v688c0 4.4 3.6 8 8 8h752c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-600-80h56c4.4 0 8-3.6 8-8V560c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v144c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V384c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v320c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V462c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v242c0 4.4 3.6 8 8 8zm152 0h56c4.4 0 8-3.6 8-8V304c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v400c0 4.4 3.6 8 8 8z">
+                        </path>
+                    </svg>
+                    <span>资金流水</span>
+                </a>
+                <a class="list-group-item noradius" href="{{ url_for('merchant.WithdrawApply') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="money-collect"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M911.5 700.7a8 8 0 00-10.3-4.8L840 718.2V180c0-37.6-30.4-68-68-68H252c-37.6 0-68 30.4-68 68v538.2l-61.3-22.3c-.9-.3-1.8-.5-2.7-.5-4.4 0-8 3.6-8 8V763c0 3.3 2.1 6.3 5.3 7.5L501 910.1c7.1 2.6 14.8 2.6 21.9 0l383.8-139.5c3.2-1.2 5.3-4.2 5.3-7.5v-59.6c0-1-.2-1.9-.5-2.8zM512 837.5l-256-93.1V184h512v560.4l-256 93.1zM660.6 312h-54.5c-3 0-5.8 1.7-7.1 4.4l-84.7 168.8H511l-84.7-168.8a8 8 0 00-7.1-4.4h-55.7c-1.3 0-2.6.3-3.8 1-3.9 2.1-5.3 7-3.2 10.8l103.9 191.6h-57c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76v39h-76c-4.4 0-8 3.6-8 8v27.1c0 4.4 3.6 8 8 8h76V704c0 4.4 3.6 8 8 8h49.9c4.4 0 8-3.6 8-8v-63.5h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8h-76.3v-39h76.3c4.4 0 8-3.6 8-8v-27.1c0-4.4-3.6-8-8-8H564l103.7-191.6c.6-1.2 1-2.5 1-3.8-.1-4.3-3.7-7.9-8.1-7.9z">
+                        </path>
+                    </svg>
+                    <span>结算记录</span>
+                </a>
+                <a class="list-group-item noradius" href="{{ url_for('merchant.exportDownload') }}"
+                    datatype="second-menu">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="file-protect"
+                        style="width: 16px; height: 16px; margin-right: 7px; vertical-align: -.15em;"
+                        fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M644.7 669.2a7.92 7.92 0 00-6.5-3.3H594c-6.5 0-10.3 7.4-6.5 12.7l73.8 102.1c3.2 4.4 9.7 4.4 12.9 0l114.2-158c3.8-5.3 0-12.7-6.5-12.7h-44.3c-2.6 0-5 1.2-6.5 3.3l-63.5 87.8-22.9-31.9zM688 306v-48c0-4.4-3.6-8-8-8H296c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8zm-392 88c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H296zm184 458H208V148h560v296c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V108c0-17.7-14.3-32-32-32H168c-17.7 0-32 14.3-32 32v784c0 17.7 14.3 32 32 32h312c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm402.6-320.8l-192-66.7c-.9-.3-1.7-.4-2.6-.4s-1.8.1-2.6.4l-192 66.7a7.96 7.96 0 00-5.4 7.5v251.1c0 2.5 1.1 4.8 3.1 6.3l192 150.2c1.4 1.1 3.2 1.7 4.9 1.7s3.5-.6 4.9-1.7l192-150.2c1.9-1.5 3.1-3.8 3.1-6.3V538.7c0-3.4-2.2-6.4-5.4-7.5zM826 763.7L688 871.6 550 763.7V577l138-48 138 48v186.7z">
+                        </path>
+                    </svg>
+                    <span>文件下载</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="content_box">
+        <nav aria-label="breadcrumb" style="border-radius: 5px">
+            <ol class="breadcrumb" style="box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05); background-color: #ffffff;">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('admin.cms_index') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" fill="currentColor"
+                            class="bi bi-stack" viewBox="0 0 16 16">
+                            <path
+                                d="m14.12 10.163 1.715.858c.22.11.22.424 0 .534L8.267 15.34a.598.598 0 0 1-.534 0L.165 11.555a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.66zM7.733.063a.598.598 0 0 1 .534 0l7.568 3.784a.3.3 0 0 1 0 .535L8.267 8.165a.598.598 0 0 1-.534 0L.165 4.382a.299.299 0 0 1 0-.535L7.733.063z" />
+                            <path
+                                d="m14.12 6.576 1.715.858c.22.11.22.424 0 .534l-7.568 3.784a.598.598 0 0 1-.534 0L.165 7.968a.299.299 0 0 1 0-.534l1.716-.858 5.317 2.659c.505.252 1.1.252 1.604 0l5.317-2.659z" />
+                        </svg>&ensp;控制台
+                    </a>
+                </li>
+                {% block ol %}<li class="breadcrumb-item active">{{ title }}</li>{% endblock %}
+            </ol>
+        </nav>
+
+        <div class="row">
+            {% block content_main %}{% endblock %}
+        </div>
+    </div>
+
+
+</body>
+
+</html>

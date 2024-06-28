@@ -1,0 +1,147 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<script>
+    function clearorder_Time() {
+        $("input[name='proc_time']").val('');
+    }
+
+    function clearproc_Time() {
+        $("input[name='order_time']").val('');
+    }
+    // 统计信息
+    function getTotalInfo() {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_total_info' },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox">'
+                    html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总笔数：</b>' + data.data.number_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>已处理订单数：</b>' + data.data.processed_cnt + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>未处理订单数：</b>' + data.data.unprocessed_cnt + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总金额：</b>' + data.data.amount_total + '</p>'
+                    html += '</div></div>'
+                    Swal({
+                        title: '订单数据统计',
+                        width: 550,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        //position: 'top-start'
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+</script>
+{% endblock %}
+
+{% block searchInput %}
+<input type="text" class="form-control mb-2 mr-sm-2" style="width: 140px;" name="order_id"
+    value="{{ search_res.order_id or '' }}" placeholder="订单号" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" style="width: 140px;" name="merchant_order_id"
+    value="{{ search_res.merchant_order_id or '' }}" placeholder="商户订单号" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" style="width: 140px;" name="merchant_name"
+    value="{{ search_res.merchant_name or '' }}" placeholder="商户名称" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" style="width: 140px;" name="payee_bankcard"
+    value="{{ search_res.payee_bankcard or '' }}" placeholder="收款卡号" aria-label="">
+<select class="form-control mr-sm-2 mb-2" style="width: 140px;" name="lose_reason" aria-label="" style="width: 140px;">
+    <option value="">选择原因</option>
+    <option value="重复支付" {% if search_res.lose_reason=='重复支付' %}selected{% endif %}>重复支付</option>
+    <option value="订单超时" {% if search_res.lose_reason=='订单超时' %}selected{% endif %}>订单超时</option>
+    <option value="已付未回调成功！" {% if search_res.lose_reason=='已付未回调成功！' %}selected{% endif %}>未回调成功</option>
+    <option value="实际支付金额和订单金额不一致！" {% if search_res.lose_reason=='实际支付金额和订单金额不一致！' %}selected{% endif %}>额不一致</option>
+</select>
+<input type="text" style="width: 140px;" class="form-control mb-2 mr-sm-2" name="order_amount"
+    value="{{ search_res.order_amount or '' }}" placeholder="订单金额" aria-label="">
+<input type="text" style="width: 200px;" class="form-control mb-2 mr-sm-2 pickerdate" name="order_time"
+    value="{{ search_res.order_time }}" placeholder="订单时间" aria-label="" onchange="clearorder_Time()">
+<input type="text" style="width: 200px;" class="form-control mb-2 mr-sm-2 pickerdate" name="proc_time"
+    value="{{ search_res.proc_time }}" placeholder="处理时间" aria-label="" onchange="clearproc_Time()">
+{% endblock %}
+{% block other_function%}
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="getTotalInfo()">统计</span>
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="post_update_statu('export_order', '666', '确认导出当前订单数据？')">导出数据</span>
+<span class="btn btn-secondary ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="post_update_statu('createTestOrder', '666', '确认生成5个测试订单？')">生成测试订单</span>
+{% endblock%}
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            <td>订单号</td>
+            <td>商户名称</td>
+            <td>商户订单号</td>
+            <td>收款卡号</td>
+            <td>订单金额</td>
+            <td>支付金额</td>
+            <td>来源</td>
+            <td>原因</td>
+            <td>状态</td>
+            <td>处理状态</td>
+            <td>备注</td>
+            <td>备注码</td>
+            <td>订单时间</td>
+            <td>处理时间</td>
+            <td width="230">操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>{{ data.order_id or '' }}</td>
+            <td>{{ data.merchant_data.merchant_name }}</td>
+            <td>{{ data.merchant_order_id }}</td>
+            <td>{{ data.bankcard_data.get('account') or ''}}</td>
+            <td>{{ format_money(data.order_amount or 0) }}</td>
+            <td>{{ format_money(data.actual_amount or 0) }}</td>
+            <td>{{ PAY_METHOD.name_dict.get(data.pay_method) or ''}}</td>
+            <td>{{ data.lose_reason or '' }}</td>
+            <td>{% if data.pay_statu %}<span class="ant-tag ant-tag-green">已支付</span>{% else %}<span
+                    class="ant-tag ant-tag-red">未支付</span>{% endif %}</td>
+            <td>{% if data.proc_statu %}<span class="ant-tag ant-tag-green">已处理</span>{% else %}<span
+                    class="ant-tag ant-tag-red">未处理</span>{% endif %}</td>
+            <td>{{ data.lose_note or '' }}</td>
+            <td>
+                {% if xs_func(data.order_time) %}
+                {{ data.bank_memo or '' }}
+                {% endif %}
+            </td>
+            <td>{{ format_time_func(data.order_time) }}</td>
+            <td>{{ format_time_func(data.proc_time) }}</td>
+            <td>
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="oneinput('updateNote','{{ data.uuid }}', '修改备注', '输入备注内容')">更新备注</span>
+                <span class="ant-tag to_cursor ant-tag-blue mr-0"
+                    onclick="post_update_statu('callbackOrder', '{{ data.uuid }}', '确认回调该订单？')">点击回调</span>
+                <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false">更多</span>
+                <div class="dropdown-menu">
+                    <span class="dropdown-item"
+                        onclick="post_update_statu('forceIsPay', '{{ data.uuid }}', '确定强制入款？')">强制入款</span>
+                    <span class="dropdown-item"
+                        onclick="post_form_html({'action': 'orderInfo_html', 'data_uuid': '{{ data.uuid }}'}, '订单详细信息', 800)">详细信息</span>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

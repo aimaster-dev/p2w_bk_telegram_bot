@@ -1,0 +1,939 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<style>
+
+</style>
+<script>
+    function getTotalInfo() {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_total_info' },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox">'
+                    html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总笔数：</b>' + data.data.number_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总金额：</b>' + js_format_money(data.data.amount_total) + '</p>'
+                    html += '</div></div>'
+                    Swal({
+                        title: '订单数据统计',
+                        width: 550,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        //position: 'top-start'
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function seleBankCard_func(crrObj) {
+        let bankuid = crrObj.attr('bankcarduuid');
+        let crrbankuid = $("#bank_card_uid").val();
+        if (!crrbankuid) {
+            crrObj.addClass('text-danger');
+            $("#bank_card_uid").val(bankuid);
+        } else {
+            if (crrbankuid !== bankuid) {
+                crrObj.addClass('text-danger');
+                $("#bank_card_uid").val(bankuid);
+                crrObj.siblings().removeClass('text-danger');
+            }
+        }
+    }
+
+    function transfer_in_out_html(postdata, title, width, url = "") {
+        Swal({
+            title: false,
+            text: '数据请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'url': url,
+            'data': postdata,
+            'success': function (data) {
+                Swal.close();
+                if (data.code === 200) {
+                    $("#title-qr").html(title);
+                    $("#qrcodeBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#qrcodeBox .modal-dlg-content").css("width", width)
+                    $("#qrcodeBox").show();
+                } else {
+                    $("#qrcodeBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+    function redirect_sel_card() {
+        window.location.href = "{{ url_for('admin.WithdrawalBankCard') }}";
+    }
+    
+    function post_transfer_in(action, data_uuid) {
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+        if (transfer_money == 0) { return xtalert.alertError('请选择金额！') }
+
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid, 'bankcarduuid': bankcarduuid, 'transfer_money': transfer_money },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function test_transfer_in_out() {
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+        let behavior_type = $.trim($("#behavior_type").val());
+        let note = $.trim($("#note").val());
+
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+        if (transfer_money == 0) { return xtalert.alertError('请选择金额！') }
+
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': "test_tranfer_in_out", 'bankcarduuid': bankcarduuid, 'transfer_money': transfer_money , 'behavior_type': behavior_type, 'note': note },
+            'success': function (data) {
+                if (data.code === 200) {
+                    $("#selectCardBox").css("z-index", "1");
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function test_post_qr_code(){
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+        let behavior_type = $.trim($("#behavior_type").val());
+
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+        if (transfer_money == 0) { return xtalert.alertError('请选择金额！') }
+
+        html = '<div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-modal swal2-loading swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" data-loading="true" aria-busy="true" style="display: flex;"><div class="swal2-header"><ul class="swal2-progresssteps" style="display: none;"></ul><div class="swal2-icon swal2-error" style="display: none;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div><div class="swal2-icon swal2-question" style="display: none;"><span class="swal2-icon-text">?</span></div><div class="swal2-icon swal2-warning" style="display: none;"><span class="swal2-icon-text">!</span></div><div class="swal2-icon swal2-info" style="display: none;"><span class="swal2-icon-text">i</span></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div><div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title"></h2><button type="button" class="swal2-close" style="display: none;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: block;">请求中...</div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validationerror" id="swal2-validationerror" style="display: none;"></div></div><div class="swal2-actions swal2-loading" style="display: flex;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" disabled="" style="border-left-color: rgb(48, 133, 214); border-right-color: rgb(48, 133, 214); display: flex;">确定</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" disabled="" style="display: none;">取消</button></div><div class="swal2-footer" style="display: none;"></div></div>'
+
+        $("#selectCardBox").css("z-index", "1061");
+        $("#selectCardBox .close-btn").hide();
+        $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+        $("#selectCardBox .modal-dlg-content").css("width", '400px')
+        $("#selectCardBox .modal-dlg-body").css("margin-top", '0px')
+        $("#selectCardBox").css("display", "flex");
+
+        xtajax.post({
+            'data': { 'action': 'test_pay_qrcode', 'transfer_money': transfer_money, 'behavior': behavior_type, 'bankcarduuid': bankcarduuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    $("#selectCardBox").css("display", "none");
+                    let html = '<div class="formBox" style="padding: 0px;">' +
+                        '<div style="height: 35rem; position: relative; box-sizing: border-box; overflow-y: auto;"><div>'
+                    html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 260px; margin: auto; margin-bottom: 30px;">'
+                    html += '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款银行：' + data.data.receive_bank + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款卡号：' + data.data.former_bankcard_account + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款人：' + data.data.receive_owner + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; font-size: 14px;">订单金额：' + js_format_money(data.data.order_amount) + '</p>' +
+                        '</div>'
+                    if (data.data.accepted_status != '{{ACCEPTED_STATUS.ACCEPTED}}') {
+                        html += '<div class="blank" style="background: #eeeeee; height: 1px; margin: 10px 0 15px;"></div>' +
+                            '<div style="position: relative; text-align: center">' +
+                            '<span class="btn btn-warning" style="color: white;" onclick="test_transfer_in_out()" >已支付</span>' + '</div>' + '</div>'
+                    }
+                    $("#selectCardBox .close-btn").show();
+                    $("#selectCardBox .modal-dlg-body").css("margin-top", '40px')
+                    $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+                    $("#selectCardBox .modal-dlg-content").css("width", '400px')
+                    $("#selectCardBox").show();
+                } else {
+                    $("#selectCardBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })    
+    }
+
+    function post_accept_confirm(action, data_uuid, accepted_status) {
+        xtalert.alertConfirm({
+            'msg': '确定操作？', 'confirmCallback': function () {
+                Swal({
+                    title: false,
+                    text: '请求中...',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    showconfirmButton: false,
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                xtajax.post({
+                    'data': { 'action': action, 'data_uuid': data_uuid, 'accepted_status': accepted_status },
+                    'success': function (data) {
+                        if (data.code === 200) {
+                            xtalert.alertSuccessToast('操作成功！')
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 800)
+                        } else {
+                            return xtalert.alertError(data.message);
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function post_qr_code(data_uuid, behavior, action, url) {
+        transfer_money = $("#transfer_money").val();
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        if (transfer_money == 0) { return xtalert.alertError('请选择金额！') }
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+
+        html = '<div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-modal swal2-loading swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" data-loading="true" aria-busy="true" style="display: flex;"><div class="swal2-header"><ul class="swal2-progresssteps" style="display: none;"></ul><div class="swal2-icon swal2-error" style="display: none;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div><div class="swal2-icon swal2-question" style="display: none;"><span class="swal2-icon-text">?</span></div><div class="swal2-icon swal2-warning" style="display: none;"><span class="swal2-icon-text">!</span></div><div class="swal2-icon swal2-info" style="display: none;"><span class="swal2-icon-text">i</span></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div><div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title"></h2><button type="button" class="swal2-close" style="display: none;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: block;">请求中...</div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validationerror" id="swal2-validationerror" style="display: none;"></div></div><div class="swal2-actions swal2-loading" style="display: flex;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" disabled="" style="border-left-color: rgb(48, 133, 214); border-right-color: rgb(48, 133, 214); display: flex;">确定</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" disabled="" style="display: none;">取消</button></div><div class="swal2-footer" style="display: none;"></div></div>'
+
+        $("#selectCardBox .close-btn").hide();
+        $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+        $("#selectCardBox .modal-dlg-content").css("width", '400px')
+        $("#selectCardBox .modal-dlg-body").css("margin-top", '0px')
+        $("#selectCardBox").css("display", "flex");
+
+        xtajax.post({
+            'url': url,
+            'data': { 'action': 'get_pay_qrcode', 'data_uuid': data_uuid, 'transfer_money': transfer_money, 'behavior': behavior, 'bankcarduuid': bankcarduuid },
+            'success': function (data) {
+
+                if (data.code === 200) {
+                    $("#selectCardBox").css("display", "none");
+                    let html = '<div class="formBox" style="padding: 0px;">' +
+                        '<div style="height: 35rem; position: relative; box-sizing: border-box; overflow-y: auto;"><div>'
+                    html += '<img src="' + data.data.payQrcode + '" alt="" style="display: block; width: 260px; margin: auto; margin-bottom: 30px;">'
+                    html += '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款银行：' + data.data.receive_bank + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款卡号：' + data.data.former_bankcard_account + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款人：' + data.data.receive_owner + '</p>' +
+                        '<p style="padding-left: 15%;text-align: left; font-size: 14px;">订单金额：' + js_format_money(data.data.order_amount) + '</p>' +
+                        '</div>'
+                    if (data.data.accepted_status != '{{ACCEPTED_STATUS.ACCEPTED}}') {
+                        html += '<div class="blank" style="background: #eeeeee; height: 1px; margin: 10px 0 15px;"></div>' +
+                            '<div style="position: relative; text-align: center">' +
+                            '<span class="btn btn-warning" style="color: white;" onclick="post_transfer_in(\'' + action + "\',\'" + data.data.uuid + "\',\'" + '{{ACCEPTED_STATUS.ACCEPTED}}' + '\')" >已支付</span>' + '</div>' + '</div>'
+                    }
+                    $("#selectCardBox .close-btn").show();
+                    $("#selectCardBox .modal-dlg-body").css("margin-top", '40px')
+                    $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+                    $("#selectCardBox .modal-dlg-content").css("width", '400px')
+                    $("#selectCardBox").show();
+                } else {
+                    $("#selectCardBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_select_cols(){
+        data = {}
+        data["admin_check"] = $("#admin_check").is(':checked') ? true : false;
+        data["former_account_check"] = $("#former_account_check").is(':checked') ? true : false;
+        data["former_name_check"] = $("#former_name_check").is(':checked') ? true : false;
+        data["former_location_check"] = $("#former_location_check").is(':checked') ? true : false;
+        data["former_pre_balance_check"] = $("#former_pre_balance_check").is(':checked') ? true : false;
+        data["former_cur_balance_check"] = $("#former_cur_balance_check").is(':checked') ? true : false;
+        data["latter_account_check"] = $("#latter_account_check").is(':checked') ? true : false;
+        data["latter_name_check"] = $("#latter_name_check").is(':checked') ? true : false;
+        data["latter_location_check"] = $("#latter_location_check").is(':checked') ? true : false;
+        data["latter_pre_balance_check"] = $("#latter_pre_balance_check").is(':checked') ? true : false;
+        data["latter_cur_balance_check"] = $("#latter_cur_balance_check").is(':checked') ? true : false;
+        data["request_money_check"] = $("#request_money_check").is(':checked') ? true : false;
+        data["transfer_money_check"] = $("#transfer_money_check").is(':checked') ? true : false;
+        data["withdrw_time_check"] = $("#withdrw_time_check").is(':checked') ? true : false;
+        data["order_time_check"] = $("#order_time_check").is(':checked') ? true : false;
+        data["order_status_check"] = $("#order_status_check").is(':checked') ? true : false;
+        data["accept_status_check"] = $("#accept_status_check").is(':checked') ? true : false;
+        data["behavior_check"] = $("#behavior_check").is(':checked') ? true : false;
+        data["note_check"] = $("#note_check").is(':checked') ? true : false;
+        data["operator_check"] = $("#operator_check").is(':checked') ? true : false;
+        data["operator_agent_check"] = $("#operator_agent_check").is(':checked') ? true : false;
+        
+        if(Object.values(data).every(value => !value)){
+            return xtalert.alertError("至少应显示一列!");
+        }
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        data['action'] = 'showcols';
+        xtajax.post({
+            'data': data,
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_clear_log(action) {
+        xtalert.alertConfirm({
+            'msg': '确定操作？', 'confirmCallback': function () {
+                xtajax.post({
+                    'data': { 'action': action },
+                    'success': function (data) {
+                        if (data.code === 200) {
+                            xtalert.alertSuccessToast('操作成功！')
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 800)
+                        } else {
+                            return xtalert.alertError(data.message);
+                        }
+                    }
+                })
+            }
+        })
+    }
+    function post_request_money_html(action, data_uuid, behavior, title, width, url) {
+        if (!data_uuid) {
+            Swal({
+                title: '错误',
+                width: '500px',
+                html: '<div style="padding:20px; border:solid gray 1px; border-radius:3px"><h3 class="mb-4">首先，要选择提款卡！</h3><span class="btn btn-secondary mr-2" onclick="redirect_sel_card()">选择卡</span><div>',
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
+            return;
+            //return xtalert.alertToast('首先，要选择提款卡！')
+        }
+        post_form_html({ 'action': action, 'data_uuid': data_uuid, 'behavior': behavior }, title, width, url);
+    }
+
+    function setRequestMoney(val) {
+        $("#transfer_money").val(val)
+    }
+
+    function post_input_money(behavior, data_uuid) {
+        let transfer_money = $.trim($("#transfer_money").val());
+        // let bank_code = $.trim($("#bank_code").val());
+        // let bankcard_account = $.trim($("#bankcard_account").val());
+        // let bank_name = $.trim($("#bank_name").val());
+        let note = $.trim($("#note").val());
+
+        if (transfer_money == 0) { return xtalert.showValidationError('请输入金额！') }
+        // if (!bank_code) { return xtalert.showValidationError('请输入银行类型！') }
+        // if (!bankcard_account) { return xtalert.showValidationError('请输入卡银行卡账号！') }
+        // if (!bank_name) { return xtalert.showValidationError('请输入银行名字！') }
+
+        xtajax.post({
+            'url': '{{ url_for('admin.WithdrawalBankCard') }}',
+            'data': { 'action': 'request_money', 'data_uuid': data_uuid, 'transfer_money': transfer_money, 'note': note, 'behavior': behavior },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function addtransfercardlist(){
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+
+        let note = $.trim($("#note").val());
+
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+        if (transfer_money == 0) { return xtalert.alertError('请输入金额！') }
+
+        let transfer_money_int = transfer_money.replace(/,/g, ''); 
+        transfer_money_int = parseInt(transfer_money_int)
+        let request_amount = $('#requested_amount').text();
+        let request_amount_int = request_amount.replace(/,/g, ''); 
+
+        request_amount_int = parseInt(request_amount_int)
+        request_amount_int = request_amount_int - transfer_money_int;
+        $('#requested_amount').text(js_format_money(request_amount_int))
+        $('#transfer_money').val(js_format_money(request_amount_int))
+
+        let element = $('div[bankcarduuid="' + bankcarduuid + '"]');
+        let account = element.attr("account");
+        let bank_code = element.attr("bank_code");
+        let bank_name = element.attr("bank_name");
+        let location = element.attr("location");
+        let locationName = element.attr("locationName");
+        let id = randomUuid();
+
+        let elehtml = `
+        <div class="card mb-2" bankcarduuid=${bankcarduuid} id=${id} transfer_money=${transfer_money} note=${note}>
+            <div class="row g-0 m-0" style = "cursor: pointer;">
+                <div class="col-2 text-center" style="display: flex; align-items: stretch; justify-content: center; padding: 0px; ">
+                    <div style=" flex: 1; background-color: #ebeaea; display: flex; align-items: center; justify-content: center; ">
+                        <h6 style="margin:0px">${bank_code}(${locationName})</h6>
+                    </div>
+                </div>
+                <div class="col-10 d-flex justify-content-between" >
+                    <div class="card-body" style="padding:10px">
+                        银行卡账号: ${account} (名字: ${bank_name}, 转账金额: ${js_format_money(transfer_money)}, 备注: ${note})
+                    </div>
+                    <button class="btn btn-danger" style="height: 30px; padding: 3px 10px; margin-top: 5px;" onclick="onClickRemovefromList('${id}')">Delete</button>
+                </div>
+            </div>
+        </div>
+        `
+        $("#transfer_card_list").append($(elehtml))
+        $('#transfer_card_cnt').html($("#transfer_card_list").children().length);
+    }
+
+    function onClickRemovefromList(id){
+        transfer_money = $(`#${id}`).attr("transfer_money")
+        $(`#${id}`).remove();
+        $('#transfer_card_cnt').html($("#transfer_card_list").children().length);
+
+        let transfer_money_int = transfer_money.replace(/,/g, ''); 
+        transfer_money_int = parseInt(transfer_money_int)
+        let request_amount = $('#requested_amount').text();
+        let request_amount_int = request_amount.replace(/,/g, ''); 
+
+        request_amount_int = parseInt(request_amount_int)
+        request_amount_int = request_amount_int + transfer_money_int;
+        $('#requested_amount').text(js_format_money(request_amount_int));
+        $('#transfer_money').val(js_format_money(request_amount_int))
+    }
+
+    function post_transfer_in_out(ele, action, data_uuid, behavior) {
+        if(ele === 'null'){
+            if($("#transfer_card_list").children().length === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+            carddatas = []
+            var list = $("#transfer_card_list").children();
+            list.each(function() {
+                if($(this).attr('paid') !== 'paid'){
+                    var bankcarduuid = $(this).attr('bankcarduuid');
+                    var transfer_money = $(this).attr('transfer_money');
+                    var note = $(this).attr('note');
+
+                    carddatas.push({
+                        'bankcarduuid': bankcarduuid,
+                        'transfer_money': transfer_money,
+                        'note': note,
+                    })
+                }
+            });
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'carddatas': JSON.stringify(carddatas), 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        } else if(ele === 'qrcode'){
+            if($("#transfer_card_list").children().length === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+            carddatas = []
+            var qrboxes = $('#qrboxlist').find('div.qrboxlist');
+            qrboxes.each(function() {
+                if($(this).attr('paid') !== 'paid'){
+                    var bankcarduuid = $(this).attr('bankcarduuid');
+                    var transfer_money = $(this).attr('transfer_money');
+                    var note = $(this).attr('note');
+
+                    carddatas.push({
+                        'bankcarduuid': bankcarduuid,
+                        'transfer_money': transfer_money,
+                        'note': note,
+                    })
+                }
+            });
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'carddatas': JSON.stringify(carddatas), 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        else {
+            let bankcarduuid = $(ele).parent().attr("bankcarduuid")
+            let transfer_money = $(ele).parent().attr("transfer_money")
+            let note = $(ele).parent().attr("note")
+
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'bankcarduuid': bankcarduuid, 'transfer_money': transfer_money, 'note': note, 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            $(ele).parent().attr("paid", "paid")
+
+                            var paid = true;
+                            var qrboxes = $('#qrboxlist').find('div.qrboxlist');
+                            qrboxes.each(function() {
+                                if($(this).attr('paid') !== 'paid'){
+                                    paid = false;
+                                }
+                            });
+                            if(!paid){
+                                $(ele).removeClass("btn-warning").addClass("btn-secondary");
+                                $(ele).removeAttr('onclick');
+                            } else {
+                                window.location.reload(true);
+                            }
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    }
+
+    function post_multi_qr_code(data_uuid, behavior, url = '') {
+        cardcnt = $("#transfer_card_list").children().length ;
+        if(cardcnt === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+        carddatas = []
+        $('#transfer_card_list').children().each(function(index, element) {
+            var bankcarduuid = $(element).attr('bankcarduuid');
+            var transfer_money = $(element).attr('transfer_money');
+            var note = $(element).attr('note');
+
+            carddatas.push({
+                'bankcarduuid': bankcarduuid,
+                'transfer_money': transfer_money,
+                'note': note,
+            })
+        });
+
+        html = '<div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-modal swal2-loading swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" data-loading="true" aria-busy="true" style="display: flex;"><div class="swal2-header"><ul class="swal2-progresssteps" style="display: none;"></ul><div class="swal2-icon swal2-error" style="display: none;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div><div class="swal2-icon swal2-question" style="display: none;"><span class="swal2-icon-text">?</span></div><div class="swal2-icon swal2-warning" style="display: none;"><span class="swal2-icon-text">!</span></div><div class="swal2-icon swal2-info" style="display: none;"><span class="swal2-icon-text">i</span></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div><div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title"></h2><button type="button" class="swal2-close" style="display: none;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: block;">请求中...</div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validationerror" id="swal2-validationerror" style="display: none;"></div></div><div class="swal2-actions swal2-loading" style="display: flex;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" disabled="" style="border-left-color: rgb(48, 133, 214); border-right-color: rgb(48, 133, 214); display: flex;">确定</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" disabled="" style="display: none;">取消</button></div><div class="swal2-footer" style="display: none;"></div></div>'
+
+        $("#selectCardBox .close-btn").hide();
+        $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+        $("#selectCardBox .modal-dlg-content").css("width", '400px')
+        $("#selectCardBox .modal-dlg-body").css("margin-top", '0px')
+        $("#selectCardBox").css("display", "flex");
+
+        xtajax.post({
+            'url': url,
+            'data': { 'action': 'get_multi_qrcode', 'data_uuid': data_uuid, 'behavior': behavior, 'carddatas': JSON.stringify(carddatas) },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let xlen = '400px';
+                    if(cardcnt === 2) xlen = '650px'
+                    if(cardcnt > 2) xlen = '910px'
+                    $("#selectCardBox .close-btn").show();
+                    $("#selectCardBox .modal-dlg-body").css("margin-top", '40px')
+                    $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#selectCardBox .modal-dlg-content").css("width", xlen)
+                    $("#selectCardBox").show();
+                } else {
+                    $("#selectCardBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+</script>
+{% endblock %}
+
+{% block searchInput %}
+{%if COLS.admin_check == 'true' %}
+{% if current_admin_user.is_superadmin %}
+<select class="form-control mr-sm-2 mb-2" name="admin_uuid" aria-label="">
+    <option value="">选择管理员</option>
+    {% for admin in admins %}
+    <option value="{{ admin.uuid }}" {% if search_res.admin_uuid==admin.uuid %}selected{% endif %}>{{
+        admin.account }}</option>
+    {% endfor %}
+</select>
+{% endif %}
+{% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+<select class="form-control mr-sm-2 mb-2" name="payer_uuid" aria-label="" style="width:160px">
+    <option value="">选择付款人</option>
+    {% for payer in outpayers %}
+    <option value="{{ payer.uuid }}" {% if search_res.payer_uuid==payer.uuid %}selected{% endif %}>{{
+        payer.account }}</option>
+    {% endfor %}
+</select>
+{% endif %}
+{% endif %}
+
+{%if COLS.former_account_check == 'true' %}
+<input type="text" class="form-control mb-2 mr-sm-2" name="former_bankcard_account" style="width:160px"
+    value="{{ search_res.former_bankcard_account }}" placeholder="转出卡银行卡账号" aria-label="">
+{% endif %}
+{%if COLS.former_name_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="former_bank_code" aria-label="">
+    <option value="">选择银行类型</option>
+    {% for bank_data in bank_datas %}
+    <option value="{{ bank_data.code }}" {% if search_res.former_bank_code==bank_data.code %}selected{% endif %}>{{
+        bank_data.code }}</option>
+    {% endfor %}
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="former_bank_name" style="width:160px"
+    value="{{ search_res.former_bank_name }}" placeholder="银行名字" aria-label="">
+{%endif%}
+{%if COLS.former_location_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="former_location" aria-label="" style="width: 200px;">
+    <option value="">选择位置</option>
+    <option value="{{LOCATION_TYPE.TRANSIT}}" {% if search_res.former_location==LOCATION_TYPE.TRANSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</option>
+    <option value="{{LOCATION_TYPE.WITHDRAW}}" {% if search_res.former_location==LOCATION_TYPE.WITHDRAW %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</option>
+    <option value="{{LOCATION_TYPE.DEPOSIT}}" {% if search_res.former_location==LOCATION_TYPE.DEPOSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</option>
+    <option value="{{LOCATION_TYPE.OTHER}}" {% if search_res.former_location==LOCATION_TYPE.OTHER %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</option>
+</select>
+{%endif%}
+
+{%if COLS.latter_account_check == 'true' %}
+<input type="text" class="form-control mb-2 mr-sm-2" name="latter_bankcard_account" style="width:160px"
+    value="{{ search_res.latter_bankcard_account }}" placeholder="转入卡银行卡账号" aria-label="">
+{%endif%}
+{%if COLS.latter_name_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="latter_bank_code" aria-label="">
+    <option value="">选择银行类型</option>
+    {% for back_data in bank_datas %}
+    <option value="{{ back_data.code }}" {% if search_res.latter_bank_code==back_data.code %}selected{% endif %}>{{
+        back_data.code }}</option>
+    {% endfor %}
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="latter_bank_name" style="width:160px"
+    value="{{ search_res.latter_bank_name }}" placeholder="银行名字" aria-label="">
+{%endif%}
+{%if COLS.latter_location_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="latter_location" aria-label="" style="width: 200px;">
+    <option value="">选择位置</option>
+    <option value="{{LOCATION_TYPE.TRANSIT}}" {% if search_res.latter_location==LOCATION_TYPE.TRANSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</option>
+    <option value="{{LOCATION_TYPE.WITHDRAW}}" {% if search_res.latter_location==LOCATION_TYPE.WITHDRAW %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</option>
+    <option value="{{LOCATION_TYPE.DEPOSIT}}" {% if search_res.latter_location==LOCATION_TYPE.DEPOSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</option>
+    <option value="{{LOCATION_TYPE.OTHER}}" {% if search_res.latter_location==LOCATION_TYPE.OTHER %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</option>
+</select>
+{%endif%}
+{%if COLS.order_status_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="order_status" aria-label="" style="width:160px">
+    <option value="">选择订单状态</option>
+    {% for order_status in ORDER_STATUS.name_arr %}
+    <option value="{{ order_status }}" {% if search_res.order_status==order_status %}selected{% endif %}>{{
+        ORDER_STATUS.name_dict[order_status] }}</option>
+    {% endfor %}
+</select>
+{%endif%}
+{%if COLS.accept_status_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="accepted_status" aria-label="">
+    <option value="">选择接受状态</option>
+    {% for rcvstatus in ACCEPTED_STATUS.name_arr %}
+    <option value="{{ rcvstatus }}" {% if search_res.accepted_status==rcvstatus %}selected{% endif %}>{{
+        ACCEPTED_STATUS.name_dict[rcvstatus] }}</option>
+    {% endfor %}
+</select>
+{%endif%}
+{%if COLS.behavior_check == 'true' %}
+<select class="form-control mr-sm-2 mb-2" name="behavior" aria-label="">
+    <option value="">选择行为</option>
+    {% for behav in BEHAVIOR_TYPE.name_arr %}
+    <option value="{{behav}}" {% if search_res.behavior==behav %}selected{% endif %}>{{
+        BEHAVIOR_TYPE.name_dict.get(behav) }}</option>
+    {% endfor %}
+</select>
+{%endif%}
+{%if COLS.transfer_money_check == 'true' %}<input type="text" class="form-control mb-2 mr-sm-2" name="transfer_money" style="width:160px" value="{{ search_res.transfer_money }}"
+    placeholder="转移金额" aria-label="">{%endif%}
+{%if COLS.note_check == 'true' %}<input type="text" class="form-control mb-2 mr-sm-2" name="note" style="width:160px" value="{{ search_res.note }}"
+    placeholder="注释" aria-label="">{%endif%}
+
+{%if COLS.order_time_check == 'true' %}<input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="order_time" value="{{ search_res.order_time }}"
+    style="width:250px" placeholder="申请时间" aria-label="">{%endif%}
+{% endblock %}
+
+{% block other_function %}
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+onclick="post_form_html({'action': 'get_total_info_html'}, '统计', 600)">统计</span>
+<span class="btn btn-secondary ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+onclick="post_form_html({'action': 'get_selectCols_html'}, '选择列', 600)">选择列</span>
+{% if is_clear_log %}
+<span class="btn btn-outline-dark ml-3 mb-2" onclick="post_clear_log('clearlog')">清除日志</span>
+{%endif%}
+{% if current_admin_user.role_code == ROlE_ALL.SYS_OUT_MONEY_USER or current_admin_user.role_code ==
+    ROlE_ALL.OUT_MONEY_USER %}
+    <span class="btn btn-info ml-3 mb-2" style="color: white; display: flex; align-items: center;"
+        onclick="post_request_money_html('request_money_html','{{ selectedcard.uuid }}', 'request_money' ,'您想要索取多少钱', 600, '{{ url_for('admin.WithdrawalBankCard') }}')">申请资金</span>
+{%endif%}
+{% if is_test_withdraw_card %}
+<span class="btn btn-primary ml-3 mb-2" style="color: white; display: flex; align-items: center;"
+onclick="post_form_html({'action': 'test_card_html'}, '测试卡', 800)">测试卡</span>
+{% endif %}
+{% endblock %}
+
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            {%if COLS.admin_check == 'true' %}<td>管理员</td>{%endif%}
+
+            {%if COLS.former_account_check == 'true' %}<td>卡银行卡账号</td>{%endif%}
+            {%if COLS.former_name_check == 'true' %}<td>银行名字</td>{%endif%}
+            {%if COLS.former_location_check == 'true' %}<td>位置</td>{%endif%}
+            {%if COLS.former_pre_balance_check == 'true' %}<td>先前余额</td>{%endif%}
+            {%if COLS.former_cur_balance_check == 'true' %}<td>当前余额</td>{%endif%}
+
+            {%if COLS.latter_account_check == 'true' %}<td>卡银行卡账号</td>{%endif%}
+            {%if COLS.latter_name_check == 'true' %}<td>银行名字</td>{%endif%}
+            {%if COLS.latter_location_check == 'true' %}<td>位置</td>{%endif%}
+            {%if COLS.latter_pre_balance_check == 'true' %}<td>先前余额</td>{%endif%}
+            {%if COLS.latter_cur_balance_check == 'true' %}<td>当前余额</td>{%endif%}
+
+            {%if COLS.request_money_check == 'true' %}<td>要求的钱</td>{%endif%}
+            {%if COLS.transfer_money_check == 'true' %}<td>转移金额</td>{%endif%}
+
+            {%if COLS.order_time_check == 'true' %}<td>订单时间</td>{%endif%}
+            {%if COLS.withdrw_time_check == 'true' %}<td>付款时间</td>{%endif%}
+
+            {%if COLS.order_status_check == 'true' %}<td>订单状态</td>{%endif%}
+            {%if COLS.accept_status_check == 'true' %}<td>接受状态</td>{%endif%}
+            {%if COLS.behavior_check == 'true' %}<td>行为</td>{%endif%}
+            {%if COLS.operator_check == 'true' %}<td>接受员</td>{%endif%}
+            {%if COLS.operator_agent_check == 'true' %}<td>操作员</td>{%endif%}
+            {%if COLS.note_check == 'true' %}<td>注解</td>{%endif%}
+            <td>操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            {%if COLS.admin_check == 'true' %}<td>{{ data.admin.account or ''}}</td>{%endif%}
+            {%if COLS.former_account_check == 'true' %}<td>{{ data.former_bankcard_account or ''}}</td>{%endif%}
+            {%if COLS.former_name_check == 'true' %}<td>{{ data.former_bank_name or '' }}({{ data.former_bank_code or ''}})</td>{%endif%}
+            {%if COLS.former_location_check == 'true' %}<td>
+                {% if data.former_location == LOCATION_TYPE.WITHDRAW %}
+                <span style="color: blue;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</span>
+                {% elif data.former_location == LOCATION_TYPE.TRANSIT %}
+                <span style="color: red;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</span>
+                {% elif data.former_location == LOCATION_TYPE.DEPOSIT %}
+                <span style="color: green;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</span>
+                {% elif data.former_location == LOCATION_TYPE.OTHER %}
+                <span style="color:chocolate;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</span>
+                {%endif%}
+            </td>{%endif%}
+            {%if COLS.former_pre_balance_check == 'true' %}<td>{{ format_money(data.former_pre_balance)}}</td>{%endif%}
+            {%if COLS.former_cur_balance_check == 'true' %}<td>{{ format_money(data.former_cur_balance)}}</td>{%endif%}
+
+            {%if COLS.latter_account_check == 'true' %}<td>
+                {%if data.latter_bankcard_account %}
+                {{ data.latter_bankcard_account}}({{ data.latter_bank_code}})
+                {% elif data.behavior != BEHAVIOR_TYPE.TRANSFER_IN %}
+                - - -
+                {%endif%}
+            </td>{%endif%}
+            {%if COLS.latter_name_check == 'true' %}<td>
+                {%if data.latter_bank_name %}
+                {{ data.latter_bank_name}}
+                {% elif data.behavior != BEHAVIOR_TYPE.TRANSFER_IN %}
+                - - -
+                {%endif%}
+            </td>{%endif%}
+            {%if COLS.latter_location_check == 'true' %}<td>
+                {% if data.latter_location == LOCATION_TYPE.WITHDRAW %}
+                <span style="color: blue;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</span>
+                {% elif data.latter_location == LOCATION_TYPE.TRANSIT %}
+                <span style="color: red;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</span>
+                {% elif data.latter_location == LOCATION_TYPE.DEPOSIT %}
+                <span style="color: green;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</span>
+                {% elif data.latter_location == LOCATION_TYPE.OTHER %}
+                <span style="color:chocolate;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</span>
+                {%endif%}
+
+            </td>{%endif%}
+            {%if COLS.latter_pre_balance_check == 'true' %}<td>
+                {%if data.behavior in [BEHAVIOR_TYPE.OTHER_TRANSFER_IN, BEHAVIOR_TYPE.OTHER_TRANSFER_OUT ]%}
+                - - -
+                {%else %}
+                {{ format_money(data.latter_pre_balance) or 0}}
+                {%endif%}
+            </td>{%endif%}
+            {%if COLS.latter_cur_balance_check == 'true' %}<td>
+                {%if data.behavior in [BEHAVIOR_TYPE.OTHER_TRANSFER_IN, BEHAVIOR_TYPE.OTHER_TRANSFER_OUT ]%}
+                - - -
+                {%else %}
+                {{ format_money(data.latter_cur_balance) or 0}}
+                {%endif%}
+            </td>{%endif%}
+
+            {%if COLS.request_money_check == 'true' %}<td>{{ format_money(data.request_money) }}</td>{%endif%}
+            {%if COLS.transfer_money_check == 'true' %}<td>{{ format_money(data.transfer_money) }}</td>{%endif%}
+            {%if COLS.order_time_check == 'true' %}<td>{{ format_time_func(data.order_time) or ''}}</td>{%endif%}
+            {%if COLS.withdrw_time_check == 'true' %}<td>{{ format_time_func(data.pay_time) or ''}}</td>{%endif%}
+            {%if COLS.order_status_check == 'true' %}<td>
+                {% if data.order_status == ORDER_STATUS.ORDERED %}
+                <span style="color: blue;">{{ORDER_STATUS.name_dict[data.order_status]}}</span>
+                {% elif data.order_status == ORDER_STATUS.INCOMPLETED %}
+                <span style="color: red;">{{ORDER_STATUS.name_dict[data.order_status]}}</span>
+                {% elif data.order_status == ORDER_STATUS.COMPLETED %}
+                <span style="color: green;">{{ORDER_STATUS.name_dict[data.order_status]}}</span>
+                {% endif %}
+            </td>{%endif%}
+            {%if COLS.accept_status_check == 'true' %}<td>
+                {% if data.accepted_status == ACCEPTED_STATUS.ACCEPTED %}
+                <span style="color: green;">{{ACCEPTED_STATUS.name_dict[data.accepted_status]}}</span>
+                {% elif data.accepted_status == ACCEPTED_STATUS.NOT_ACCEPTED %}
+                <span style="color: red;">{{ACCEPTED_STATUS.name_dict[data.accepted_status]}}</span>
+                {% elif data.accepted_status == ACCEPTED_STATUS.CANCELLED %}
+                <span style="color:chocolate">{{ACCEPTED_STATUS.name_dict[data.accepted_status]}}</span>
+                {% elif data.accepted_status == ACCEPTED_STATUS.NOT_PROCESSED %}
+                <span style=" color:blueviolet">{{ACCEPTED_STATUS.name_dict[data.accepted_status]}}</span>
+                {% endif %}
+            </td>{%endif%}
+            {%if COLS.behavior_check == 'true' %}<td>
+                <span {% if data.behavior==BEHAVIOR_TYPE.TRANSFER_IN %} style="color: green;" {% elif
+                    data.behavior==BEHAVIOR_TYPE.TRANSFER_OUT %} style="color: red;" {% elif
+                    data.behavior==BEHAVIOR_TYPE.OTHER_TRANSFER_IN %} style="color:rgb(13, 133, 113)" {% elif
+                    data.behavior==BEHAVIOR_TYPE.OTHER_TRANSFER_OUT %} style="color:deeppink;" {% elif
+                    data.behavior==BEHAVIOR_TYPE.ISSUED %} style=" color:chocolate" {% endif %}>
+                    {{BEHAVIOR_TYPE.name_dict.get(data.behavior)}}
+                </span>
+            </td>{%endif%}
+            {%if COLS.operator_check == 'true' %}<td>{{data.operator or ''}}</td>{%endif%}
+            {%if COLS.operator_agent_check == 'true' %}<td>{{data.operator_agent or ''}}</td>{%endif%}
+            {%if COLS.note_check == 'true' %}<td>{{ data.note or '' }}</td>{%endif%}
+            <td>
+                {% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.AGENTADMIN or current_admin_user.role_code == ROlE_ALL.ADMINISTRATOR or current_admin_user.role_code ==
+                    ROlE_ALL.SYSTEMUSER%}
+                    {% if data.order_status==ORDER_STATUS.ORDERED %}
+                    <button class="ant-tag to_cursor ant-tag-red mr-0 mb-1"
+                        onclick="transfer_in_out_html({'action': 'transfer_in_html',  'data_uuid':'{{ data.uuid }}'}, '请选择卡', 800)">输入</button>
+                    {% else %}
+                        {% if data.behavior==BEHAVIOR_TYPE.TRANSFER_IN or data.behavior==BEHAVIOR_TYPE.TRANSFER_OUT or
+                        data.behavior==BEHAVIOR_TYPE.ISSUED%}
+                        <span class="ant-tag to_cursor ant-tag-red mr-0 mb-1"
+                        onclick="transfer_in_out_html({'action': 'retransfer_html',  'data_uuid':'{{ data.uuid }}'}, '请重选择中转卡', 800)">重选卡</span>
+                        {% if data.accepted_status != ACCEPTED_STATUS.NOT_PROCESSED %}
+                        <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">更多</span>
+                        <div class="dropdown-menu">
+                            <span onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.ACCEPTED}}')" class="dropdown-item" > 已接受 </span>
+                            <span onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.NOT_ACCEPTED}}')" class="dropdown-item">没接受</span>
+                            <span  onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.CANCELLED}}')" class="dropdown-item" > 撤消 </span>
+                            <span  onclick="post_form_html({'action': 'show_qrcode', 'data_uuid': '{{ data.uuid }}'}, 'QR Code', 320)" class="dropdown-item" > QRCode </span>
+                        </div>
+                        {%else%}
+                        <span onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.ACCEPTED}}')" class="ant-tag to_cursor ant-tag-green mr-0 mb-1" > 已接受 </span>
+                        <span onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.NOT_ACCEPTED}}')" class="ant-tag to_cursor ant-tag-orange">没接受</span>
+                        <span  onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.CANCELLED}}')" class="ant-tag to_cursor ant-tag-blue mr-0 mb-1" > 撤消 </span>
+                        <span  onclick="post_form_html({'action': 'show_qrcode', 'data_uuid': '{{ data.uuid }}'}, 'QR Code', 320)" class="ant-tag to_cursor ant-tag-blue mr-0 mb-1" > QRCode </span>
+                        {%endif%}
+                        {%endif%}
+                    {% endif %}
+                {% elif current_admin_user.role_code in [ROlE_ALL.SYS_OUT_MONEY_USER , ROlE_ALL.OUT_MONEY_USER ]%}
+                {% if current_admin_user.uuid != data.admin_uuid%}
+                    {% if data.behavior==BEHAVIOR_TYPE.TRANSFER_IN or data.behavior==BEHAVIOR_TYPE.TRANSFER_OUT or
+                        data.behavior==BEHAVIOR_TYPE.ISSUED%}
+                        <span {% if data.accepted_status in [ACCEPTED_STATUS.NOT_PROCESSED, ACCEPTED_STATUS.CANCELLED] %}
+                            onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.ACCEPTED}}')"
+                            class="ant-tag to_cursor ant-tag-green mb-1" {% elif data.accepted_status in
+                            [ACCEPTED_STATUS.ACCEPTED, ACCEPTED_STATUS.NOT_ACCEPTED] %}
+                            onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.CANCELLED}}')"
+                            class="ant-tag to_cursor ant-tag-blue mb-1" {% else %} class="ant-tag to_cursor ant-tag-gray mb-1"
+                            {% endif %}>
+                            {% if data.accepted_status in [ACCEPTED_STATUS.ACCEPTED, ACCEPTED_STATUS.NOT_ACCEPTED] %}
+                            撤消
+                            {% else %}
+                            已接受
+                            {% endif %}
+                        </span>
+
+                        <span {% if data.accepted_status in [ACCEPTED_STATUS.NOT_PROCESSED, ACCEPTED_STATUS.CANCELLED] %}
+                            onclick="post_accept_confirm('accept_confirm', '{{ data.uuid }}', '{{ACCEPTED_STATUS.NOT_ACCEPTED}}')"
+                            class="ant-tag to_cursor ant-tag-red" {% else %} class="ant-tag to_cursor ant-tag-gray mb-1" {%
+                            endif %}>
+                            没接受
+                        </span>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+        function post_script_data(action, data_uuid='') {
+            let name = $.trim($("#name").val());
+            let bankowner = $.trim($("#bankowner").val());
+            let bankcard_account = $.trim($("#bankcard_account").val());
+            let note = $.trim($("#note").val());
+            let ips = $.trim($("#ips").val());
+            let desktop_id = $.trim($("#desktop_id").val());
+            let device_id = $.trim($("#device_id").val());
+            let min_amount = $.trim($("#min_amount").val());
+            let max_amount = $.trim($("#max_amount").val());
+            if (!name){ return xtalert.alertError('请输入脚本名称！') }
+            if (!bankowner){ return xtalert.alertError('请输入银行卡人姓名！') }
+            if (!desktop_id){ return xtalert.alertError('请输入桌面编号！') }
+            if (!device_id){ return xtalert.alertError('请输入设备Id！') }
+            if (!bankcard_account){ return xtalert.alertError('请输入银行卡账户！') }
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': action, 'bankowner': bankowner, 'bankcard_account': bankcard_account, 'note': note, 'ips': ips, 'name': name,
+                    'data_uuid': data_uuid, 'desktop_id': desktop_id, 'device_id': device_id, 'min_amount': min_amount, 'max_amount': max_amount},
+                'success':function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('添加成功！')
+                        reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+
+        }
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">脚本状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>可用</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>停用</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="bankcard_account" value="{{ search_res.bankcard_account or '' }}" placeholder="银行卡账号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-2 mb-2" style="color: white;" onclick="post_form_html({'action': 'add_script_html'}, '添加脚本信息', 800)">添加脚本信息</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>名称[{{ total }}]</td>
+                <td>桌面编号</td>
+                <td>设备Id</td>
+                <td>密钥</td>
+                <td>银行卡号</td>
+                <td>银行卡人姓名</td>
+                <td>银行卡余额</td>
+                <td>脚本状态</td>
+                <td>备注</td>
+                <td width="190">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.name or '' }}</td>
+                    <td>{{ data.desktop_id or '' }}</td>
+                    <td>{{ data.device_id or '' }}</td>
+                    <td>{{ data.secret_key or '' }}</td>
+                    <td>{{ data.bankcard_account or '' }}</td>
+                    <td>{{ data.bankowner or '' }}</td>
+                    <td>{{ format_money(data.balance_amount) or '0' }}</td>
+                    <td>{% if data.statu %}<span class="ant-tag ant-tag-green">启用</span>{% else %}<span class="ant-tag ant-tag-red">停用</span>{% endif %}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td width="260">
+                        <span class="ant-tag ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_script_html', 'data_uuid': '{{ data.uuid }}'}, '编辑脚本信息', 800)">编辑</span>
+                        {% if data.statu %}
+                            <span class="ant-tag ant-tag-red mr-0" onclick="post_update_statu('update_script_statu', '{{ data.uuid }}')">停用</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-green mr-0" onclick="post_update_statu('update_script_statu', '{{ data.uuid }}')">启用</span>
+                        {% endif %}
+                        <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}', '确定删除？删除后不可恢复')">删除</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

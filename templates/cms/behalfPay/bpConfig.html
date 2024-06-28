@@ -1,0 +1,250 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <style>
+        .siteSetting{width: 100%;position: relative;overflow: hidden;box-sizing: border-box;}
+        /*白色面板*/
+        .white_panel{padding: 20px;background-color: #FFFFFF;overflow: hidden;box-sizing: border-box; margin-bottom: 15px; border-radius: 5px;position: relative;}
+        .white_panel input, .white_panel textarea{font-size: 12px !important;}
+        .groupHead{height: 60px;line-height: 60px;padding: 0 20px;font-size: 16px;font-weight: normal;font-stretch: normal;letter-spacing: 0.3px;color: #235077;position: relative;background-color: #fafafa;padding-top: 0;display: flex;justify-content: space-between;align-items: center;}
+        .groupHead h2{margin: 5px 0;display: block;font-size: 16px;color: #235077;}
+        .groupHead .back{cursor: pointer;}
+        .groupHead .back:hover{color: #00c9d1;}
+
+        .iconfont.icon-kaiguanguan{color: rgb(210, 210, 210); line-height: 20px;}
+        .iconfont.icon-kaiguan4{color: rgb(0, 201, 209); line-height: 20px;}
+        .iconfont.icon-duoxuankuangweixuan{color: #c2c2c2;}
+        .iconfont.icon-duoxuankuang-fuxuan{color: rgb(0, 201, 209);}
+    </style>
+    <script>
+
+        $(function () {
+            reset_siteSetting()
+        })
+
+        // 开关
+        function switch_func(obj) {
+            if (obj.hasClass('icon-kaiguanguan')){
+                obj.prev().val('1');
+                obj.removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+            }else {
+                obj.prev().val('0');
+                obj.removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+            }
+        }
+        
+        function reset_siteSetting() {
+            xtajax.post({
+                'data': {'action': 'getSiteConfig'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let data_json = data.data;
+                        {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                        if (data_json.automatic_maintain_switch === true){
+                            $("#automatic_maintain_switch").val('1');
+                            $("#automatic_maintain_switch").next().removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+                        }else {
+                            $("#automatic_maintain_switch").val('0');
+                            $("#automatic_maintain_switch").next().removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+                        }
+                        if (data_json.check_aname_switch === true){
+                            $("#check_aname_switch").val('1');
+                            $("#check_aname_switch").next().removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+                        }else {
+                            $("#check_aname_switch").val('0');
+                            $("#check_aname_switch").next().removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+                        }
+                        {% endif %}
+                        $("#maintainBankCodes span").each(function () {
+                            let bankcode = $.trim($(this).attr('data-bankcode'));
+                            if (data_json.maintain_bankcodes.includes(bankcode)) {
+                                $(this).addClass('ant-tag-red');
+                                $(this).attr('data-activation', '1');
+                            } else {
+                                $(this).removeClass('ant-tag-red');
+                                $(this).attr('data-activation', '0');
+                            }
+                        })
+                        if (data_json.maintain_switch === true){
+                            $("#maintain_switch").val('1');
+                            $("#maintain_switch").next().removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+                        }else {
+                            $("#maintain_switch").val('0');
+                            $("#maintain_switch").next().removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+                        }
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 保存网站配置信息
+        function post_save_siteSetting() {
+            let maintain_switch = $.trim($("#maintain_switch").val());
+            let maintainBankCodes = '';
+            $("#maintainBankCodes span").each(function () {
+                let activation = $.trim($(this).attr('data-activation'));
+                if (activation === '1'){
+                    let dataBankcode = $.trim($(this).attr('data-bankcode'));
+                    maintainBankCodes += dataBankcode + ',';
+                }
+            })
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            let automatic_maintain_switch = $.trim($("#automatic_maintain_switch").val());
+            let check_aname_switch = $.trim($("#check_aname_switch").val());
+            {% endif %}
+            Swal({
+                title: false,
+                text: '操作中，请稍等...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            let _data = {
+                'action': 'updateConfig',
+                'maintain_switch': maintain_switch,
+                'maintain_bankcodes': maintainBankCodes,
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                'automatic_maintain_switch': automatic_maintain_switch,
+                'check_aname_switch': check_aname_switch,
+                {% endif %}
+            }
+            xtajax.post({
+                'data': _data,
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('保存成功！')
+                    }else{
+                        return xtalert.alertError(data.message)
+                    }
+                }
+            })
+        }
+        
+        function seleBankCode_func(crrObj) {
+            let crrActivation = crrObj.attr('data-activation');
+            if (crrActivation === '0'){
+                crrObj.addClass('ant-tag-red');
+                crrObj.attr('data-activation', '1');
+            }
+            if (crrActivation === '1'){
+                crrObj.removeClass('ant-tag-red');
+                crrObj.attr('data-activation', '0');
+            }
+        }
+
+    </script>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-lg-12">
+
+        <div class="siteSetting">
+
+            <div class="alert alert-primary" role="alert">
+                <i class="iconfont icon-tishi" style="color: rgb(24, 128, 255); font-size: 18px; vertical-align: -2px; margin-right: 3px;"></i> 部分设置保存后，需刷新页面后起效！
+            </div>
+
+            <div class="groupHead">
+                <div>
+                    <h2><span class="back" onclick="siteAccess_func()">代付配置</span></h2>
+                </div>
+                <div>
+                    <span class="btn btn-primary" onclick="post_save_siteSetting()">提交</span>
+                    <span class="btn btn-default" onclick="reset_siteSetting()">重置</span>
+                </div>
+            </div>
+
+            <div class="white_panel" style="border-radius: 0 0 5px 5px;padding: 0 40px 20px;">
+                <div class="row" style="max-width: 80%;">
+                    <div class="col-lg-12 mb-4 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12" style="color:#3c6082; font-weight: bold;">代付银行维护限制</div>
+                            <div class="col-lg-12" style="color:#3c6082;">选择配置维护停用的银行Code</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div id="maintainBankCodes">
+                            {% for bank_data in bank_datas %}
+                                <span class="ant-tag {{ 'ant-tag-red' if bank_data.code in site_data.maintain_bankcodes else '' }}" style="margin-bottom: 13px;margin-right: 10px;padding: 15px 15px;line-height: 0px;" data-activation="{{ '1' if bank_data.code in site_data.maintain_bankcodes else '0' }}" data-bankcode="{{ bank_data.code }}" onclick="seleBankCode_func($(this))">{{ bank_data.shortName or '' }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="white_panel" style="padding: 0 40px 20px;">
+                <div class="ukefu-webim-prop" style="padding-left: 0; padding-right: 0px;">
+                    <div class="row" style="max-width: 600px; margin-bottom: 0px;">
+                        <div class="col-lg-12 mt-3 mb-4">
+                            <div class="row">
+                                <div class="col-lg-12" style="color:#3c6082;">项目代付业务总开关，控制整个项目代付功能的运行</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-3">
+                            <div class="row">
+                                <div class="col-lg-8" style="color:#3c6082;">代付业务总开关</div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" alt="" aria-label="" value="{{ '1' if site_data.maintain_switch else '0' }}" id="maintain_switch">
+                                    <i class="iconfont {{ 'icon-kaiguan4' if site_data.maintain_switch else 'icon-kaiguanguan' }} pointer float-right" style="font-size: 40px;" onclick="switch_func($(this))"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <div class="white_panel" style="padding: 0 40px 20px;">
+                <div class="ukefu-webim-prop" style="padding-left: 0; padding-right: 0px;">
+                    <div class="row" style="max-width: 600px; margin-bottom: 0px;">
+                        <div class="col-lg-12 mt-3 mb-4">
+                            <div class="row">
+                                <div class="col-lg-12" style="color:#3c6082;">代付检测收款账户姓名是否一致功能</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-3">
+                            <div class="row">
+                                <div class="col-lg-8" style="color:#3c6082;">功能开关</div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" alt="" aria-label="" value="{{ '1' if site_data.check_aname_switch else '0' }}" id="check_aname_switch">
+                                    <i class="iconfont {{ 'icon-kaiguan4' if site_data.check_aname_switch else 'icon-kaiguanguan' }} pointer float-right" style="font-size: 40px;" onclick="switch_func($(this))"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="white_panel" style="padding: 0 40px 20px;">
+                <div class="ukefu-webim-prop" style="padding-left: 0; padding-right: 0px;">
+                    <div class="row" style="max-width: 600px; margin-bottom: 0px;">
+                        <div class="col-lg-12 mt-3 mb-4">
+                            <div class="row">
+                                <div class="col-lg-12" style="color:#3c6082;">自动代付功能总开关，控制自动代付脚本的运行</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-3">
+                            <div class="row">
+                                <div class="col-lg-8" style="color:#3c6082;">自动代付功能总开关</div>
+                                <div class="col-lg-4">
+                                    <input type="hidden" alt="" aria-label="" value="{{ '1' if site_data.automatic_maintain_switch else '0' }}" id="automatic_maintain_switch">
+                                    <i class="iconfont {{ 'icon-kaiguan4' if site_data.automatic_maintain_switch else 'icon-kaiguanguan' }} pointer float-right" style="font-size: 40px;" onclick="switch_func($(this))"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

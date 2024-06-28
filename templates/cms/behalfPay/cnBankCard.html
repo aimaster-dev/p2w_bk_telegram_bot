@@ -1,0 +1,108 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+        function post_bank_data(action, data_uuid='') {
+            if (!action){ return false }
+            let name = $.trim($('#name').val());
+            let username = $.trim($('#username').val());
+            let password = $.trim($('#password').val());
+            let account = $.trim($('#account').val());
+            let account_username = $.trim($('#account_username').val());
+            let bank_uid = $.trim($('#bank_uid').val());
+            let note = $.trim($('#note').val());
+            if (!name){ return xtalert.showValidationError('请输入名称！') }
+            if (!username){ return xtalert.showValidationError('请输入登录名！') }
+            if (!password){ return xtalert.showValidationError('请输入密码！') }
+            if (!account){ return xtalert.showValidationError('请输入银行卡账户！') }
+            if (!account_username){ return xtalert.showValidationError('请输入银行卡人姓名！') }
+            if (!bank_uid){ return xtalert.showValidationError('请选择银行！') }
+            Swal({
+                title: '',
+                text: '数据提交中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            let _Data = {
+                'action': action,
+                'data_uuid': data_uuid ? data_uuid:'',
+                'name': name,
+                'username': username,
+                'password': password,
+                'account': account,
+                'account_username': account_username,
+                'bank_uid': bank_uid,
+                'note': note,
+            }
+            xtajax.post({
+                'data': _Data,
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('提交成功！');
+                        reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+    
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">银行卡状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>可用</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>停用</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="name" value="{{ search_res.name or '' }}" placeholder="名称" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="银行卡号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="创建时间" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-2 mb-2" style="color:#FFFFFF;" onclick="post_form_html({'action': 'add_bankcard_html'}, '添加银行卡', 800)">添加银行卡</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>名称</td>
+                <td>银行卡号</td>
+                <td>登录名</td>
+                <td>持卡人姓名</td>
+                <td>银行名称</td>
+                <td>状态</td>
+                <td>创建时间</td>
+                <td>备注</td>
+                <td width="190">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.name or '' }}</td>
+                    <td>{{ data.account }}</td>
+                    <td>{{ data.username }}</td>
+                    <td>{{ data.account_username or '' }}</td>
+                    <td>{{ data.bank_data.shortName or '' }}</td>
+                    <td>{% if data.statu %}<span class="ant-tag ant-tag-green">可用</span>{% else %}<span class="ant-tag ant-tag-red">禁用</span>{% endif %}</td>
+                    <td>{{ format_time_func(data.create_time, '%H:%M:%S') }}</td>
+                    <td>{{ data.note or '' }}</td>
+                    <td width="200">
+                        <span class="ant-tag ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_bankcard_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行卡', 800)">编辑</span>
+                        <span class="ant-tag to_cursor ant-tag-red mr-0" onclick="post_update_statu('del', '{{ data.uuid }}')">删除</span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

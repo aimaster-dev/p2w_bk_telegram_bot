@@ -1,0 +1,287 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+<style>
+    .table-bordered td,
+    .table-bordered th {
+        border: 1px solid #e9e9e9;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        border-bottom: 2px solid #e9e9e9;
+    }
+
+    .table tr:last-child td {
+        border-bottom: 1px solid #e9e9e9;
+    }
+
+    .table {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.65);
+    }
+
+    .table-hover tbody tr:hover {
+        color: rgba(0, 0, 0, 0.65);
+        background-color: rgba(195, 195, 195, 0.07)
+    }
+
+    .table-bordered td,
+    .table-bordered th {
+        /* border: none;  */
+        border-bottom: 1px solid #e9e9e9;
+    }
+
+    .table thead th {
+        border-bottom: 2px solid #e9e9e9;
+    }
+
+    .table td,
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid #e9e9e9;
+    }
+
+    .tableBox {
+        position: relative;
+        background-color: #FFFFFF;
+        height: 500px;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05);
+    }
+
+    .dropdown-item {
+        cursor: pointer;
+        font-size: 12px;
+        padding: 0.25rem 1rem;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        align-items: center;
+    }
+
+    #tzPage:hover {
+        background-color: rgba(233, 236, 239);
+    }
+
+    .auto-complete {
+        position: relative;
+        display: inline-block;
+    }
+
+    .auto-complete-items {
+        position: absolute;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        max-height: 200px;
+        overflow-y: auto;
+        width: 100%;
+        display: none;
+        z-index: 1;
+    }
+
+    .auto-complete-item {
+        padding: 5px;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .auto-complete-item:hover {
+        background-color: #bdbdbd;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', function (event) {
+            if (!$(event.target).is($("#bank_code"))) {
+                $(".auto-complete-items").hide();
+            }
+        });
+    });
+
+    $(document).keydown(function (event) {
+        if (event.key === "Escape") {
+            if($("#selectCardBox").css("display") != 'none'){
+                $("#selectCardBox").hide();
+            } else {
+                $("#qrcodeBox").hide();
+            }
+        }
+    });
+
+    function oninput_bankcode() {
+        var inputValue = $("#bank_code").val().toLowerCase();
+        var items = $(".auto-complete-items").find(".auto-complete-item");
+        items.each(function () {
+            var itemText = $(this).text().toLowerCase();
+            if (itemText.includes(inputValue)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $(".auto-complete-items").show();
+    }
+    function onclick_bankcode() {
+        if ($("#bank_code").val() === '') {
+            var allItems = $(".auto-complete-items").find(".auto-complete-item");
+            allItems.show();
+        }
+        $(".auto-complete-items").show();
+    }
+    function on_card_filter_change() {
+        var children = $("#bankcard_list").children();
+        children.each(function () {
+            let location = $("#location_filter").val();
+            let bank_code = $("#bank_code").val();
+            let bank_name = $("#bankname_filter").val();
+            let account = $("#account_filter").val();
+            $(this).show();
+            if (location) {
+                if ($(this).attr("location") !== location) { $(this).hide(); }
+            }
+            if (bank_code) {
+                oninput_bankcode()
+                if (!$(this).attr("bank_code").toLowerCase().includes(bank_code.toLowerCase())) { $(this).hide(); }
+            }
+            if (bank_name) {
+                if (!$(this).attr("bank_name").toLocaleLowerCase().includes(bank_name)) { $(this).hide(); }
+            }
+            if (account) {
+                if (!$(this).attr("account") .toLocaleLowerCase().includes(account)) { $(this).hide(); }
+            }
+        });
+    }
+    function onclick_insert_code(code, filter = false) {
+        $("#bank_code").val(code);
+        $(".auto-complete-items").hide();
+        if (filter) {
+            on_card_filter_change()
+        }
+    }
+
+    function onchange_number_input(id) {
+        let data = $("#" + id).val();
+        $("#" + id).val(js_format_money(data))
+    }
+    function isNumeric(str) {
+        return /^\d+(\.\d+)?$/.test(str);
+    }
+    function getQueryParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const params = {};
+        for (let [key, value] of urlParams) {
+            params[key] = value;
+        }
+        return params;
+    }
+
+    $(function () {
+        var pageHeight = $(window).height();
+        let tableBox_h = pageHeight - 62 - 15 - 42 - 16 - 20;
+        $(".tableBox").css('height', tableBox_h + 'px');
+
+        if ($(".pagination").length >= 0) {
+            let phtml = '<li class="page-item" style="display: flex; align-items: center; padding-right: 20px;"><span>共{{ total }}条，'
+            phtml += '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ per_page }}条/页</button><div class="dropdown-menu"><span class="dropdown-item" onclick="per_page_reload(30)">30条/页</span><span class="dropdown-item" onclick="per_page_reload(50)">50条/页</span><span class="dropdown-item" onclick="per_page_reload(100)">100条/页</span><span class="dropdown-item" onclick="per_page_reload(200)">200条/页</span><span class="dropdown-item" onclick="per_page_reload(500)">500条/页</span></div></div>'
+            phtml += '</span></li>'
+            let pthtml = '<li class="page-item" style="padding-left: 20px;display: flex;align-items: center;top: 2px;">跳转至<input type="text" class="form-control" id="tzPageNumber" aria-label="" style="width: 50px;position: relative;display: inline-block;margin: 0 8px; padding: 0.3rem 0.75rem; height: calc(1.5em + 0.75rem);">页<span id="tzPage" " style="border: 1px solid #dee2e6;padding: 0.4rem 0.75rem;display: inline-block;position: relative;margin-left: 8px;border-radius: 5px;cursor: pointer;">确定</span></li>'
+            $(".pagination").prepend(phtml)
+            $(".pagination").append(pthtml)
+        }
+
+        $("#tzPage").on('click', function () {
+            let page_number = $.trim($("#tzPageNumber").val());
+            if (isNumeric(page_number)) {
+                const params = getQueryParams();
+                params['page'] = page_number;
+                const newUrlParams = $.param(params);
+                const newUrl = window.location.pathname + '?' + newUrlParams;
+                window.location.href = newUrl;
+            }
+        })
+    })
+
+    function post_update_data(action, data_uuid = '') {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！');
+                    reloadpage();
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function per_page_reload(per_page) {
+        let page_number = $.trim($("#tzPageNumber").val());
+        const params = getQueryParams();
+        if (isNumeric(page_number)) {
+            params['page'] = page_number;
+        }
+        params['per_page'] = per_page;
+        const newUrlParams = $.param(params);
+        window.location.href = window.location.pathname + '?' + newUrlParams;
+    }
+
+
+</script>
+{% endblock %}
+
+{% block content_main %}
+
+<div class="col-lg-12">
+
+    {% block alertBox %}{% endblock %}
+
+    <div class="tableBox">
+
+        <div id="searchBox" class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+            <form class="form-inline">
+                <label for=""><strong>搜索：</strong></label>
+                {% block searchInput %}{% endblock %}
+                {% block searchBtn %}
+                <button class="btn btn-primary mb-2">搜索</button>
+                <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+                {% endblock %}
+                {% block other_function %}{% endblock %}
+            </form>
+        </div>
+
+        {% block other_info %}{% endblock %}
+
+        {% block table_con %}{% endblock %}
+
+        {% if not all_datas %}
+        <div class="no_data">
+            <img src="/static/common/images/no_data.png" alt="暂无数据">
+            <p>暂无数据</p>
+        </div>
+        {% endif %}
+        {% if pagination and pagination.links %}
+        <div class="text-center">{{ pagination.links }}</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

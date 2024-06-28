@@ -1,0 +1,63 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <style>
+        .table-bordered td,
+        .table-bordered th{border: none; border-bottom: 1px solid #e9e9e9;}
+        .table thead th{border-bottom: 2px solid #e9e9e9;}
+        .table td, .table th {border-top: none;border-bottom: 1px solid #e9e9e9;}
+        .table{ font-size: 12px; color: rgba(0, 0, 0, 0.65); }
+        .table-hover tbody tr:hover {color: rgba(0, 0, 0, 0.65);background-color: rgba(195, 195, 195, 0.07)}
+
+        .swal2-popup .swal2-title {color: rgba(4,15,66,.9);font-size: 1.43em;}
+        .table tr:last-child td {border-bottom: 1px solid #e9e9e9;}
+        .tableBox{position: relative;padding: 20px;background-color: #FFFFFF;overflow: hidden;box-sizing: border-box;border-radius: 3px; color: rgba(0, 0, 0, 0.65); font-size: 12px;}
+    </style>
+{% endblock %}
+
+{% block content_main %}
+    <div class="col-lg-6 col-12">
+
+        <div class="alert alert-primary" role="alert">
+            <i class="iconfont icon-tishi" style="color: rgb(24, 128, 255); font-size: 18px; vertical-align: -2px; margin-right: 3px;"></i> 请注意：银行脚本的开关直接影响，整个项目的首付款功能，请谨慎操作！
+        </div>
+
+        <div class="tableBox">
+
+            <table class="table table-hover text-left" style="background-color: #ffffff;">
+                <tbody>
+                    <tr style="background-color: #f7f7f7;">
+                        <td style="border: none;">银行名称</td>
+                        <td style="border: none;">银行Code</td>
+                        <td style="border: none;">脚本运行状态</td>
+                        <td style="border: none;">运行时间</td>
+                        <td style="border: none;">操作</td>
+                    </tr>
+                    {% for data in datas %}
+                    <tr>
+                        <td>{{ data.bank_data.bank_name }}</td>
+                        <td>{{ data.bank_data.bank_code }}</td>
+                        <td>
+                            {% if data.statu %}
+                            <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>运行中</span>
+                            {% else %}
+                            <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已停止</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ data.run_time }}</td>
+                        <td>
+                            {% if data.statu %}
+                                <span class="ant-tag ant-tag-red" onclick="post_update_statu('stopScript', '{{ data.task_name }}', '确定停止运行该银行脚本？')">停止</span>
+                            {% else %}
+                                <span class="ant-tag ant-tag-blue-inverse" onclick="post_update_statu('startScript', '{{ data.task_name }}', '确定启动该银行脚本？')">启动</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+{% endblock %}

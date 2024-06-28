@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payment Gateway</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <script src="/common/jquery.js"></script>
+    <script src="/common/xtajax.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        ul > li{ list-style: none; }
+        html,body{margin: 0;max-width: 100vw;min-height: 100vh;position: relative;overflow-x: hidden;font: 20px NotoSansSC;}
+        body{background: url(/public/world/img/skin2_paybg.jpg) repeat;line-height: normal;margin: 0;padding: 0;font-family: Avenir,Helvetica,Arial,sans-serif;color: #707070;}
+        .head{position: absolute;top: 0;left: 0;right: 0;height: 50px;line-height: 50px;text-align: center;background: #d4af37;color: #FFFFFF;z-index: 100;}
+        .main{width: 1000px;position: relative;box-sizing: border-box;overflow: hidden;margin: 80px auto 40px;background: url(/public/world/img/skin2_bankbg.png) no-repeat top;background-size: auto;background-size: 100% 100%;-webkit-box-shadow: 0 0 12px 1px rgba(0,0,0,.3);-moz-box-shadow: 0 0 12px 1px rgba(0,0,0,.3);-ms-box-shadow: 0 0 12px 1px rgba(0,0,0,.3);box-shadow: 0 0 12px 1px rgb(0,0,0,.3);border-radius: 15px;padding-bottom: 100px;}
+        .main .imgLogo{display: block;position: relative;height: 60px;box-sizing: border-box;text-align: center;margin: 40px auto 50px;}
+        .main .imgLogo img{height: 100%;display: block;margin: auto;}
+
+        .bankcontent{margin: 20px auto;width: 94%;}
+        .bankcontent .banktable{display: table;width: 100%;border: 1px solid #e0e0e0;padding: 0;border-radius: 15px;}
+        .bankcontent .bankleft-con{display: table-cell;width: 35%;text-align: center;vertical-align: top;border-right: 1px solid #e0e0e0;padding: 20px 0;}
+        .saveqr button{box-shadow: 0 0 5px 0 rgb(0 0 0/28%);background: #fff;border: none;font-size: 14px;color: #d4af37;padding: 5px 10px;border-radius: 14px;outline: none;display: inline-block;vertical-align: middle;cursor: pointer;text-decoration: none;}
+        .bankright-con {display: table-cell;width: 65%;vertical-align: middle;text-align: center;padding: 20px 0;}
+        .bankright-con .infonote{font-size: 16px;width: 90%;margin: 0 auto 50px;}
+        .infocon:not(:last-child) {border-bottom: 2px dashed #dedede !important;padding-bottom: 10px;}
+        .infocon {text-align: left;width: 90%;margin: 10px auto;font-size: 16px;}
+        .infocon .labelcon{margin-bottom: 10px;font-size: 21px;}
+
+        .banknote{width: 94%;margin: 0 auto;font-size: 14px;}
+        .notetitle {font-size: 14px;font-weight: 700;margin-bottom: 15px;}
+        @media (max-width: 1000px) {
+            .main{width: 98%;}
+        }
+        @media (max-width: 767px) {
+            .bankcontent .bankleft-con {display: block;width: 100%;margin: 0 0 20px;border-right: none;border-bottom: 1px solid #e0e0e0;padding-bottom: 20px;}
+            .bankright-con {width: 100%;display: block;}
+        }
+    </style>
+
+    <script>
+
+        // 复制text
+        function copyText(message) {
+            var input = document.createElement("input");
+            input.value = message;
+            document.body.appendChild(input);
+            input.select();
+            input.setSelectionRange(0, input.value.length)
+            document.execCommand('Copy');
+            document.body.removeChild(input);
+        }
+
+    </script>
+</head>
+<body>
+
+    <div class="head">
+        <span>Chuyển khoản nhanh chóng</span>
+    </div>
+
+    <div class="main">
+
+        <div class="imgLogo">
+            <img src="/assets/world/bank/img/ACB.png" alt="">
+        </div>
+
+        <div class="bankcontent">
+            <div class="banktable">
+                <div class="bankleft-con">
+
+                    <div style="position: relative; display: block; text-align: center; padding: 10px; color: red; font-weight: bold; font-size: 25px;">
+                        <span id="jsText">00:00:00</span>
+                    </div>
+
+                    <div id="qrcode" style="height: 204px; width: 204px; margin: 0px auto;">
+                        <img src="" alt="" style="display: block; height: 100%;">
+                    </div>
+                    <div class="saveqr" style="margin: 10px 0">
+                        <button id="downloadBtn" type="button" data-en="Save QR code" data-vn="Lưu mã QR" onclick="saveQR()">Lưu mã QR</button>
+                    </div>
+                </div>
+                <div class="bankright-con">
+                    <div class="infonote">"Nếu không thể sử dụng mã QR, vui lòng sao chép thông tin bên dưới để chuyển tiền"</div>
+                    <div class="infocon">
+                        <div class="labelcon"><b>Ngân hàng</b></div>
+                        <ul>
+                            <li class="labelinfo" style="font-size:16px;"><b>ACB</b></li>
+                        </ul>
+                    </div>
+                    <div class="infocon">
+                        <div style="display: block; text-align: left; margin-bottom: 10px;">
+                            <span><b>Tên nhận:</b></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>USER USER to</div>
+                            <div onclick="copyText('USER USER to')">
+                                <span style="background-color: #d4af37; position: revert; font-size: 13px; padding: 5px 12px; outline: none; border-radius: 20px; color: #FFFFFF; cursor: pointer;"><b>Sao chép</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="infocon">
+                        <div style="display: block; text-align: left; margin-bottom: 10px;">
+                            <span><b>Số tiền chuyển:</b></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 30px;color: #d4af37;font-weight: bold; height: 23px; line-height: 27px;"><span id="transamt"><b>300300</b></span>VND</div>
+                            <div onclick="copyText('300300')">
+                                <span style="background-color: #d4af37; position: revert; font-size: 13px; padding: 5px 12px; outline: none; border-radius: 20px; color: #FFFFFF; cursor: pointer;">Sao chép</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="infocon">
+                        <div style="display: block; text-align: left; margin-bottom: 10px;">
+                            <span><b>Tài Khoản</b></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 22px; height: 23px; line-height: 27px;"><b>103568978458895</b></div>
+                            <div onclick="copyText('103568978458895')">
+                                <span style="background-color: #d4af37; position: revert; font-size: 13px; padding: 5px 12px; outline: none; border-radius: 20px; color: #FFFFFF; cursor: pointer;">Sao chép</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="infocon">
+                        <div style="display: block; text-align: left; margin-bottom: 10px;">
+                            <span><b>Nội dung lời nhắn:</b></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 30px; height: 23px; line-height: 27px; color: red;">RT8921212389879812</div>
+                            <div onclick="copyText('RT8921212389879812')">
+                                <span style="background-color: #d4af37; position: revert; font-size: 13px; padding: 5px 12px; outline: none; border-radius: 20px; color: #FFFFFF; cursor: pointer;">Sao chép</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="banknote" style="font-size: 16px;">
+            <div class="notetitle" data-en="Note :" data-vn="Lưu ý :">Lưu ý :</div>
+            <p style="margin-bottom: 15px; line-height: 1.5;">1. Vui lòng nhập chính xác nội dung và số tiền yêu cầu từ hệ thống ; Thông tin không chính xác sẽ không thể tự động lên điểm.</p>
+            <p style="margin-bottom: 15px; line-height: 1.5;">2. Nếu không thể sử dụng mã QR Code, vui lòng sao chép tài khoản thanh toán.</p>
+            <p style="margin-bottom: 15px; line-height: 1.5;">3. Khi chuyển khoản không làm mới trình duyệt. </p>
+        </div>
+
+    </div>
+
+    <script src="/common/echarts/echarts.min.js"></script>
+    <script>
+
+        $(function () {
+            update_orderTotal()
+        })
+
+        // 更新订单统计
+        function update_orderTotal() {
+            var chartDom = document.getElementById('orderTotal');
+            var myChart = echarts.init(chartDom);
+            const colors = ['#5470C6', '#91CC75', '#EE6666'];
+            option = {
+              color: colors,
+              tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'cross'
+                }
+              },
+              grid: {
+                right: '20%'
+              },
+              toolbox: {
+                feature: {
+                  dataView: { show: true, readOnly: false },
+                  restore: { show: true },
+                  saveAsImage: { show: true }
+                }
+              },
+              legend: {
+                data: ['越南银行扫码', 'Precipitation', '订单量']
+              },
+              xAxis: [
+                {
+                  type: 'category',
+                  axisTick: {
+                    alignWithLabel: true
+                  },
+                  data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                }
+              ],
+              yAxis: [
+                {
+                  type: 'value',
+                  name: '',
+                  position: 'right',
+                  alignTicks: true,
+                  axisLine: {
+                    show: false,
+                    lineStyle: {
+                      color: colors[0]
+                    }
+                  },
+                  axisLabel: {
+                    formatter: '{value} ml'
+                  }
+                },
+                {
+                  type: 'value',
+                  name: 'Precipitation',
+                  position: 'right',
+                  alignTicks: true,
+                  axisLine: {
+                    show: true,
+                    lineStyle: {
+                      color: colors[1]
+                    }
+                  },
+                  axisLabel: {
+                    formatter: '{value} ml'
+                  }
+                },
+                {
+                  type: 'value',
+                  name: '订单量',
+                  position: 'left',
+                  alignTicks: true,
+                  axisLine: {
+                    show: true,
+                    lineStyle: {
+                      color: colors[2]
+                    }
+                  },
+                  axisLabel: {
+                    formatter: '{value}'
+                  }
+                }
+              ],
+              series: [
+                {
+                  name: '越南银行扫码',
+                  type: 'bar',
+                  yAxisIndex: 1,
+
+                  data: [
+                    2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
+                  ]
+                },
+                {
+                  name: 'Precipitation',
+                  type: 'bar',
+                  yAxisIndex: 1,
+                  data: [
+                    2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
+                  ]
+                },
+                {
+                  name: '订单量',
+                  type: 'line',
+                  yAxisIndex: 2,
+                  data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                }
+              ]
+            };
+            option && myChart.setOption(option);
+        }
+
+    </script>
+    <div class="col-lg-12">
+        <div class="cardt">
+            <div class="cardt-head">
+                <span><b>代收订单统计</b></span>
+                <span class="cardt_tag tag-greenblue" style="margin: 10px 7px 10px 0">更新</span>
+            </div>
+            <div class="cardt-content">
+                <div id="orderTotal" style="height: 450px;"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

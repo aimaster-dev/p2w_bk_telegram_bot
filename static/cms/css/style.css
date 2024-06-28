@@ -1,0 +1,90 @@
+html, body{ font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; font-size: 100%; color: #333; background: #f0f2f5;}
+html, body{ font-size: 14px;}
+img, a:link, a:visited, a:hover ,a:active{text-decoration: none; outline: none;}
+.btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {outline: none; border-color: transparent;}
+/* 禁止换行 */
+.ban-newline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* 强制换行 */
+.require-newline{word-break: break-all;word-wrap: break-word;white-space: pre-wrap;}
+/* 禁止选中 */
+.no-touch {-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;}
+/* 文件上传按钮美化 */
+.file-button {position: relative;display: inline-block;overflow: hidden;}
+.file-button input{position:absolute;right: 0;top: 0;bottom: 0;opacity: 0;-ms-filter: 'alpha(opacity=0)';cursor: pointer;}
+ul, li, a{margin: 0; padding: 0; text-decoration: none}
+ul, li, ul >li{list-style: none}
+a:hover{ text-decoration: none }
+.form-control {border-color: #CCD1D9; box-shadow: none; border-radius: 4px; color: #434A54;}
+.to_cursor{cursor: pointer;}
+.noradius{ border-radius: 0;}
+.btn-default{
+    background-color: #fff;
+    border-color: #dbdbdb;
+    color: #303030;
+    white-space: nowrap;
+}
+.btn-default:hover{
+    background-color: #f0f0f0;
+    border-color: #e3e3e3;
+    color: #303030;
+}
+.background-white{background: #ffffff}
+.table td{ padding: .68rem; }
+.btn-xs{ padding: .08rem .4rem; font-size: .78rem; line-height: 1.5; border-radius: .2rem;}
+.box-shadow{box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08)}
+.card{ /*box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);*/ box-shadow: 0 0 2px 0 rgba(82, 63, 105, 0.05);}
+.card-header{ padding: 13px 20px;}
+.card-subtitle{display: block; width: 100%; padding: 10px 20px; border-top: 1px solid rgba(0,0,0,.125); border-bottom: 1px solid rgba(0,0,0,.125); background: #f0f1f2; font-size: 16px; font-weight: bolder;}
+.red {color: red}
+::placeholder {color: #747f8a !important;font-size: 13px;opacity: .5 !important;}
+.card-border-bottom{ border-bottom: 1px solid rgba(0,0,0,.125)}
+
+/* 选项卡 */
+.options_tab { border: none;}
+.options_tab .card-header a{ color: rgba(0,0,0,.85);}
+.options_tab .card-header{ border: none; padding: 0 20px; background: #FFFFFF; position: relative; overflow: hidden; box-sizing: border-box;}
+.options_tab .card-header .nav-pills{ border-bottom: 1px solid rgba(0,0,0,.125); margin: 0;}
+.options_tab .card-header .nav-pills .nav-item{ padding: 10px 0 7px; position: relative; overflow: hidden;}
+.options_tab .card-header .nav-item .nav-link.active{ color: #007bff; background: none;}
+.options_tab .card-header .nav-item .nav-link.active::after{ content: ""; position: absolute; width:calc(100% - 30px); height: 2px; background: #007bff; bottom: 0; left: 15px; -moz-transition: all .5s ease; -webkit-transition: all .5s ease; transition: all .5s ease;}
+
+/* 头部 */
+#header{ width: auto; height: 62px; box-shadow: 0 2px 4px rgba(41,48,66,.1); background-color: #ffffff; position: fixed; top: 0; left: 210px; right: 0; padding: 0 18px; box-sizing: border-box; z-index: 999; font-size: 15px;}
+#header .dropdown-menu { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important; top: 60px; margin-top: 0; padding: .3rem 0; right: -10px; min-width: 100px; width: auto; font-size: 14px; border: none;}
+#header .dropdown-menu a{ padding: 12px;}
+#header .dropdown-menu svg{ display: inline-block; margin-right: 5px; vertical-align: -.1em;}
+.navbar-brand i{ font-size: 1.5rem;}
+.navbar-nav li.nav-item{ margin: 0 10px; }
+.navbar-nav li.nav-item a.nav-link{ color: #333333;}
+.navbar-nav li.nav-item a.nav-link svg{ display: inline-block; margin-right: 5px; vertical-align: -.1em;}
+.dropdown-box a.nav-link{ line-height: 36px}
+.dropdown-box a.nav-link .avatar{ margin-top: -15px; margin-bottom: -15px; width: 40px; height: 40px; margin-right: .25rem !important; border-radius: 50% !important;}
+
+#swal2-title{ margin-bottom: 25px}
+
+/*
+background-color: #253134;
+background-color: #001529;
+background-color: #007bff;
+background-color: rgb(204, 204, 204);
+*/
+#sidebar{ width: 210px; position: fixed; top: 0; left: 0; bottom: 0;  background-color: #1D86F3; z-index: 999; font-size: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.50); overflow: hidden; box-sizing: border-box;}
+#sidebar .brand-logo{width: 100%; height: 62px; line-height: 65px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.15); position: relative; overflow: hidden;}
+#sidebar .brand-logo img{width: 35px; margin-right: 5px;}
+#sidebar .brand-logo .logo-text {margin: 0; padding: 0; color: #fff; font-size: 16px; font-weight: 600; display: inline-block; position: relative; top: 3px; letter-spacing: 2px; text-align: center; line-height: 50px;}
+#sidebar .nav-box{ position: relative; overflow: hidden auto; width: 100%; height: 100%; padding-top: 10px;}
+#sidebar .list-group-item{ color: #a0a7af; border-color: #001529; background-color: #001529; -ms-transition: all .5s ease; -moz-transition: all .5s ease; -webkit-transition: all .5s ease; -o-transition: all .5s ease; transition: all .5s ease;}
+#sidebar .list-group-item:hover{ color: #FFFFFF;}
+#sidebar .second_box{ background: #000;}
+#sidebar .second_box a.list-group-item{ padding-left: 50px; background: #000; border-color: #000;}
+#sidebar .list-group{padding-bottom: 100px}
+#sidebar a.active, #sidebar .second_box a.active{background-color: #1890ff; color: #FFFFFF;}
+
+/* 内容 */
+#content_box{width: auto;padding: 15px;margin-left: 210px;margin-top: 62px;margin-bottom: 70px; box-sizing: border-box; position: relative; overflow: hidden;}
+#content_box .ol_box{box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); padding: 12px; margin-bottom: 15px; background-color: #fff}
+.no_data{width: 100%; height: 390px; padding-top: 100px; text-align: center; background: white; position: relative; top: -14px;}
+
+/*.secondGroup .list-group-item{background-color: #0879EF;border-color: #0879EF;}*/
+.secondGroup .list-group-item{background-color: #4D9AEB;border-color: #4D9AEB;}
+

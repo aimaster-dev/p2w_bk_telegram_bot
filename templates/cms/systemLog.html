@@ -1,0 +1,46 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="ip" value="{{ search_res.ip or '' }}" placeholder="IP" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="uname" value="{{ search_res.uname or '' }}" placeholder="用户账户或姓名" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="操作日期" aria-label="" readonly>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>操作人</td>
+                <td>日期</td>
+                <td>状态码</td>
+                <td>请求IP</td>
+                <td>请求方法</td>
+                <td>请求路径</td>
+                <td>说明</td>
+            </tr>
+        {% for data in all_datas %}
+            <tr>
+                <td>{{ data.udata.account }}({{ data.udata.username or '' }})</td>
+                <td>{{ format_time_func(data.create_time) }}</td>
+                <td>
+                    {% if data.state_code == 200 %}
+                        <span class="ant-tag ant-tag-green">{{ data.state_code }}</span>
+                    {% else %}
+                        <span class="ant-tag ant-tag-red">{{ data.state_code }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ data.ip }}</td>
+                <td><span class="ant-tag ant-tag-green">{{ data.method }}</span></td>
+                <td>{{ data.url_path }}</td>
+                <td>{{ data.note }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

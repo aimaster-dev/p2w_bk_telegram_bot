@@ -1,0 +1,134 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+    
+        function search_data_func() {
+            let bank_uid = $.trim($("select[name='bank_uid']").val());
+            let bankcard_type = $.trim($("select[name='bankcard_type']").val());
+            let account = $.trim($("input[name='account']").val());
+            let dataDate = $.trim($("input[name='dataDate']").val());
+            let ppp = {
+                'action': 'search_data',
+                'bank_uid': bank_uid,
+                'bankcard_type': bankcard_type,
+                'account': account,
+                'dataDate': dataDate,
+            };
+            $("#tableLoding").css('display', 'flex');
+            xtajax.get({
+                'data': ppp,
+                'success': function (data) {
+                    if (data.code === 200){
+                        let datas = data.data.datas;
+                        if (datas.length <= 0){
+                            $(".no_data").show()
+                        }else{
+                            $(".no_data").hide()
+                        }
+                        let html = '';
+                        for (let i=0; datas.length > i; i++){
+                            let _vv = datas[i];
+                            html += '<tr>'
+                            html += '<td>'+_vv.account+'</td>'
+                            html += '<td>'+_vv.account_username+'</td>'
+                            html += '<td>'+_vv.shortName+'</td>'
+                            html += '<td>'+_vv.bank_code+'</td>'
+                            html += '<td>'+_vv.bankcard_type+'</td>'
+                            html += '<td>'+_vv.order_total_counts+'</td>'
+                            html += '<td>'+_vv.success_counts+'</td>'
+                            html += '<td>'+_vv.py_rate+'</td>'
+                            html += '<td>'+_vv.success_second_rate1+'</td>'
+                            html += '<td>'+_vv.success_second_rate+'</td>'
+
+                            html += '<td>'+js_format_money(_vv.success_order_money_total)+'</td>'
+                            html += '<td>'+js_format_money(_vv.total_sk_amount)+'</td>'
+                            html += '<td>'+js_format_money(_vv.success_callback_money)+'</td>'
+                            html += '<td>'+js_format_money(_vv.lose_money_total)+'</td>'
+                            html += '<td>'+js_format_money(_vv.income_money_total)+'</td>'
+                            html += '<td>'+js_format_money(_vv.out_money_total)+'</td>'
+                            html += '</tr>'
+                        }
+                            html += '<tr>'
+                            html += '<td><b>总计：</b></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td>'+data.data.bankcard_money_total+'</td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '<td></td>'
+                            html += '</tr>'
+                        var parent = $(".table > tbody");
+                        var allChildren = parent.children();
+                        var unwantedChildren = allChildren.slice(1);
+                        unwantedChildren.remove();
+                        parent.append(html);
+                        $("#tableLoding").css('display', 'none');
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="bank_uid" aria-label="" style="width: 200px;">
+        <option value="">银行类型</option>
+        {% for back_data in back_datas %}
+            <option value="{{ back_data.uuid }}" {% if search_res.bank_uid == back_data.uuid %}selected{% endif %} >{{ back_data.code }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="bankcard_type" aria-label="" style="width: 200px;">
+        <option value="">银行卡类型</option>
+        {% for bctype in BankCardType.name_arr %}
+            <option value="{{ bctype }}" {% if search_res.bankcard_type == bctype %}selected{% endif %}>{{ BankCardType.name_dict.get(bctype) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="银行卡号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="dataDate" value="{{ search_res.dataDate or '' }}" placeholder="日期" aria-label="">
+{% endblock %}
+
+{% block searchBtn %}
+    <span class="btn btn-primary mb-2" onclick="search_data_func()">搜索</span>
+    <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>银行卡号</td>
+                <td>银行卡姓名</td>
+                <td>银行简称</td>
+                <td>银行Code</td>
+                <td>卡类别</td>
+                <td>订单总数</td>
+                <td>成功数</td>
+                <td>付款率</td>
+                <td>订单到支付时间</td>
+                <td>订单到回调完成时间</td>
+                <td>成功订单金额</td>
+                <td>成功支付金额</td>
+                <td>成功回调金额</td>
+                <td>掉单金额</td>
+                <td>爬虫收款金额</td>
+                <td>爬虫出款金额</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/world/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

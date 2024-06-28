@@ -1,0 +1,56 @@
+{% extends 'merchant/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block table_con %}
+    <div class="list-group-item pb-0" style="border: none; margin-bottom: 10px;">
+        <form class="form-inline">
+            <label for=""><strong>搜索：</strong></label>
+            <select class="form-control mr-sm-2 mb-2" name="bill_type" aria-label="">
+                <option value="">账单类型</option>
+                {% for BILL_STATEMEN_TYPE in BILL_STATEMEN_TYPES.name_arr %}
+                <option value="{{ BILL_STATEMEN_TYPE }}" {% if search_res.bill_type == BILL_STATEMEN_TYPE %}selected{% endif %}>{{ BILL_STATEMEN_TYPES.name_dict.get(BILL_STATEMEN_TYPE) }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" class="form-control mb-2 mr-sm-2" name="amount" value="{{ search_res.amount or '' }}" placeholder="交易金额" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_order_id" value="{{ search_res.merchant_order_id or '' }}" placeholder="商户订单号" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+            <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="时间" aria-label="">
+            <button class="btn btn-primary mb-2">搜索</button>
+            <span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+            <span class="btn btn-warning ml-1 mb-2" style="color: white;" onclick="post_update_statu('export_order', 'fewfwe', '确认导出当前订单数据？')">导出当前数据</span>
+        </form>
+    </div>
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户名称</td>
+                <td>账单类型</td>
+                <td>订单号</td>
+                <td>商户订单号</td>
+                <td>交易金额</td>
+                <td>手续费</td>
+                <td>当前余额</td>
+                <td>创建时间</td>
+                <td>备注</td>
+            </tr>
+            {% for data in all_datas %}
+            <tr>
+                <td>{{ data.merchant_data.merchant_name }}</td>
+                <td>{{ BILL_STATEMEN_TYPES.name_dict.get(data.bill_type) or '' }}</td>
+                <td>{{ data.order_id or '' }}</td>
+                <td>{{ data.merchant_order_id or '' }}</td>
+                <td>{{ format_money(data.amount or 0) }}</td>
+                <td>{{ format_money(data.repay_amount) or 0 }}</td>
+                <td>{{ format_money(data.balance_amount) or 0 }}</td>
+                <td>{{ format_time_func(data.create_time) }}</td>
+                <td>{{ data.note or '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="tunnel_code" aria-label="">
+        <option value="">通道类型</option>
+        {% for METHOD in PAY_METHOD.name_arr %}
+        <option value="{{ METHOD }}" {% if search_res.tunnel_code == METHOD %}selected{% endif %}>{{ PAY_METHOD.name_dict.get(METHOD) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant" value="{{ search_res.merchant or '' }}" placeholder="商户名或商户ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="orderDate" value="{{ search_res.orderDate }}" placeholder="日期" aria-label="">
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户ID</td>
+                <td>商户名称</td>
+                <td>通道</td>
+                <td>代收费率%</td>
+                <td>代收成功率</td>
+                <td>代收申请单数</td>
+                <td>代收成功单数</td>
+                <td>代收成功金额</td>
+                <td>代收成功手续费</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.mdata.merchant_id }}</td>
+                    <td>{{ data.mdata.merchant_name }}</td>
+                    <td>{{ data.tunnel_name }}</td>
+                    <td>{{ data.df_fv or 0 }}</td>
+                    <td>{{ data.ds_success_rate }}</td>
+                    <td>{{ data.ds_order_count }}</td>
+                    <td>{{ data.ds_success_count }}</td>
+                    <td>{{ data.ds_success_money }}</td>
+                    <td>{{ data.ds_success_repay }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>统计：</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ total_data.total_dssqds or 0 }}</td>
+                <td>{{ total_data.total_dscgds or 0 }}</td>
+                <td>{{ total_data.total_dscgje or 0 }}</td>
+                <td>{{ total_data.total_dscgsxf or 0 }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

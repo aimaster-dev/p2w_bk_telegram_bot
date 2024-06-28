@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>世界付 - 代收API文档</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <link rel="stylesheet" href="/static/common/bootstrap/css/bootstrap.min.css">
+    <script src="/static/common/jquery.js"></script>
+    <script src="/static/common/md5/md5.min.js"></script>
+    <style>
+        *{margin: 0;padding: 0;box-sizing: border-box;}
+        ul > li{ list-style: none; }
+        html,body{margin: 0;max-width: 100vw;min-height: 100vh;position: relative;overflow-x: hidden;font: 14px NotoSansSC;color: #2c3e50;font-family: PingFang SC,Helvetica Neue,Helvetica,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8f6f\96c5\9ed1,Arial,sans-serif;}
+        body{line-height: normal;margin: 0;padding: 0;}
+        .main{position: relative;box-sizing: border-box;overflow: hidden;}
+        .apiBox{display: block;position: relative;padding: 50px;overflow: hidden;box-sizing: border-box;width: 1200px;margin: auto;}
+        .apiBox .tit{position: relative;height: 50px;line-height: 50px;border-left: 5px solid #44bfa2;box-sizing: border-box;background-color: #f5f5f5;padding: 0 0 0 20px;margin-bottom: 20px;font-size: 18px;}
+        .apiBox P{margin-bottom: 10px;line-height: 1.5;}
+        table {display: table;border-collapse: separate;box-sizing: border-box;text-indent: initial;border-spacing: 2px;border-color: gray;width: 870px;}
+        table thead{display: table-header-group;vertical-align: middle;border-color: inherit;}
+        table thead td{box-sizing: border-box; padding: 8px; max-width: 200px; border-top: 0px; border-bottom-width: 2px; vertical-align: top; line-height: 1.42857; background-color: rgb(245, 245, 245);}
+        table tbody {display: table-row-group;vertical-align: middle;border-color: inherit;}
+        table tbody td{box-sizing: border-box; padding: 8px; max-width: 200px; vertical-align: top; line-height: 1.6; height: 30px;}
+        code{font-size: .875em;color: #d63384;word-wrap: break-word;}
+        .codeDemo{box-sizing: border-box;overflow: auto;font-size: 13px;font-family: Menlo, Monaco, Consolas, "Courier New", monospace;margin-top: 30px;margin-bottom: 10px;padding: 9.5px;border: 1px solid rgb(204, 204, 204);border-radius: 4px;background-color: rgb(245, 245, 245);color: rgb(51, 51, 51);word-wrap: break-word;line-height: 1.42857;word-break: break-all;white-space: pre-wrap;position: relative;}
+        .footer{width: 1200px;position: relative;box-sizing: border-box;text-align: center;line-height: 30px;font-size: 16px;margin: 40px auto 15px;}
+    </style>
+    <script>
+
+        function objKeySort(arys) {
+            //先用Object内置类的keys方法获取要排序对象的属性名数组，再利用Array的sort方法进行排序
+            var newkey = Object.keys(arys).sort();
+            console.log('newkey=' + newkey);
+            var newObj = ''; //创建一个新的对象，用于存放排好序的键值对
+            for (var i = 0; i < newkey.length; i++) {
+                //遍历newkey数组
+                newObj += [newkey[i]] + '=' + arys[newkey[i]] + '&';
+            }
+            return newObj.substring(0, newObj.length - 1);
+        }
+
+        $(function () {
+
+
+
+            $("#getDataMd5").on('click', function () {
+                let mchId = $.trim($("#mchId").val());
+                let mchOrderId = $.trim($("#mchOrderId").val());
+                let payMethod = $.trim($("#payMethod").val());
+                let notifyUrl = $.trim($("#notifyUrl").val());
+                let amount = $.trim($("#amount").val());
+                let sjsign = $.trim($("#sjsign").val());
+                if (!mchId){ return alert('请输入商户ID mchId！') }
+                if (!mchOrderId){ return alert('请输入订单号mchOrderId！') }
+                if (!payMethod){ return alert('请输入支付方式编号payMethod！') }
+                if (!amount){ return alert('请输入订单金额！') }
+                if (!notifyUrl){ return alert('请输入回调网址notifyUrl！') }
+                if (!sjsign){ return alert('请输入商户密钥！') }
+                let ddd = ['mchId', 'mchOrderId', 'payMethod', 'notifyUrl', 'amount'];
+                ddd.sort()
+                let mtext = '';
+                for (let i=0; i < ddd.length; i++){
+                    if (i !== 0){
+                        mtext +='&'
+                    }
+                    let _k = ddd[i];
+                    if (_k === 'mchId'){
+                        mtext += 'mchId='+mchId
+                    }else if(_k === 'mchOrderId'){
+                        mtext += 'mchOrderId='+mchOrderId
+                    }else if(_k === 'payMethod'){
+                        mtext += 'payMethod='+payMethod
+                    }else if(_k === 'notifyUrl'){
+                        mtext += 'notifyUrl='+notifyUrl
+                    }else if(_k === 'amount'){
+                        mtext += 'amount='+amount
+                    }
+                }
+                // console.log('ttt:', ddd)
+                // console.log('mtext:', mtext)
+                mtext+='&sign='+sjsign
+                let etext = md5(mtext);
+                $("#sign").val(etext);
+                $(".low_datatext").show();
+                $(".low_datatext").find('code').text(mtext);
+            })
+
+        })
+    </script>
+
+</head>
+<body>
+
+    <div class="main">
+
+        <h1 style="display: block; text-align: center; margin: 39px auto 20px;">世界付 - 代收API文档</h1>
+
+        <div class="apiBox">
+            <h2 class="tit">订单创建接口</h2>
+            <div class="cont" style="position: relative; box-sizing: border-box; padding-left: 20px;">
+                <p><b>地址：</b><code>https://pay2world.co/api/pay</code></p>
+                <p><b>调用方式：</b><code>POST</code></p>
+                <p><b>数据格式：</b><code>JSON</code></p>
+                <p><b>注意事项：</b>获取到支付链接后请不要直接使用window.open进行跳转，否则部分手机浏览器(如safari)会阻挡跳窗，可以直接使用location.href</p>
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户ID，请于商户后台->基本信息查看ID</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户订单号，必须为唯一订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >amount</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >订单金额，具体限额请洽询客服。</td>
+                        </tr>
+                        <tr>
+                            <td >payMethod</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >
+                                <p>通道编码</p>
+                                <p>VNBANKQR: 越南网银扫码</p>
+                                <p>VNZALO: 越南ZALO pay</p>
+                                <p>VNMOMO: 越南MOMO pay</p>
+                                <p>VNVTPAY: 越南ViettelPay</p>
+                                <p>VNBANKQR2: 世界付支付(网银扫码)自定义</p>
+                                <p>VNMO2MO: 世界付支付(momopay)自定义</p>
+                                <p>VNZA2LO: 世界付支付(zalopay)自定义</p>
+                                <p>VNVT2PAY: 世界付支付(viettelpay)自定义</p>
+                                <!--
+                                <p>VNBANK: 越南银行转卡</p>
+                                <p>VNDIRECT: 越南网银直连</p>
+                                <p>VNZALO: 越南ZALO pay</p>
+                                <p>VNMOMO: 越南MOMO pay</p>
+                                <p>VNVTPAY: 越南ViettelPay</p>
+                                -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >notifyUrl</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >支付结果回调网址，当订单成功到帐时，我司将发送支付结果</td>
+                        </tr>
+                        <tr>
+                            <td >backUrl</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >支付完毕后跳转的网址</td>
+                        </tr>
+                        <tr>
+                            <td >bankCode</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >
+                                <p>银行代码，通道编码为VNBANKQR时可填，选择银行</p>
+                                <p>越南銀行掃碼支援以下銀行: MB、TPB、BIDV、SEAB、ICB、ACB、VCB</p>
+                                <!--
+                                <p>可以直接填写OTHER我司会根据可用通道自动展示可用银行</p>
+                                <p>若需指定银行请参考以下代收银行编码</p>
+                                <p>越南转卡支援以下银行ACB ABB DGB EXIM VCB BIDV VTB TCB STB MB HDB TPB SGB VPB</p>
+                                <p>越南银行扫码支援以下银行TCB ACB VCB BIDV VTB MB</p>
+                                <p>越南直连支援以下银行TCB ACB VCB VTB BIDV MB</p>
+                                -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td >bankAccountName</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >付款人姓名，可不填，仅用于核对上分</td>
+                        </tr>
+                        <tr>
+                            <td >bankMemo</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >指定付言，可不填，若贵司想要自订付言，请确保每个订单的付言不一样</td>
+                        </tr>
+                        <tr>
+                            <td >is_revise_wrong_amount	</td>
+                            <td >Number</td>
+                            <td >否</td>
+                            <td >0为否、1为是、默认0，是否自动修正金额上分，若支付金额与订单金额不同但付言正确时，我司会按照实际支付金额上分，并且回调会有payAmount来告知贵司实际金额。 is_revise_wrong_amount=1 时， 只要付言符合，我司会自动修改金额且回调若金额不变payAmount 与amount是相同的is_revise_wrong_amount =0 时， 不会自动修改金额，若我司强制修改金额回调， amount会按照修改金额为准，不会再给payAmount栏位</td>
+                        </tr>
+                        <tr>
+                            <td >is_return_qr</td>
+                            <td >Number</td>
+                            <td >否</td>
+                            <td >0为否、1为是、默认0，银行扫码通道、MOMO、Viettel、Zalo适用,若为1会回传收款二维码的内容</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >Number</td>
+                            <td >否</td>
+                            <td >请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&mchOrderId=123456&amount=100000&payMethod=VNBANKQR&notifyUrl=https://www.google.com&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求返回内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >code</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >状态码200 表示成功，其它都视为失败</td>
+                        </tr>
+                        <tr>
+                            <td >data.payUrl</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >支付网址，当订单创建成功后将返回支付网址。</td>
+                        </tr>
+                        <tr>
+                            <td >data.bankName</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >收款银行名称。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >data.bankAccount</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >收款银行卡号。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >data.bankOwner</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >银行卡收款人姓名。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >data.bankMemo</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >附言。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >data.bankLogo</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >银行logo。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >data.payQrcode</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >收款支付码，base64格式。（当通道为：VNBANKQR2、VNMO2MO、VNZA2LO、VNVT2PAY时返回）</td>
+                        </tr>
+                        <tr>
+                            <td >message</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >失败原因，当订单创建失败时将显示创建失败原因</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>异步回调</b></p>
+                <p>当付款成功时，我方将传送回调至提单时填入的notifyUrl，回调内容如下，接收到我司回调时，请回传小写success 已表示成功</p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >String</td>
+                            <td >商户编号</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >商户订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >amount</td>
+                            <td >Integer</td>
+                            <td >订单金额。</td>
+                        </tr>
+                        <tr>
+                            <td >payAmount</td>
+                            <td >String</td>
+                            <td >订单实际金额。</td>
+                        </tr>
+                        <tr>
+                            <td >isPaid</td>
+                            <td >Integer</td>
+                            <td >支付状态，1为已支付，0为未支付</td>
+                        </tr>
+                        <tr>
+                            <td >payMethod</td>
+                            <td >Integer</td>
+                            <td >支付方式编号 7:越南银行QR; 8:越南ZALO; 9:越南MOMO; 10:越南ViettelPay</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >String(32)</td>
+                            <td >签名，请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&mchOrderId=123456&amount=100000&payAmount=1000&isPaid=1&payMethod=7&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="codeDemo">
+                    <h2 style="position: relative; display: block; text-align: center; ">支付接口测试</h2>
+<div style="width: 60%; position: relative; box-sizing: border-box; overflow: hidden; margin: auto; padding: 5px;">
+<div class="form-group mb-0"><label for="login_account">商户ID mchId</label><input type="text" class="form-control" id="mchId" aria-describedby="emailHelp"></div>
+<div class="form-group mb-0"><label for="password">订单号mchOrderId</label><input type="text" class="form-control" id="mchOrderId"></div>
+<div class="form-group mb-0"><label for="password">支付方式编号payMethod</label><input type="text" class="form-control" id="payMethod"></div>
+<div class="form-group mb-0"><label for="password">订单金额amount</label><input type="text" class="form-control" id="amount"></div>
+<div class="form-group mb-0"><label for="password">支付结果回调网址</label><input type="text" class="form-control" id="notifyUrl"></div>
+<div class="form-group mb-0"><label for="password">商户密钥</label><input type="text" class="form-control" id="sjsign"></div>
+<div class="form-group mb-0"><label for="password">请求签名sign</label><input type="text" class="form-control" id="sign"></div>
+<div style="display: none; text-align: left;" class="low_datatext">原数据：<code></code></div>
+<div style="display: block; text-align: center;"><button id="getDataMd5" type="button" class="btn btn-primary">生成sign</button><!-- <button type="button" class="btn btn-primary ml-2">提交支付</button> --></div>
+</div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="apiBox" style="margin-top: 20px;">
+            <h2 class="tit">代收订单查询接口</h2>
+            <div class="cont" style="position: relative; box-sizing: border-box; padding-left: 20px;">
+                <p><b>地址：</b><code>https://pay2world.co/api/pay/order/Query</code></p>
+                <p><b>调用方式：</b><code>POST</code></p>
+                <p><b>数据格式：</b><code>JSON</code></p>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >mchId</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >商户ID，请于商户后台->基本信息查看ID</td>
+                        </tr>
+                        <tr>
+                            <td >mchOrderId</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >商户订单号，必须为唯一订单号。</td>
+                        </tr>
+                        <tr>
+                            <td >sign</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >请求签名，将请求参数按照参数名ASCII码排序后，再加上&sign=商户密钥后进行md5运算示例：
+                                <code>mchId=10000&mchOrderId=123456&sign=商戶密钥</code>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p style="font-size: 16px; margin: 30px 0 15px;"><b>请求返回内容</b></p>
+                <table class="table table-bordered">
+                    <thead style="color: rgb(58, 58, 58);">
+                        <tr class="active firstRow">
+                            <td style="">参数名</td>
+                            <td style="">类型</td>
+                            <td style="">必填</td>
+                            <td style="">说明</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >code</td>
+                            <td >Integer</td>
+                            <td >是</td>
+                            <td >状态码200 表示成功，其它都视为失败</td>
+                        </tr>
+                        <tr>
+                            <td >data.isPaid</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >支付状态0为未支付、1为已支付</td>
+                        </tr>
+                        <tr>
+                            <td >data.isGotReceipt</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >回执状态0为未收到回执、1为已收到回执</td>
+                        </tr>
+                        <tr>
+                            <td >data.amount</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >支付金额</td>
+                        </tr>
+                        <tr>
+                            <td >data.payAmount</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >实际支付金额</td>
+                        </tr>
+                        <tr>
+                            <td >data.costFee</td>
+                            <td >Number</td>
+                            <td >是</td>
+                            <td >手续费</td>
+                        </tr>
+                        <tr>
+                            <td >data.createdAt</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >创建时间</td>
+                        </tr>
+                        <tr>
+                            <td >data.paidAt</td>
+                            <td >String</td>
+                            <td >是</td>
+                            <td >支付时间</td>
+                        </tr>
+                        <tr>
+                            <td >message</td>
+                            <td >String</td>
+                            <td >否</td>
+                            <td >失败原因，当订单创建失败时将显示创建失败原因</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p style="text-align: center; color: #cacaca; font-size: 14px;">@世界付，2023~2024</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+{% extends 'cms/base.html' %}
+
+{% block head %}
+    <style>
+        .classifyTotal{display: flex;position: relative;box-sizing: border-box;justify-content: space-between;align-items: center;margin-bottom: 20px;}
+        .classifyTotal .totalItem{width: 24%;position: relative;box-sizing: border-box;overflow: hidden;background-color: #FFFFFF;border-radius: 5px;}
+        .totalItem .card-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 38px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .totalItem .card_tag_gl{box-sizing: border-box;margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .totalItem .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .totalItem .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .totalItem .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .totalItem .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+        .totalItem .card-content{padding: 15px;position: relative;box-sizing: border-box;overflow: hidden;}
+
+        /* 面板 */
+        .cardt{position: relative;background-color: #FFFFFF;overflow: hidden;border-radius: 5px;margin-bottom: 20px;}
+        .cardt .cardt-head{display: flex;justify-content: space-between;align-items: center;position: relative;min-height: 39px;padding: 0 12px;font-size: 14px;border-bottom: 1px solid #f0f0f0;}
+        .cardt .cardt-content{position: relative;overflow: hidden;padding: 20px;}
+        .cardt .cardt_tag{box-sizing: border-box; cursor: pointer; margin: 0;padding: 0;color: rgba(0, 0, 0, 0.88);font-size: 12px;line-height: 23px;list-style: none;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';display: inline-block;height: auto;margin-inline-end: 8px;padding-inline: 7px;white-space: nowrap;background: rgba(0, 0, 0, 0.02);border: 1px solid #d9d9d9;border-radius: 4px;opacity: 1;transition: all 0.2s;text-align: start;}
+        .cardt .tag-green{color: #389e0d;background: #f6ffed;border-color: #b7eb8f;}
+        .cardt .tag-greenblue {color: #0958d9;background: #e6f4ff;border-color: #91caff;}
+        .cardt .tag-orange {color: #d46b08;background: #fff7e6;border-color: #ffd591;}
+        .cardt .tag-purple {color: #531dab;background: #f9f0ff;border-color: #d3adf7;}
+    </style>
+
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="col-12">
+        <div class="classifyTotal">
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>商户总余额</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-purple">总</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">{{ format_money(total_balance_amount) or 0 }}</span>
+                        <div>
+                            <img src="/assets/images/qbao.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>今日增长</span>
+                        <span>+0.00%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>今日订单数量</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-greenblue">日</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">{{ orderDayCount or 0 }}</span>
+                        <div>
+                            <img src="/assets/images/data.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>订单总数量</span>
+                        <span>{{ allOrderCount or 0 }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>今日代收金额</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-green">日</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">{{ format_money(day_actual_amount) or 0 }}</span>
+                        <div>
+                            <img src="/assets/images/ziyuan.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>总代收金额</span>
+                        <span>{{ format_money(day_actual_amount) or 0 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="totalItem">
+                <div class="card-head">
+                    <div><b>今日代付金额</b></div>
+                    <div>
+                        <span class="card_tag_gl tag-orange">日</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 12px 12px 12px;">
+                        <span class="ds-text" style="font-size: 23px;">0</span>
+                        <div>
+                            <img src="/assets/images/jine.png" alt="" style="display: inline-block; height: 40px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem;">
+                        <span>总代付金额</span>
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

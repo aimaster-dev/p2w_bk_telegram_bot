@@ -1,0 +1,165 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<script>
+
+    function post_form_data(action, data_uuid = '') {
+        let receive_bankacrd_account = $.trim($("#receive_bankacrd_account").val());
+        let amount = $.trim($("#amount").val());
+        let receive_time = $.trim($("#receive_time").val());
+        let note = $.trim($("#note").val());
+        if (!receive_bankacrd_account) { return xtalert.showValidationError('请输入收款银行卡卡号！') }
+        if (!amount) { return xtalert.showValidationError('请输入收款金额！') }
+        if (!receive_time) { return xtalert.showValidationError('请选择收款时间！') }
+        let _data = {
+            'receive_bankacrd_account': receive_bankacrd_account,
+            'amount': amount,
+            'receive_time': receive_time,
+            'note': note,
+            'data_uuid': data_uuid ? data_uuid : '',
+            'action': action,
+        }
+        {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+        let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+        if (!agentadmin_uuid) { return xtalert.showValidationError('请选择绑定的代理！') }
+        _data[agentadmin_uuid] = agentadmin_uuid
+        {% endif %}
+        xtajax.post({
+            'data': _data,
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('提交成功！');
+                    reloadpage();
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+
+    }
+
+    // 统计信息
+    function getTotalInfo() {
+        Swal({
+            title: false,
+            text: '请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'data': { 'action': 'get_total_info' },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let html = '<div class="formBox">'
+                    html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总笔数：</b>' + data.data.number_count + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>已处理订单数：</b>' + data.data.processed_cnt + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>未处理订单数：</b>' + data.data.unprocessed_cnt + '</p>'
+                    html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总金额：</b>' + data.data.amount_total + '</p>'
+                    html += '</div></div>'
+                    Swal({
+                        title: '订单数据统计',
+                        width: 550,
+                        html: html,
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        //position: 'top-start'
+                    })
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+    function clearorder_Time() {
+        $("input[name='proc_time']").val('');
+    }
+
+    function clearproc_Time() {
+        $("input[name='create_time']").val('');
+    }
+
+</script>
+{% endblock %}
+
+{% block searchInput %}
+<select class="form-control mr-sm-2 mb-2" name="state" aria-label="">
+    <option value="">处理状态</option>
+    <option value="1" {% if search_res.state=='1' %}selected{% endif %}>已处理</option>
+    <option value="0" {% if search_res.state=='0' %}selected{% endif %}>未处理</option>
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="amount" value="{{ search_res.amount or '' }}"
+    placeholder="金额" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" name="receive_bankacrd_account"
+    value="{{ search_res.receive_bankacrd_account or '' }}" placeholder="收款银行卡号" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2" name="bank_bill_id" value="{{ search_res.bank_bill_id or '' }}"
+    placeholder="原订单ID" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}"
+    placeholder="记录时间" aria-label="" onchange="clearorder_Time()">
+<input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="proc_time" value="{{ search_res.proc_time }}"
+    placeholder="处理时间" aria-label="" onchange="clearproc_Time()">
+{% endblock %}
+
+{% block other_function %}
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="getTotalInfo()">统计</span>
+<span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="post_update_statu('export_order', '666', '确认导出当前订单数据？')">导出数据</span>
+<span class="btn btn-secondary ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="post_update_statu('createTestOrder', '666', '确认生成5个测试订单？')">生成测试订单</span>
+{% endblock %}
+
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            <td>收款银行卡号【{{ total }}】</td>
+            <td>原订单ID</td>
+            <td>金额</td>
+            <td>记录时间</td>
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <td>代理商</td>
+            {% endif %}
+            <td>处理时间</td>
+            <td>处理状态</td>
+            <td>处理人</td>
+            <td>订单备注</td>
+            <td>备注</td>
+            <td width="180">操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>{{ data.receive_bankacrd_account or '' }}</td>
+            <td>{{ data.bank_bill_id or '' }}</td>
+            <td>{{ format_money(data.amount or '0') }}</td>
+            <td>{{ format_time_func(data.create_time) }}</td>
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <td>{{ data.agentadmin_data.account }}-{{ data.agentadmin_data.username }}</td>
+            {% endif %}
+            <td>{{ format_time_func(data.proc_time) }}</td>
+            <td>{% if data.state %}<span class="ant-tag ant-tag-green">已处理</span>{% else %}<span
+                    class="ant-tag ant-tag-red">未处理</span>{% endif %}</td>
+            <td>{{ data.user_data.account or '' }}</td>
+            <td>{{ data.order_note or '' }}</td>
+            <td>{{ data.note or '' }}</td>
+            <td>
+                <span class="ant-tag ant-tag-blue"
+                    onclick="oneinput('updateNote', '{{ data.uuid }}', '输入备注内容', '输入备注内容')">备注</span>
+                <span class="ant-tag ant-tag-blue"
+                    onclick="post_update_statu('updateState', '{{ data.uuid }}', '确认处理该数据？')">处理</span>
+                <span class="ant-tag ant-tag-red"
+                    onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除</span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用！-世界付</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <script src="/static/common/jquery.js"></script>
+    <link rel="stylesheet" href="/static/common/bootstrap/css/bootstrap.min.css">
+    <script src="/static/common/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/common/bootstrap/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/common/sweetalert2/sweetalert2.min.css">
+    <script src="/static/common/sweetalert2/promise.min.js"></script>
+    <script src="/static/common/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/static/common/sweetalert2/xtalert.js"></script>
+    <script src="/static/common/xtajax.js"></script>
+    <script src="/static/common/js/common.js"></script>
+    <link rel="stylesheet" href="{{ url_for('assets', filename='/world/iconfont/iconfont.css') }}">
+    <style>
+        *{
+            margin: 0; padding: 0;
+        }
+        body, html{
+            color: rgba(4,15,66,.9);
+            font-size: 14px;
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Helvetica Neue',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+            font-variant: tabular-nums;
+            line-height: 1.5;
+            font-feature-settings: 'tnum';
+            background-color: #FFFFFF;
+        }
+        .loginBox{
+            display: block;
+            position: relative;
+            box-sizing: border-box;
+            width: 500px;
+            margin: auto;
+        }
+        .logo{
+            display: block;
+            position: relative;
+            height: 100px;
+            text-align: center;
+            overflow: hidden;
+            margin: 20px 0 35px;
+        }
+        .logo img{
+            height: 100%;
+            display: block;
+            margin: auto;
+        }
+        .login{
+            width: 100%;
+            padding: 40px 76px 20px;
+            box-shadow: 0 0 8px 0 rgba(29,39,84,.1);
+            border-radius: 8px;
+            color: rgba(4,15,66,.9);
+            background-color: #fff;
+            box-sizing: border-box;
+            margin: 0;
+            font-size: 14px;
+            font-variant: tabular-nums;
+            line-height: 1.5;
+            list-style: none;
+            font-feature-settings: 'tnum';
+            position: relative;
+            margin-top: 150px;
+        }
+        .login h2{
+            text-align: center;
+            margin: 0 0 24px;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .loglable::before{
+            display: inline-block;
+            margin-right: 4px;
+            color: #ff4236;
+            font-size: 14px;
+            font-family: SimSun,sans-serif;
+            line-height: 1;
+            content: '*';
+        }
+        .loginBtn{
+            color: #fff;
+            background-color: #1880ff;
+            border-color: #1880ff;
+            text-shadow: 0 -1px 0 rgba(0,0,0,.12);
+            box-shadow: 0 2px 0 rgba(0,0,0,.045);
+            width: 100%;
+            height: 40px;
+            padding: 0 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            border: none;
+            -ms-transition: all .5s ease;
+            -moz-transition: all .5s ease;
+            -webkit-transition: all .5s ease;
+            -o-transition: all .5s ease;
+            transition: all .5s ease;
+            margin: 25px auto 30px;
+        }
+        .loginBtn:hover{
+            opacity: .8;
+        }
+        .verify_code{
+            display: none;
+        }
+    </style>
+    <script>
+        function psot_login() {
+            let login_account = $.trim($("#login_account").val());
+            let password = $.trim($("#password").val());
+            let verify_code = $.trim($("#verify_code").val());
+            if (!login_account){return xtalert.alertErrorToast('请输入账户')}
+            if (!password){return xtalert.alertErrorToast('请输入密码')}
+            Swal({
+                title: false,
+                text: '操作中，请稍等...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'pwdLogin', 'account':login_account, 'password':password, 'verify_code': verify_code},
+                'success': function (data){
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('登录成功！');
+                        let tt = setTimeout(function () {
+                            window.location.href='{{ url_for('admin.cms_index') }}';
+                        }, 500)
+                    }else if (data.code === 401){
+                        if ($(".verify_code").css('display') === 'none'){
+                            $(".verify_code").show(0);
+                            if (data.data.is_show_qrcode && data.data.generate_qrcode){
+                                let generate_qrcode = data.data.generate_qrcode;
+                                $("#showQrcode").attr('onclick', "xtalert.alertImg('Google 验证', '" + generate_qrcode + "', '', '', false)")
+                                $("#showQrcode").show(0);
+                            }else{
+                                $("#showQrcode").hide(0);
+                            }
+                            return xtalert.close();
+                        }else{
+                            if (data.data.is_show_qrcode && data.data.generate_qrcode){
+                                let generate_qrcode = data.data.generate_qrcode;
+                                $("#showQrcode").attr('onclick', "xtalert.alertImg('Google 验证', '" + generate_qrcode + "', '', '', false)")
+                                $("#showQrcode").show(0);
+                            }else{
+                                $("#showQrcode").hide(0);
+                            }
+                            return xtalert.alertErrorToast(data.message);
+                        }
+                    } else {
+                        return xtalert.alertErrorToast(data.message);
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+
+    <div style="background: url(/static/cms/images/bjj.jpg) no-repeat center center/cover; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+
+    <div class="loginBox">
+
+        <div class="login">
+            <div class="logo">
+                <img src="/public/world/img/paylogo4.png" alt="">
+            </div>
+            <div class="form-group">
+                <label for="login_account" class="loglable">输入您的账户</label>
+                <input type="text" class="form-control" id="login_account" aria-describedby="emailHelp">
+            </div>
+            <div class="form-group">
+                <label for="password" class="loglable">输入您的密码</label>
+                <input type="password" class="form-control" id="password">
+            </div>
+            <div class="form-group verify_code" style="position: relative">
+                <label for="text" class="loglable">输入Google验证码</label>
+                <input type="text" class="form-control" id="verify_code" alt="" aria-label="" style="padding-right: 39px;">
+                <div id="showQrcode" style="position: absolute;right: 3px;top: 28px;height: 32px;width: 30px;display: flex;justify-content: center;align-items: center;cursor: pointer;"><i class="iconfont icon-saomiaoshibie"></i></div>
+            </div>
+            <button type="button" class="loginBtn" onclick="psot_login()">登录</button>
+        </div>
+
+    </div>
+
+</body>
+</html>

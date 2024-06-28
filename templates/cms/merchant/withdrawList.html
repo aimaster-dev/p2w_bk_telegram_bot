@@ -1,0 +1,172 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+        // 统计信息
+        function getTotalInfo() {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_total_info'},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox">'
+                        html += '<div style="height: 26rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总笔数：</b>'+data.data.number_count+'</p>'
+                        html += '<p style="margin-bottom: 20px; font-size: 14px; padding-left: 30px; text-align: left;"><b>总金额：</b>'+js_format_money(data.data.amount_total)+'</p>'
+                        html += '</div></div>'
+                        Swal({
+                            title: '订单数据统计',
+                            width: 550,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            //position: 'top-start'
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        // 支付码
+        function getPayInfo(data_uuid) {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'get_pay_info', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        let html = '<div class="formBox" style="padding: 0px;">'+
+                            '<div style="height: 32rem; position: relative; box-sizing: border-box; overflow-y: auto;">'
+                            if (data.data.statu === '{{ WITHDRAW_STATUS.success }}'){
+                                html += '<img src="' + data.data.payQrcode +'" alt="" style="display: block; width: 115px; margin: auto; margin-bottom: 30px;">'
+                                html += '<p style="margin-bottom: 20px; font-size: 16px;"><b>已支付</b></p>'
+                            }else if (data.data.statu === '{{ WITHDRAW_STATUS.reject }}'){
+                                html += '<img src="' + data.data.payQrcode +'" alt="" style="display: block; width: 115px; margin: auto; margin-bottom: 15px;">'
+                                html += '<p style="margin-bottom: 20px; font-size: 16px;"><b>已拒绝支付</b></p>'
+                            }else{
+                                html += '<img src="' + data.data.payQrcode +'" alt="" style="display: block; width: 260px; margin: auto; margin-bottom: 30px;">'
+                            }
+                            html += '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款银行：'+ data.data.receive_bank +'</p>'+
+                            '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款卡号：'+ data.data.receive_account +'</p>'+
+                            '<p style="padding-left: 15%;text-align: left; margin-bottom: 10px; font-size: 14px;">收款人：'+ data.data.receive_owner +'</p>'+
+                            '<p style="padding-left: 15%;text-align: left; font-size: 14px;">金额：'+ js_format_money(data.data.order_amount) +'</p>'+
+                            '</div>'
+                        '</div>'
+                        Swal({
+                            title: '',
+                            width: 400,
+                            html: html,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            position: 'top-start'
+                        })
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">处理状态</option>
+        {% for WITHDRAW_STATU in WITHDRAW_STATUS.name_arr %}
+        <option value="{{ WITHDRAW_STATU }}" {% if search_res.statu == WITHDRAW_STATU %}selected{% endif %}>{{ WITHDRAW_STATUS.name_dict.get(WITHDRAW_STATU) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="agentadmin_account" value="{{ search_res.agentadmin_account }}" placeholder="代理账户" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant_name_id" value="{{ search_res.merchant_name_id }}" placeholder="商家名称或商家ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="bankcard_account" value="{{ search_res.bankcard_account }}" placeholder="收款银行卡号" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="申请时间" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;" onclick="getTotalInfo()">统计</span>
+    <span class="btn btn-warning ml-1 mb-2" style="color: white; display: flex; align-items: center;"
+    onclick="post_update_statu('export_order', '666', '确认导出当前数据？')">导出数据</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户名称</td>
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                <td>代理账户</td>
+                {% endif %}
+                <td>商家ID</td>
+                <td>收款银行</td>
+                <td>收款卡号</td>
+                <td>收款人姓名</td>
+                <td>提现金额</td>
+                <td>手续费</td>
+                <td>实际扣除金额</td>
+                <td>处理状态</td>
+                <td>处理人</td>
+                <td>处理时间</td>
+                <td>申请时间</td>
+                <td width="260" align="left">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.merchant_data.merchant_name }}</td>
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                    <td>{{ data.agentadmin_data.account }}</td>
+                    {% endif %}
+                    <td>{{ data.merchant_data.merchant_id }}</td>
+                    <td>{{ data.bank_data.shortName or data.bank_data.code or data.payee_bank or '' }}</td>
+                    <td>{{ data.bankcard_data.account or data.payee_bankcard or '' }}</td>
+                    <td>{{ data.bankcard_data.account_username or data.payee_username or '' }}</td>
+                    <td>{{ format_money(data.amount) }}</td>
+                    <td>{{ format_money(data.repay_amount)  }}</td>
+                    <td>{{ format_money(data.actual_amount) }}</td>
+                    <td>{{ WITHDRAW_STATUS.name_dict.get(data.statu) }}</td>
+                    <td>{{ data.adminuser.account or '' }}</td>
+                    <td>{{ format_time_func(data.dealwith_time) }}</td>
+                    <td>{{ format_time_func(data.create_time) }}</td>
+                    <td align="left">
+                        <span class="ant-tag ant-tag-blue" onclick="getPayInfo('{{ data.uuid }}')">支付码</span>
+                        {% if current_admin_user.is_superadmin %}
+                        <span class="ant-tag ant-tag-red" onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除？')">删除</span>
+                        {% endif %}
+                        {% if data.statu == WITHDRAW_STATUS.review %}
+                        <span class="ant-tag ant-tag-red" onclick="post_update_statu('withdrawReject', '{{ data.uuid }}', '确认拒绝结算？')">拒绝</span>
+                        <span class="ant-tag ant-tag-blue" onclick="post_update_statu('withdrawSuccess', '{{ data.uuid }}', '确认通过审核？')">通过</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>MOMO</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <style>
+        body {
+            background-image: url("/public/world/img/pc-bg.png");
+            background-size: cover;
+            width: 100vw;
+            color: #475467;
+        }
+
+        main {
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+
+<body>
+<main>
+    <div class="sm:flex sm:items-center sm:justify-center sm:h-full">
+        <div class="sm:py-12 sm:flex sm:bg-[#e0e8ff] sm:overflow-hidden sm:rounded-2xl">
+            <div class="p-3 pt-0 flex flex-col items-center sm:flex-1 sm:border-r-[1px] sm:border-r-white">
+                <div
+                        style="position: relative; background-color: #e0e8ff;padding: 20px; padding-left: 30px; padding-right: 30px;margin-top: 10px;padding-top: 0; border-radius: 30px;"
+                        class="flex items-center flex-col">
+                    <div class="sm:absolute sm:bottom-0 sm:bg-white sm:px-[10px] sm:rounded-md">
+                        <p class="text-red-700 font-bold text-[20px] mb-[5px] mt-[5px] sm:mt-0 sm:mb-0" id="jsText">
+                            00:00:00</p>
+                    </div>
+                    <img id="qrcode" src="{{ payQrcode }}" rel="nofollow" alt="qr code" class="w-34"/>
+                    <a href="www.qr-code-generator.com/" rel="nofollow"></a>
+                </div>
+                <button class="sm:hidden font-extrabold text-[22px] px-5 rounded-full text-white py-0.5 mt-4 bg-blue-500">
+                    MỞ MOMO
+                </button>
+                <div class="w-[90%] mx-auto mt-4 pb-6 hidden sm:block">
+                    <h2 class="text-center font-bold text-lg mb-[10px] text-[20px] text-[#352c75]">
+                        Hỗ trợ nhận tiền từ tất cả các ngân hàng
+                    </h2>
+
+                    <ol class="list-decimal text-sm">
+                        <li class="ml-4 text-black mb-1.5 text-[16px] font-semibold">
+                            Có thể quét mã QR hoặc bấm Mở MOMO để tự động kết nối app MOMO (Khuyêndùng)
+                        </li>
+                        <li class="ml-4 text-black mb-1.5 text-[16px]  font-semibold">
+                            Một mã QR chỉ được sử dụng chô MỘT giao dịch duy nhất
+                        </li>
+                        <li class="ml-4 text-black mb-1.5 text-[16px]  font-semibold">
+                            KHÔNG sửa đổi số tiền và nội dung chuyển khoản
+                        </li>
+                        <li class="ml-4 text-black text-[16px]  font-semibold">
+                            Lưu lại biên lai giao dịch để đối chiếu khi cần thiết
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="w-[90%] bg-[#e0e8ff] rounded-t-[20px] rounded-b-[10px] mt-[10px] pb-2 mx-auto sm:flex-1">
+                <div
+                        class="text-center mb-[14px] pt-2 flex justify-center items-center sm:flex-col text-[24px] sm:text-[36px]">
+                    <img src="https://api.kylan88.com/img/918vn/logo-momo.png" alt="logoMomo"
+                         class="h-[60px] sm:h-[120px]"/>
+                    <span class="font-extrabold text-[#352c75] ml-2">
+              MOBILE MONEY
+            </span>
+                </div>
+
+                <div class="flex justify-between items-center bg-white rounded-full w-[90%] mx-auto px-3 py-2 mb-3">
+                    <p class="font-medium text-sm text-blue-500">
+                        <span class="font-bold">HỌ TÊN:</span> {{ bankcard_data.account_username }}
+                    </p>
+                    <div class="bg-blue-500 rounded-full px-2 font-medium py-1 text-sm flex items-center text-white cursor-pointer"
+                         onclick="copyText('{{ bankcard_data.account_username }}')">
+                        Sao chép
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-white rounded-full w-[90%] mx-auto px-3 py-2 mb-3">
+                    <p class="font-medium text-sm text-blue-500"><span class="font-bold">Số thẻ ngân hàng:</span>{{ bankcard_data.account }}</p>
+                    <div
+                            class="bg-blue-500 rounded-full px-2 font-medium text-sm py-1 flex items-center text-white cursor-pointer" onclick="copyText('{{ bankcard_data.account }}')">
+                        Sao chép
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-white rounded-full w-[90%] mx-auto px-3 py-2 mb-3">
+                    <p class="font-medium text-sm text-blue-500"><span
+                            class="font-bold">SỐ TIỀN:</span>{{ format_money(order_data.order_amount) }}</p>
+                    <div
+                            class="bg-blue-500 rounded-full px-2 font-medium text-sm py-1 flex items-center text-white cursor-pointer" onclick="copyText('{{ format_money(order_data.order_amount) }}')">
+                        Sao chép
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center bg-white rounded-full w-[90%] mx-auto px-3 py-2 mb-3">
+                    <p class="font-medium text-sm text-blue-500"><span
+                            class="font-bold">GHI CHÚ:</span>{{ order_data.bank_memo }}</p>
+                    <div
+                            class="bg-blue-500 rounded-full px-2 font-medium text-sm py-1 flex items-center text-white cursor-pointer" onclick="copyText('{{ order_data.bank_memo }}')">
+                        Sao chép
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-[90%] mx-auto mt-4 pb-6 sm:hidden">
+                <h2 class="text-center font-bold text-lg mb-[10px] text-[20px] text-[#352c75]">
+                    Hỗ trợ nhận tiền từ tất cả các ngân hàng
+                </h2>
+
+                <ol class="list-decimal text-sm">
+                    <li class="ml-4 text-black mb-1.5 text-[16px] font-semibold">
+                        Có thể quét mã QR hoặc bấm Mở MOMO để tự động kết nối app MOMO (Khuyên
+                        dùng)
+                    </li>
+                    <li class="ml-4 text-black mb-1.5 text-[16px]  font-semibold">
+                        Một mã QR chỉ được sử dụng chô MỘT giao dịch duy nhất
+                    </li>
+                    <li class="ml-4 text-black mb-1.5 text-[16px]  font-semibold">
+                        KHÔNG sửa đổi số tiền và nội dung chuyển khoản
+                    </li>
+                    <li class="ml-4 text-black text-[16px]  font-semibold">
+                        Lưu lại biên lai giao dịch để đối chiếu khi cần thiết
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="/static/common/jquery.js"></script>
+<script src="/static/common/xtajax.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/sweetalert2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/promise.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='common/sweetalert2/xtalert.js') }}"></script>
+<script>
+
+    // 复制text
+    function copyText(message) {
+        var input = document.createElement("input");
+        input.value = message;
+        document.body.appendChild(input);
+        input.select();
+        input.setSelectionRange(0, input.value.length)
+        document.execCommand('Copy');
+        document.body.removeChild(input);
+        xtalert.alertSuccessToast('Đã sao chép thành công！')
+    }
+
+    $(document).ready(function () {
+
+        var check_order = setInterval(function () {
+            xtajax.post({
+                'url': '{{ url_for('api.order_query_api') }}',
+                'data': {'action': 'queryStatu', 'orderUid': '{{ orderUuid }}', 'time': '{{ time }}'},
+                'success': function (data) {
+                    if (data.code === 200) {
+                        if (data.data.is_state) {
+                            window.location.href = '{{ url_for('front.pay_success_view', order_id=orderId) }}';
+                        }
+                        if (data.data.finish) {
+                            return clearInterval(check_order);
+                        }
+                    } else {
+                        console.log(data.message);
+                    }
+                }
+            })
+        }, 3000)
+
+        DaoJiShi('{{ orderend_time }}', '{{ crr_time }}')
+    })
+
+    function getDate(strDate) {
+        var _date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
+            function (a) {
+                return parseInt(a, 10) - 1;
+            }).match(/\d+/g) + ')');
+        return _date;
+    }
+
+    function getLocalTime(nS) {
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+    }
+
+    function DaoJiShi(openTime1, serverTime1) {
+        console.log('openTime1:', openTime1);
+        console.log('serverTime1:', serverTime1);
+        var openTime = getDate(openTime1);
+        var serverTime = getDate(serverTime1);
+        console.log('serverTime:', serverTime);
+        var difftime = (openTime - serverTime) / 1000;
+
+        var data_func = function () {
+            if (difftime > 0) {
+                var hours = parseInt(difftime / 3600);    // 小时 60*60 总小时数-过去的小时数=现在的小时数
+                var minutes = parseInt(difftime % 3600 / 60); // 分钟 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
+                var seconds = parseInt(difftime % 60);  // 以60秒为一整份 取余 剩下秒数
+                if (hours < 10) {
+                    var hours = '0' + hours;
+                }
+                if (minutes < 10) {
+                    var minutes = '0' + minutes;
+                }
+                if (seconds < 10) {
+                    var seconds = '0' + seconds;
+                }
+                var dj_str = hours + ':' + minutes + ':' + seconds
+                $("#jsText").text(dj_str);
+            } else {
+                $("#jsText").html('Đơn hàng đã hết hạn!');
+                let rr = '/public/world/img/sb.png'
+                $("#qrcode").attr('src', rr)
+                clearInterval(timer);
+                return
+            }
+            --difftime;
+        }
+        var timer = setInterval(function () {
+            try {
+                data_func();
+            } catch (e) {
+                clearInterval(timer);
+                window.location.replace(window.location.href);
+            }
+        }, 1000);
+
+    }
+
+</script>
+
+
+</body>
+</html>

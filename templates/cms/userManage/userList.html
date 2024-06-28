@@ -1,0 +1,445 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <link rel="stylesheet" href="/static/common/layui/layui/css/layui.css">
+    <style>
+        .addUserBox{background: #FFFFFF;padding: 20px;position: relative;width: 100%;}
+        .addUserBox .portrait{width: 100%;margin-bottom: 15px;position: relative;box-sizing: border-box;overflow: hidden;padding: 0 10px;}
+        .portrait .img{width: 60px;height: 60px;position: relative;box-sizing: border-box;border-radius: 50%;float: left;margin: 0 15px; overflow: hidden;}
+        .portrait .img img{width: 100%;height: 100%;display: inline-block;}
+        .addUserBox .list-group-item{border: none;color: #545b62;font-size: 12px;margin-bottom: 5px;}
+        .addUserBox .list-group-item input{font-size: 12px;}
+        .addUserBox .list-group-item select{font-size: 12px;}
+        .loglable::before{display: inline-block;margin-right: 4px;color: #ff4236;font-size: 14px;font-family: SimSun,sans-serif;line-height: 1;content: '*';}
+    </style>
+    <script>
+    
+        function post_user_data(action, data_uuid) {
+            if (!action){return xtalert.alertError('缺少参数："action"！')}
+            let account = $.trim($("#account").val());
+            let username = $.trim($("#username").val());
+            let outm_min_money = $.trim($("#outm_min_money").val());
+            let outm_max_money = $.trim($("#outm_max_money").val());
+            let bankcard_info = $.trim($("#bankcard_info").val());
+            let password = $.trim($("#password").val());
+            let confirm_password = $.trim($("#confirm_password").val());
+
+            let telephone = $.trim($("#telephone").val());
+            let note = $.trim($("#note").val());
+            let role_code = $.trim($("#role_code").val());
+            let is_addcard = $.trim($("#is_addcard").val());
+            let is_test_withdraw_card = $.trim($("#is_test_withdraw_card").val());
+            let is_clear_deposit = $.trim($("#is_clear_deposit").val());
+            let is_clear_withdraw = $.trim($("#is_clear_withdraw").val());
+            let is_clear_transit = $.trim($("#is_clear_transit").val());
+            let is_clear_other = $.trim($("#is_clear_other").val());
+            let is_clear_log = $.trim($("#is_clear_log").val());
+            if (!account) {return xtalert.showValidationError('请输入账户！')}
+            if (!username) {return xtalert.showValidationError('请输入姓名！')}
+            if (!data_uuid){
+                if (!password) {return xtalert.showValidationError('请输入密码！')}
+                if (!confirm_password) {return xtalert.showValidationError('请输入确认密码！')}
+                if (password !== confirm_password){return xtalert.showValidationError('密码不一致！')}
+                if (!role_code) {return xtalert.showValidationError('请选择用户角色！')}
+            }
+            let _data = {
+                'action': action,
+                'account': account,
+                'username': username,
+                'is_addcard': is_addcard,
+                'is_test_withdraw_card': is_test_withdraw_card,
+                'is_clear_deposit': is_clear_deposit,
+                'is_clear_withdraw': is_clear_withdraw,
+                'is_clear_transit': is_clear_transit,
+                'is_clear_other': is_clear_other,
+                'is_clear_log': is_clear_log,
+                'password': password,
+                'telephone': telephone,
+                'note': note,
+                'role_code': role_code,
+                'data_uuid': data_uuid ? data_uuid : '',
+            }
+            {% if current_admin_user.is_superadmin %}
+                if (!data_uuid){
+                    let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+                    if (!agentadmin_uuid && role_code==='systemuser') {return xtalert.showValidationError('请选择绑定代理！')}
+                    _data['agentadmin_uuid'] = agentadmin_uuid
+                }
+                let is_syscard = $.trim($("#is_syscard").val());
+                let system_paybehalf = $.trim($("#system_paybehalf").val());
+                let login_google_verify_statu = $.trim($("#login_google_verify_statu").val());
+                let cms_ip_whitelist = $.trim($("#cms_ip_whitelist").val());
+                let in_vnbankqr_rate = $.trim($("#in_vnbankqr_rate").val());
+let in_vnzalo_rate = $.trim($("#in_vnzalo_rate").val());
+                let in_vnmomo_rate = $.trim($("#in_vnmomo_rate").val());
+                let in_vnvtpay_rate = $.trim($("#in_vnvtpay_rate").val());
+                let in_vnbankqr2_rate = $.trim($("#in_vnbankqr2_rate").val());
+                let in_vnmo2mo_rate = $.trim($("#in_vnmo2mo_rate").val());
+                let in_vnza2lo_rate = $.trim($("#in_vnza2lo_rate").val());
+                let in_vnvt2pay_rate = $.trim($("#in_vnvt2pay_rate").val());
+                let paybehalf_rate = $.trim($("#paybehalf_rate").val());
+                let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+let issued_money_rate = $.trim($("#issued_money_rate").val());
+                _data['is_syscard'] = is_syscard
+                _data['system_paybehalf'] = system_paybehalf
+                _data['login_google_verify_statu'] = login_google_verify_statu
+                _data['cms_ip_whitelist'] = cms_ip_whitelist
+                _data['in_vnbankqr_rate'] = in_vnbankqr_rate
+_data['in_vnzalo_rate'] = in_vnzalo_rate
+                _data['in_vnmomo_rate'] = in_vnmomo_rate
+                _data['in_vnvtpay_rate'] = in_vnvtpay_rate
+                _data['in_vnbankqr2_rate'] = in_vnbankqr2_rate
+                _data['in_vnmo2mo_rate'] = in_vnmo2mo_rate
+                _data['in_vnza2lo_rate'] = in_vnza2lo_rate
+                _data['in_vnvt2pay_rate'] = in_vnvt2pay_rate
+                _data['paybehalf_rate'] = paybehalf_rate
+                _data['recharge_money_rate'] = recharge_money_rate
+_data['issued_money_rate'] = issued_money_rate
+            {% endif %}
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                _data['outm_min_money'] = outm_min_money
+                _data['outm_max_money'] = outm_max_money
+                _data['bankcard_info'] = bankcard_info
+            {% endif %}
+            Swal({
+                title: false,
+                text: '请求中，请稍等...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            xtajax.post({
+                'data': _data,
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('数据提交成功！')
+                        return reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message)
+                    }
+                }
+            })
+        }
+
+        // 获取谷歌验证码
+        function getGoogleQrcode(data_uuid) {
+            xtajax.post({
+                'data': {'action': 'getGoogleQrcode', 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertImg('Google验证码', data.data.generate_qrcode);
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function update_permission(data_uuid, p) {
+            if (!data_uuid) {
+                swal.showValidationError('修改出错！');
+                return false
+            }
+            var _data = {'action': '_edit_permission', 'data_uuid': data_uuid, 'p': p}
+            xtajax.post({
+                'utl': '',
+                'data': _data,
+                'success': function (data) {
+                    if (data.code === 200) {
+                        $('#permission_div').html(data.message);
+                    } else {
+                        swal.showValidationError(data.message);
+                    }
+                }
+            });
+        }
+
+        {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+        function select_role() {
+            let role_code = $("#role_code").val();
+            if (!role_code) {
+                return;
+            }
+            if (role_code === 'agentadmin') {
+                $("#agentadmin_uuid").parent().hide();
+                
+                $('#in_vnbankqr_rate').parent().show();
+                $('#in_vnzalo_rate').parent().show();
+                $('#in_vnmomo_rate').parent().show();
+                $('#in_vnvtpay_rate').parent().show();
+                $('#in_vnbankqr2_rate').parent().show();
+                $('#in_vnmo2mo_rate').parent().show();
+                $('#in_vnza2lo_rate').parent().show();
+                $('#in_vnvt2pay_rate').parent().show();
+
+                $("#paybehalf_rate").parent().show();
+                $("#recharge_money_rate").parent().show();
+$("#issued_money_rate").parent().show();
+                $("#is_syscard").parent().css('display', 'flex');
+                $("#system_paybehalf").parent().css('display', 'flex');
+                $("#login_google_verify_statu").parent().css('display', 'flex');
+                $("#cms_ip_whitelist").parent().css('display', 'flex');
+                $("#outm_max_money").parent().hide();
+                $("#outm_min_money").parent().hide();
+                $("#bankcard_info").parent().hide();
+            } else if (role_code === 'administrator') {
+                $("#agentadmin_uuid").parent().hide();
+                $('#in_vnbankqr_rate').parent().hide();
+                $('#in_vnzalo_rate').parent().hide();
+                $('#in_vnmomo_rate').parent().hide();
+                $('#in_vnvtpay_rate').parent().hide();
+                $('#in_vnbankqr2_rate').parent().hide();
+                $('#in_vnmo2mo_rate').parent().hide();
+                $('#in_vnza2lo_rate').parent().hide();
+                $('#in_vnvt2pay_rate').parent().hide();                $("#paybehalf_rate").parent().hide();
+                $("#recharge_money_rate").parent().hide();
+$("#issued_money_rate").parent().hide();
+                $("#is_syscard").parent().css('display', 'none');
+                $("#system_paybehalf").parent().css('display', 'none');
+                $("#login_google_verify_statu").parent().css('display', 'none');
+                $("#cms_ip_whitelist").parent().css('display', 'none');
+                $("#outm_max_money").parent().hide();
+                $("#outm_min_money").parent().hide();
+                $("#bankcard_info").parent().hide();
+            } else if (role_code === 'sys_out_money_user') {
+                $("#outm_max_money").parent().show();
+                $("#outm_min_money").parent().show();
+                $("#bankcard_info").parent().show();
+                $("#agentadmin_uuid").parent().hide();
+                $('#in_vnbankqr_rate').parent().hide();
+                $('#in_vnzalo_rate').parent().hide();
+                $('#in_vnmomo_rate').parent().hide();
+                $('#in_vnvtpay_rate').parent().hide();
+                $('#in_vnbankqr2_rate').parent().hide();
+                $('#in_vnmo2mo_rate').parent().hide();
+                $('#in_vnza2lo_rate').parent().hide();
+                $('#in_vnvt2pay_rate').parent().hide();
+                $("#paybehalf_rate").parent().hide();
+                $("#recharge_money_rate").parent().hide();
+$("#issued_money_rate").parent().hide();
+                $("#is_syscard").parent().css('display', 'none');
+                $("#system_paybehalf").parent().css('display', 'none');
+                $("#login_google_verify_statu").parent().css('display', 'none');
+                $("#cms_ip_whitelist").parent().css('display', 'none');
+            } else if (role_code === 'systemuser') {
+                $("#agentadmin_uuid").parent().show();
+                $('#in_vnbankqr_rate').parent().hide();
+                $('#in_vnzalo_rate').parent().hide();
+                $('#in_vnmomo_rate').parent().hide();
+                $('#in_vnvtpay_rate').parent().hide();
+                $('#in_vnbankqr2_rate').parent().hide();
+                $('#in_vnmo2mo_rate').parent().hide();
+                $('#in_vnza2lo_rate').parent().hide();
+                $('#in_vnvt2pay_rate').parent().hide();
+                $("#paybehalf_rate").parent().hide();
+                $("#recharge_money_rate").parent().hide();
+$("#issued_money_rate").parent().hide();
+                $("#is_syscard").parent().css('display', 'none');
+                $("#system_paybehalf").parent().css('display', 'none');
+                $("#login_google_verify_statu").parent().css('display', 'none');
+                $("#cms_ip_whitelist").parent().css('display', 'none');
+                $("#outm_max_money").parent().hide();
+                $("#outm_min_money").parent().hide();
+                $("#bankcard_info").parent().hide();
+            } else if (role_code === 'out_money_user') {
+                $("#agentadmin_uuid").parent().show();
+                $("#outm_max_money").parent().show();
+                $("#outm_min_money").parent().show();
+                $("#bankcard_info").parent().show();
+                $("#in_vnbankqr_rate").parent().hide();
+$('#in_vnbankqr_rate').parent().hide();
+                $('#in_vnzalo_rate').parent().hide();
+                $('#in_vnmomo_rate').parent().hide();
+                $('#in_vnvtpay_rate').parent().hide();
+                $('#in_vnbankqr2_rate').parent().hide();
+                $('#in_vnmo2mo_rate').parent().hide();
+                $('#in_vnza2lo_rate').parent().hide();
+                $('#in_vnvt2pay_rate').parent().hide();  
+                $("#paybehalf_rate").parent().hide();
+                $("#recharge_money_rate").parent().hide();
+$("#issued_money_rate").parent().hide();
+                $("#is_syscard").parent().css('display', 'none');
+                $("#system_paybehalf").parent().css('display', 'none');
+                $("#login_google_verify_statu").parent().css('display', 'none');
+                $("#cms_ip_whitelist").parent().css('display', 'none');
+            }
+        }
+
+        function post_recharge_money(data_uuid) {
+            let note = $.trim($("#note").val());
+            let cz_amount = $.trim($("#cz_amount").val());
+            let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+            if (!cz_amount){ return xtalert.showValidationError('请输入充值金额！')}
+            xtajax.post({
+                'data': {'action': 'rechargeMoney', 'cz_amount': cz_amount, 'recharge_money_rate': recharge_money_rate, 'data_uuid': data_uuid, 'note': note},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('充值成功！');
+                        return reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function post_kc_money(data_uuid) {
+            let jmoney = $.trim($("#jmoney").val());
+            let note = $.trim($("#note").val());
+            if (!jmoney){ return xtalert.showValidationError('请输入金额！') }
+            xtajax.post({
+                'data': {'action': 'kcMoney_data', 'jmoney':jmoney, 'note':note, 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        return xtalert.alertSuccessToast('操作成功！')
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        {% endif %}
+
+        {% if current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+        function select_role() {
+            let role_code = $("#role_code").val();
+            if (!role_code) {return;}
+            if (role_code === 'systemuser') {
+                $("#outm_max_money").parent().hide();
+                $("#outm_min_money").parent().hide();
+                $("#bankcard_info").parent().hide();
+            } else if (role_code === 'out_money_user') {
+                $("#outm_max_money").parent().show();
+                $("#outm_min_money").parent().show();
+                $("#bankcard_info").parent().show();
+            }
+        }
+        {% endif %} 
+        
+        
+        // 开关
+        function switch_func(obj) {
+            if (obj.hasClass('icon-kaiguanguan')){
+                obj.parent().prev().val('1');
+                obj.removeClass('icon-kaiguanguan').addClass('icon-kaiguan4');
+            }else {
+                obj.parent().prev().val('0');
+                obj.removeClass('icon-kaiguan4').addClass('icon-kaiguanguan');
+            }
+        }
+
+        function monitorRechargeMoney() {
+            let cz_amount = $.trim($("#cz_amount").val());
+            let recharge_money_rate = $.trim($("#recharge_money_rate").val());
+            if (!cz_amount){ return $("#repay_amount_text").text('0') }
+            if (recharge_money_rate){
+                let ccc = parseFloat(cz_amount) * parseFloat(recharge_money_rate) / 100
+                return $("#repay_amount_text").text(ccc)
+            }
+
+            return $("#repay_amount_text").text(cz_amount)
+        }
+
+        
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>正常</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>禁用</option>
+    </select>
+    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+    <select class="form-control mr-sm-2 mb-2" name="role_code" aria-label="">
+        <option value="">角色</option>
+        {% for role_Code in ROlE_ALL.name_arr %}
+        <option value="{{ role_Code }}" {% if search_res.role_code == role_Code %}selected{% endif %}>{{ ROlE_ALL.name_dict.get(role_Code) }}</option>
+        {% endfor %}
+    </select>
+    {% endif %}
+    <select class="form-control mr-sm-2 mb-2" name="is_online" aria-label="">
+        <option value="">在线状态</option>
+        <option value="1" {% if search_res.is_online == "1" %}selected{% endif %}>在线</option>
+        <option value="0" {% if search_res.is_online == "0" %}selected{% endif %}>离线</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="登录账户" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="username" value="{{ search_res.username or '' }}" placeholder="姓名" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="email" value="{{ search_res.email or '' }}" placeholder="邮箱" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="email" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-primary ml-1 mb-2" onclick="post_form_html({'action': 'add_form_html'}, '添加账户', 800)">添加账户</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>姓名</td>
+                <td>登录账名</td>
+                <td>角色</td>
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                <td>代理商账户</td>
+                {% endif %}
+                <td>邮箱</td>
+                <td>状态</td>
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                <td>在线状态[{{online_cnt}}]</td>
+                {% endif %}
+                <td>未处理订单量</td>
+                <td width="200">创建时间</td>
+                <td width="200">最近登录时间</td>
+                <td>余额</td>
+                <td>备注</td>
+                <td width="260">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.username or '' }}</td>
+                    <td>{{ data.account or '' }}</td>
+                    <td>{{ ROlE_ALL.name_dict.get(data.role_code or '') }}</td>
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                    <td>{{ data.agentadmin_data.account if data.agentadmin_data else ''}}</td>
+                    {% endif %}
+                    <td>{{ data.email or '' }}</td>
+                    <td>{% if data.statu %}<span class="ant-tag ant-tag-green">正常</span>{% else %}<span class="ant-tag ant-tag-red">禁用</span>{% endif %}</td>
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+                    <td>
+                        {% if data.role_code in [ROlE_ALL.OUT_MONEY_USER, ROlE_ALL.SYS_OUT_MONEY_USER] %}
+                            {% if data.is_online %}<span class="ant-tag ant-tag-green" onclick="post_update_statu('updateOnlineStatu', '{{ data.uuid }}')">在线</span>{% else %}<span class="ant-tag" onclick="post_update_statu('updateOnlineStatu', '{{ data.uuid }}')">离线</span>{% endif %}
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                    <td></td>
+                    <td>{{ format_time_func(data.create_time, '%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ format_time_func(data._current_login, '%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>{{ format_money(data.balance_amount or '') }}</td>
+                    <td>{{ data.note }}</td>
+                    <td>
+                        <span class="ant-tag ant-tag-blue" onclick="post_form_html({'action': 'edit_form_html', 'data_uuid': '{{ data.uuid }}'}, '编辑用户信息', 800)">编辑</span>
+                        <span class="ant-tag ant-tag-blue" onclick="post_form_html({'action': 'get_permission_html', 'data_uuid': '{{ data.uuid }}'}, '权限修改', 800)">权限</span>
+                        <span class="ant-tag ant-tag-red" onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除</span>
+                        <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>
+                        <div class="dropdown-menu">
+                            {% if (current_admin_user.is_superadmin or current_admin_user.is_administrator) and data.role_code == ROlE_ALL.AGENTADMIN %}
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'cz_html', 'data_uuid': '{{ data.uuid }}'}, '内充', 800)">内充</span>
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'jmoney_html', 'data_uuid': '{{ data.uuid }}'}, '内充', 800)">扣除</span>
+                            <a class="dropdown-item" href="{{ url_for('admin.AgentadminBillLogView', auid=data.uuid) }}" target="_blank">资金流水</a>
+                            {% endif %}
+                            {% if data.role_code in [ROlE_ALL.OUT_MONEY_USER, ROlE_ALL.SYS_OUT_MONEY_USER] and (current_admin_user.is_superadmin or current_admin_user.is_administrator) %}
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'detailsInfo_html', 'data_uuid': '{{ data.uuid }}'}, '出款卡记录', 800)">出款卡记录</span>
+                            {% endif %}
+                            <span class="dropdown-item" onclick="getGoogleQrcode('{{ data.uuid }}')">Google验证码</span>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,322 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+    <script>
+
+        function post_bank_data(action, data_uuid) {
+            if (!action){ return xtalert.alertError('缺少参数：action！') }
+            let name = $.trim($("#name").val());
+            let account = $.trim($("#account").val());
+            let username = $.trim($("#username").val());
+            let password = $.trim($("#password").val());
+            let bank_uid = $.trim($("#bank_uid").val());
+            let vpn_uuid = $.trim($("#vpn_uuid").val());
+            let stint_money = $.trim($("#stint_money").val());
+            let merchant_uid = $.trim($("#merchant_uid").val());
+            let account_username = $.trim($("#account_username").val());
+            let collection_money_min = $.trim($("#collection_money_min").val());
+            let collection_money_max = $.trim($("#collection_money_max").val());
+            let day_collection_money_limit = $.trim($("#day_collection_money_limit").val());
+            let day_collection_pencount_limit = $.trim($("#day_collection_pencount_limit").val());
+            let note = $.trim($("#note").val());
+            let bankcard_type = $.trim($("#bankcard_type").val());
+            let agentadmin_uuid_str = $.trim($("#agentadmin_uuid").val());
+            if (!name){ return xtalert.showValidationError('请输入名称！') }
+            if (!bank_uid){ return xtalert.showValidationError('请选择银行！') }
+            if (!account){ return xtalert.showValidationError('请输入银行卡账户！') }
+            if (!account_username){ return xtalert.showValidationError('请输入银行账户人姓名！') }
+            let _data = {
+                'action': action,
+                'name': name,
+                'note': note,
+                'account': account,
+                'username': username,
+                'password': password,
+                'bank_uid': bank_uid,
+                'vpn_uuid': vpn_uuid,
+                'stint_money': stint_money,
+                'merchant_uid': merchant_uid,
+                'account_username': account_username,
+                'data_uuid': data_uuid ? data_uuid : '',
+                'collection_money_min': collection_money_min,
+                'collection_money_max': collection_money_max,
+                'day_collection_money_limit': day_collection_money_limit,
+                'day_collection_pencount_limit': day_collection_pencount_limit,
+            }
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            if (!data_uuid){
+                if (!bankcard_type){ return xtalert.showValidationError('请选择卡类型！') }
+                if (bankcard_type === '{{ BankCardType.AGENTADMIN_CARD }}'){
+                if (!agentadmin_uuid_str){ return xtalert.showValidationError('请选择绑定代理！') }
+                }
+                _data['bankcard_type'] = bankcard_type
+                if (bankcard_type === '{{ BankCardType.AGENTADMIN_CARD }}'){
+                    _data['agentadmin_uuid'] = agentadmin_uuid_str
+                }
+            }
+            {% endif %}
+            Swal({
+                title: '',
+                text: '数据提交中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            console.log('_data;', _data)
+            xtajax.post({
+                'data': _data,
+                'success': function (data) {
+                    console.log('data;', data)
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('提交成功！')
+                        reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function select_bankcard_type() {
+            let bankcard_type = $("#bankcard_type").val();
+            if (!bankcard_type){return;}
+            if (bankcard_type === 'agentadmin_card'){
+                $("#agentadmin_uuid").parent().show();
+                $("#merchant_uid").parent().show();
+            }else{
+                $("#agentadmin_uuid").parent().hide();
+                $("#merchant_uid").parent().hide();
+                xtajax.post({
+                    'data': {'action': 'getAllVpn'},
+                    'success': function (data) {
+                        if (data.code === 200){
+                            if (data.data.datalist){
+                                $("#vpn_uuid").children().remove();
+                                $("#vpn_uuid").append('<option value="">选择VPN</option>');
+                                let datalist = data.data.datalist;
+                                for (let i=0; i<= datalist.length; i++){
+                                    let vv = datalist[i];
+                                    if (vv){
+                                        $("#vpn_uuid").append('<option value="'+vv.uuid+'">'+vv.name+'</option>')
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function select_agentadmin() {
+            $("#vpn_uuid").val('');
+            $("#vpn_uuid").children().remove();
+            $("#vpn_uuid").append('<option value="">选择VPN</option>');
+            $("#merchant_uid").val('');
+            $("#merchant_uid").children().remove();
+            $("#merchant_uid").append('<option value="">选择商户账户</option>');
+            let agentadmin_uuid = $.trim($("#agentadmin_uuid").val());
+            xtajax.post({
+                'data': {'action': 'getVpnList', 'agentadmin_uuid': agentadmin_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        if (data.data.datalist){
+                            let datalist = data.data.datalist;
+                            let mdatas = data.data.mdatas;
+                            for (let i=0; i<= datalist.length; i++){
+                                let vv = datalist[i];
+                                if (vv){
+                                    $("#vpn_uuid").append('<option value="'+vv.uuid+'">'+vv.name+'</option>')
+                                }
+                            }
+                            for (let m=0; m<= mdatas.length; m++){
+                                let vv = mdatas[m];
+                                if (vv){
+                                    $("#merchant_uid").append('<option value="'+vv.uuid+'">'+vv.name+'</option>')
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+
+        }
+
+        function post_update_data(action, data_uuid='') {
+            Swal({
+                title: false,
+                text: '请求中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            xtajax.post({
+                'data': {'action': action, 'data_uuid': data_uuid},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('操作成功！');
+                        reloadpage();
+                    }else{
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+        function clipboard_copy2(data) {
+            //控制剪贴板
+            var text = document.createElement('textarea');
+            text.value = data;
+            document.body.appendChild(text);
+            text.select();
+            document.execCommand('Copy');
+            text.remove();
+            swal({
+                'text': '复制成功: ' + data,
+                'type': 'success',
+                'showCancelButton': false,
+                'showConfirmButton': false,
+                'timer': 300,
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="statu" aria-label="">
+        <option value="">开启状态</option>
+        <option value="1" {% if search_res.statu == '1' %}selected{% endif %}>开启</option>
+        <option value="0" {% if search_res.statu == '0' %}selected{% endif %}>关闭</option>
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="bank_uid" aria-label="" style="width: 200px;">
+        <option value="">银行类型</option>
+        {% for back_data in back_datas %}
+            <option value="{{ back_data.uuid }}" {% if search_res.bank_uid == back_data.uuid %}selected{% endif %}>{{ back_data.code }}</option>
+        {% endfor %}
+    </select>
+    <select class="form-control mr-sm-2 mb-2" name="bankcard_type" aria-label="" style="width: 200px;">
+        <option value="">银行卡类型</option>
+        {% for bctype in BankCardType.name_arr %}
+            <option value="{{ bctype }}" {% if search_res.bankcard_type == bctype %}selected{% endif %}>{{ BankCardType.name_dict.get(bctype) }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account or '' }}" placeholder="银行卡账户" aria-label="">
+    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="agentadmin_account" value="{{ search_res.agentadmin_account or '' }}" placeholder="代理账户" aria-label="">
+    {% endif %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="account_username" value="{{ search_res.account_username or '' }}" placeholder="账户人姓名" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note or '' }}" placeholder="备注" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+    <span class="btn btn-warning ml-2 mb-2" style="color:#FFFFFF;" onclick="post_form_html({'action': 'add_bankCard_html'}, '添加银行卡', 800)">添加银行卡</span>
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>名称【{{ total }}】</td>
+                <td>银行</td>
+                <td>银行卡账户</td>
+                <td>银行卡用户名</td>
+                <td>账户人姓名</td>
+                <td>卡类型</td>
+                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                <td>代理名称</td>
+                {% endif %}
+                <td>状态</td>
+                <td>脚本执行状态</td>
+                <td>实时余额</td>
+                <td>每日收款上限</td>
+                <td>每日收款笔数上限</td>
+                <td>收款金额范围</td>
+                <td>余额上限</td>
+                <td>备注</td>
+                <td width="230">操作</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.back_data.shortName or '' }}</td>
+                    <td>{{ data.account or '' }}</td>
+                    <td>{{ data.username or '' }}</td>
+                    <td>{{ data.account_username or '' }}</td>
+                    <td>{{ BankCardType.name_dict.get(data.bankcard_type) or '' }}</td>
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                        {% if data.bankcard_type == BankCardType.AGENTADMIN_CARD %}
+                        <td>{{ data.agentadmin_data.account }}-{{ data.agentadmin_data.username }}</td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                    {% endif %}
+                    <td>
+                        {% if data.statu %}
+                            <span class="ant-tag ant-tag-green">启用</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-red">停用</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if data.script_statu %}
+                            <span class="ant-tag ant-tag-green">启用</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-red">停用</span>
+                        {% endif %}
+                    </td>
+                    <td onclick="clipboard_copy2('{{ data.balance_amount or 0 }}')">
+                        {% if data.balance_amount >= data.stint_money and data.balance_amount != 0 and data.stint_money %}
+                        <span class="iconfont icon-lianjieshibai text-danger" style="vertical-align: -2px;"></span>
+                        <span class="text-danger">{{ format_money(data.balance_amount) }}</span>
+                        {% else %}
+                        {{ format_money(data.balance_amount or 0) }}
+                        {% endif %}
+                    </td>
+                    <td>{{ format_money(data.day_collection_money_limit or '无限') }}</td>
+                    <td>{{ data.day_collection_pencount_limit or '无限' }}</td>
+                    <td>{{ format_money(data.collection_money_min or 0) }} ~ {{ format_money(data.collection_money_max or '无限') }}</td>
+                    <td>{{ format_money(data.stint_money) }}</td>
+                    <td></td>
+                    <td>
+                        <span class="ant-tag ant-tag-blue mr-0" onclick="post_form_html({'action': 'edit_bankCard_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行卡', 800)">编辑</span>
+                        {% if data.statu %}
+                            <span class="ant-tag ant-tag-red mr-0" onclick="post_update_data('update_bankcard_statu', '{{ data.uuid }}')">停用</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-green mr-0" onclick="post_update_data('update_bankcard_statu', '{{ data.uuid }}')">启用</span>
+                        {% endif %}
+                        {% if data.script_statu %}
+                            <span class="ant-tag ant-tag-red mr-0" onclick="post_update_data('update_script_statu', '{{ data.uuid }}')">停用脚本</span>
+                        {% else %}
+                            <span class="ant-tag ant-tag-green mr-0" onclick="post_update_data('update_script_statu', '{{ data.uuid }}')">启用脚本</span>
+                        {% endif %}
+                        <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown" aria-expanded="false">更多</span>
+                        <div class="dropdown-menu mr-0">
+                            <span class="dropdown-item" onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除银行卡</span>
+                            <span class="dropdown-item" onclick="post_update_data('testCard', '{{ data.uuid }}')">账户测试</span>
+                            <span class="dropdown-item" onclick="post_update_data('updateBalance', '{{ data.uuid }}')">余额更新</span>
+                            <span class="dropdown-item" onclick="post_update_data('runScript', '{{ data.uuid }}')">执行脚本</span>
+                            <span class="dropdown-item" onclick="post_form_html({'action': 'scriptRunLog', 'data_uuid': '{{ data.uuid }}'}, '脚本运行日志', 800)">脚本日志</span>
+                            <span class="dropdown-item" onclick="xtalert.alertContent('{{ data.vpn_data.vpn_url or '该银行卡暂未使用VPN！' }}', '银行卡VPN')">查看VPN</span>
+                            {% if data.bankcard_type == BankCardType.SYSTEM_CARD %}
+                                {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                            <a class="dropdown-item" href="{{ url_for('admin.BankCardBillLog', bc_id=data.uuid) }}" target="_blank">爬虫明细</a>
+                                {% endif %}
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url_for('admin.BankCardBillLog', bc_id=data.uuid) }}" target="_blank">爬虫明细</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

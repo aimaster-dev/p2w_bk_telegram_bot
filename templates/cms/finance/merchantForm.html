@@ -1,0 +1,220 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<script>
+    let search_type = "merchant_search";
+
+    function search_data_func() {
+        let dataDate = $.trim($("input[name='dataDate']").val());
+        let merchant = $.trim($("input[name='merchant']").val());
+        let agentadmin_account = $.trim($("input[name='agentadmin_account']").val());
+        let ppp = {
+            'action': 'search_data',
+            'dataDate': dataDate,
+            'merchant': merchant,
+            'agentadmin_account': agentadmin_account,
+            'search_type': search_type
+        };
+        $("#tableLoding").css('display', 'flex');
+        xtajax.get({
+            'data': ppp,
+            'success': function (data) {
+                if (data.code === 200) {
+                    let datas = data.data.datas;
+                    let total_data = data.data.total_data;
+                    if (datas.length <= 0) {
+                        $(".no_data").show()
+                    } else {
+                        $(".no_data").hide()
+                    }
+
+                    let html = '';
+                    if (data.data.search_res.search_type === 'merchant_search') {
+                        for (let i = 0; datas.length > i; i++) {
+                            let _vv = datas[i];
+                            html += '<tr>'
+                            html += '<td>' + _vv.merchant_id + '</td>'
+                            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                            html += '<td>' + _vv.agentadmin_account + '</td>'
+                            {% endif %}
+                            html += '<td>' + _vv.merchant_name + '</td>'
+                            html += '<td>' + js_format_money(_vv.ds_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.dssxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.df_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.dfsxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.sdxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.sdxfsxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.internal_charge_amount + '</td>'
+                                html += '<td>' + js_format_money(_vv.internal_fee_amount + '</td>'
+                                html += '<td>' + js_format_money(_vv.start_balance_amount) + '</td>'
+                                html += '<td>' + js_format_money(_vv.end_balance_amount) + '</td>'
+                                html += '<td>' + js_format_money(_vv.wc_vv) + '</td>'
+                                html += '</tr>'
+                            }
+                        html += '<tr>'
+                        html += '<td>总计：</td>'
+                        html += '<td></td>'
+                        {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                        html += '<td></td>'
+                        {% endif %}
+                        html += '<td>' + js_format_money(total_data.total_dsje) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_dssxf) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_sfje) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_sfsxf) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_sdxfje) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_sdxfjxf) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_incharge_amount) + '</td>'
+                        html += '<td>' + js_format_money(total_data.total_incharge_fee) + '</td>'
+                        html += '<td></td>'
+                        html += '<td>' + total_data.total_shjwje + '</td>'
+                        html += '<td></td>'
+                        html += '</tr>'
+                    }
+                    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+                    if (data.data.search_res.search_type === 'agent_search') {
+                        for (let i = 0; datas.length > i; i++) {
+                            let _vv = datas[i];
+                            html += '<tr>'
+                            html += '<td>' + _vv.agent_account + '</td>'
+                            html += '<td>' + _vv.agent_name + '</td>'
+                            html += '<td>' + js_format_money(_vv.ds_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.dssxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.df_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.dfsxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.sdxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.sdxfsxf_aomunt_total) + '</td>'
+                            html += '<td>' + js_format_money(_vv.start_balance_amount) + '</td>'
+                            html += '<td>' + js_format_money(_vv.end_balance_amount) + '</td>'
+                            html += '<td>' + js_format_money(_vv.wc_vv) + '</td>'
+                            html += '</tr>'
+                        }
+                        html += '<tr>'
+                        html += '<td>总计：</td>'
+                        html += '<td></td>'
+                        html += '<td>' + (total_data.total_dsje) + '</td>'
+                        html += '<td>' + (total_data.total_dssxf) + '</td>'
+                        html += '<td>' + (total_data.total_sfje) + '</td>'
+                        html += '<td>' + (total_data.total_sfsxf) + '</td>'
+                        html += '<td>' + (total_data.total_sdxfje) + '</td>'
+                        html += '<td>' + (total_data.total_sdxfjxf) + '</td>'
+                        html += '<td></td>'
+                        html += '<td></td>'
+                        html += '<td></td>'
+                        html += '</tr>'
+                    }
+                    {% endif %}
+
+                    var parent = $(".table > tbody");
+                    var allChildren = parent.children();
+                    var unwantedChildren = allChildren.slice(1);
+                    unwantedChildren.remove();
+                    parent.append(html);
+                    $("#tableLoding").css('display', 'none');
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+    function onSelectChange() {
+        var parent = $(".table > tbody");
+        var allChildren = parent.children();
+        var unwantedChildren = allChildren.slice(0);
+        unwantedChildren.remove();
+        html = '';
+
+        if ($("#selectType").val() === "merchant_search") {
+            $("#search_method").attr('placeholder', '商户名或商户ID')
+            search_type = "merchant_search"
+            html += '<tr style="background-color: #f7f7f7;">';
+            html += '<td>商户ID</td>'
+            html += '<td>商户名称</td>'
+            html += '<td>代收金额</td>'
+            html += '<td>代收手续费</td>'
+            html += '<td>代付金额</td>'
+            html += '<td>代付手续费</td>'
+            html += '<td>手动下发</td>'
+            html += '<td>手动下发手续费</td>'
+            html += '<td>内部费用金额</td>'
+            html += '<td>内部收费</td>'
+            html += '<td>起始商户余额</td>'
+            html += '<td>结尾商户余额</td>'
+            html += '<td>误差值</td>'
+            html += '</tr>'
+            parent.append(html);
+        }
+        if ($("#selectType").val() === "agent_search") {
+            $("#search_method").attr('placeholder', '代理名或代理账号')
+            search_type = "agent_search"
+            html += '<tr style="background-color: #f7f7f7;">';
+            html += '<td>代理账号</td>'
+            html += '<td>代理名称</td>'
+            html += '<td>代收金额</td>'
+            html += '<td>代收手续费</td>'
+            html += '<td>代付金额</td>'
+            html += '<td>代付手续费</td>'
+            html += '<td>手动下发金额</td>'
+            html += '<td>手动下发手续费</td>'
+            html += '<td>初始余额</td>'
+            html += '<td>结束余额</td>'
+            html += '<td>代理利润</td>'
+            html += '</tr>'
+            parent.append(html);
+        }
+    }
+    {% endif %}
+
+
+</script>
+{% endblock %}
+
+{% block searchInput %}
+{% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+<select class="form-control mr-sm-2 mb-2" name="searchType" aria-label="" style="width: 200px;"
+    onchange="onSelectChange()" id="selectType">
+    <option value="merchant_search" {% if search_res.searchType=='merchant_search' %}selected{% endif %}>商户搜索</option>
+    <option value="agent_search" {% if search_res.searchType=='agent_search' %} selected{% endif %}>代理搜索</option>
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="agentadmin_account"
+    value="{{ search_res.agentadmin_account }}" placeholder="代理账户" aria-label="">
+{% endif %}
+<input type="text" class="form-control mb-2 mr-sm-2" name="merchant" value="{{ search_res.merchant or '' }}"
+    placeholder="商户名或商户ID" aria-label="">
+<input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="dataDate" value="{{ search_res.dataDate or '' }}" placeholder="日期" aria-label="">
+{% endblock %}
+
+{% block searchBtn %}
+<span class="btn btn-primary mb-2" onclick="search_data_func()">搜索</span>
+<span class="btn btn-default ml-1 mb-2" onclick="exitsearch()">重置</span>
+{% endblock %}
+
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        <tr style="background-color: #f7f7f7;">
+            <td>商户ID</td>
+            {% if current_admin_user.is_superadmin or current_admin_user.is_administrator %}
+            <td>代理账户</td>
+            {% endif %}
+            <td>商户名称</td>
+            <td>代收金额</td>
+            <td>代收手续费</td>
+            <td>代付金额</td>
+            <td>代付手续费</td>
+            <td>手动下发</td>
+            <td>手动下发手续费</td>
+            <td>内部费用金额</td>
+            <td>内部收费</td>
+            <td>起始商户余额</td>
+            <td>结尾商户余额</td>
+            <td>误差值</td>
+        </tr>
+    </tbody>
+</table>
+<div id="tableLoding"
+    style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+    <img src="/assets/world/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+</div>
+{% endblock %}

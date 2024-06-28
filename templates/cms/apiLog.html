@@ -1,0 +1,55 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+
+{% endblock %}
+
+{% block searchInput %}
+    <select class="form-control mr-sm-2 mb-2" name="request_method" aria-label="">
+        <option value="">请求模式</option>
+        <option value="get" {% if search_res.request_method == 'get' %}selected{% endif %}>GET</option>
+        <option value="post" {% if search_res.request_method == 'post' %}selected{% endif %}>POST</option>
+    </select>
+    <input type="text" class="form-control mb-2 mr-sm-2" name="ip" value="{{ search_res.ip or '' }}" placeholder="请求ip" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2" name="request_data" value="{{ search_res.request_data or '' }}" placeholder="请求内容" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="create_time" value="{{ search_res.create_time }}" placeholder="请求时间" aria-label="">
+{% endblock %}
+
+{% block other_function %}
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>请求IP[{{ total }}]</td>
+                <td>请求模式</td>
+                <td>请求地址</td>
+                <td>请求内容</td>
+                <td>响应Code</td>
+                <td>响应备注</td>
+                <td>请求时间</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.ip or '' }}</td>
+                    <td>
+                        {% if data.request_method == 'psot' %} 
+                        post
+                        {% else %}
+                        {{ data.request_method or '' }}
+                        {% endif %}
+                    </td>
+                    <td>{{ data.url_path or '' }}</td>
+                    <td>{{ data.request_data or '' }}</td>
+                    <td>{{ data.response_code or '' }}</td>
+                    <td>{{ data.response_text or '' }}</td>
+                    <td>{{ format_time_func(data.create_time, '%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="tableLoding" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(255,255,255,.8);display: none; align-items: center; justify-content: center; z-index: 99;">
+        <img src="/assets/world/images/loading-0.gif" alt="" style="display: block; position: relative; height: 230px;">
+    </div>
+{% endblock %}

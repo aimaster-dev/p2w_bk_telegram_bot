@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用！-世界付</title>
+    <link rel="icon" href="/public/world/img/logo6.jpeg">
+    <script src="/static/common/jquery.js"></script>
+    <link rel="stylesheet" href="/static/common/bootstrap/css/bootstrap.min.css">
+    <script src="/static/common/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/common/bootstrap/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/common/sweetalert2/sweetalert2.min.css">
+    <script src="/static/common/sweetalert2/promise.min.js"></script>
+    <script src="/static/common/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/static/common/sweetalert2/xtalert.js"></script>
+    <script src="/static/common/xtajax.js"></script>
+    <script src="/static/common/js/common.js"></script>
+    <link rel="stylesheet" href="{{ url_for('assets', filename='world/iconfont/iconfont.css') }}">
+    <style>
+        *{margin: 0; padding: 0;}
+        body, html{color: rgba(4,15,66,.9);font-size: 14px;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei','Helvetica Neue',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';font-variant: tabular-nums;line-height: 1.5;font-feature-settings: 'tnum';background-color: #FFFFFF;}
+        .loginMain{display: block;position: relative;box-sizing: border-box;width: 500px;margin: auto;}
+        .logo{display: block;position: relative;height: 100px;text-align: center;overflow: hidden;margin: 20px 0 35px;}
+        .logo img{height: 100%;display: block;margin: auto;}
+        .login{width: 100%;padding: 40px 76px 20px;box-shadow: 0 0 8px 0 rgba(29,39,84,.1);border-radius: 8px;color: rgba(4,15,66,.9);background-color: #fff;box-sizing: border-box;margin: 0;font-size: 14px;font-variant: tabular-nums;line-height: 1.5;list-style: none;font-feature-settings: 'tnum';position: relative;margin-top: 150px;}
+        .login h2{text-align: center;margin: 0 0 24px;font-size: 24px;font-weight: 500;}
+        .loglable::before{display: inline-block;margin-right: 4px;color: #ff4236;font-size: 14px;font-family: SimSun,sans-serif;line-height: 1;content: '*';}
+        .loginBtn{color: #fff;background-color: #1880ff;border-color: #1880ff;text-shadow: 0 -1px 0 rgba(0,0,0,.12);box-shadow: 0 2px 0 rgba(0,0,0,.045);width: 100%;height: 40px;padding: 0 15px;border-radius: 4px;font-size: 14px;outline: none;border: none;-ms-transition: all .5s ease;-moz-transition: all .5s ease;-webkit-transition: all .5s ease;-o-transition: all .5s ease;transition: all .5s ease;margin: 25px 0px 30px;}
+        .loginBtn:hover{opacity: .8;}
+        .verify_code{display: none;}
+
+        .lzc{line-height: 1.5715;position: relative;display: inline-block;font-weight: 400;white-space: nowrap;text-align: center;background-image: none;border: 1px solid transparent;box-shadow: 0 2px #00000004;cursor: pointer;transition: all .3s cubic-bezier(.645,.045,.355,1);user-select: none;touch-action: manipulation;height: 32px;padding: 4px 15px;font-size: 14px;border-radius: 2px;color: #000000d9;border-color: #d9d9d9;background: #fff;outline: 0;width: 100%;}
+        .ant-btn:hover, .ant-btn:focus {color: #2a7dc9;border-color: #2a7dc9;background: #fff;}
+
+    </style>
+    <script>
+
+        $(function () {
+
+            $(".imgCapBtn").on('click', function () {
+                xtajax.get({
+                    'url':'{{ url_for('common.img_cap') }}',
+                    'success': function (data) {
+                        $('.imgCapBtn').attr('src', data);
+                    }
+                })
+            });
+
+        })
+
+        function psot_login() {
+            let account = $.trim($("#account").val());
+            let password = $.trim($("#password").val());
+            let verify_code = $.trim($("#verify_code").val());
+            {#let graph_captcha = $.trim($("#graph_captcha").val());#}
+            if (!account){return xtalert.alertErrorToast('请输入账户！')}
+            if (!password){return xtalert.alertErrorToast('请输入密码！')}
+            {#if (!graph_captcha){return xtalert.alertErrorToast('请输入图片验证码！')}#}
+            Swal({
+                title: false,
+                text: '操作中，请稍等...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'pwdLogin', 'account':account, 'password':password, 'verify_code': verify_code},
+                'success': function (data){
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('登录成功！');
+                        let tt = setTimeout(function () {
+                            window.location.href='{{ url_for('merchant.merchant_index') }}';
+                        }, 500)
+                    }else if (data.code === 401){
+                        console.log('999:', data)
+                        if ($(".verify_code").css('display') === 'none'){
+                            console.log(999)
+                            $(".verify_code").show(0);
+                            if (data.data.is_show_qrcode && data.data.generate_qrcode){
+                                let generate_qrcode = data.data.generate_qrcode;
+                                $("#showQrcode").attr('onclick', "xtalert.alertImg('Google 验证', '" + generate_qrcode + "', '', '', false)")
+                                $("#showQrcode").show(0);
+                            }else{
+                                $("#showQrcode").hide(0);
+                            }
+                            return xtalert.close();
+                        }else{
+                            console.log(777)
+                            if (data.data.is_show_qrcode && data.data.generate_qrcode){
+                                let generate_qrcode = data.data.generate_qrcode;
+                                $("#showQrcode").attr('onclick', "xtalert.alertImg('Google 验证', '" + generate_qrcode + "', '', '', false)")
+                                $("#showQrcode").show(0);
+                            }else{
+                                $("#showQrcode").hide(0);
+                            }
+                            return xtalert.alertErrorToast(data.message);
+                        }
+                    } else {
+                        return xtalert.alertErrorToast(data.message);
+                    }
+                }
+            })
+        }
+        
+        function post_regist() {
+            let username = $.trim($("#username").val());
+            let reg_account = $.trim($("#reg_account").val());
+            let reg_password = $.trim($("#reg_password").val());
+            let confirm_password = $.trim($("#confirm_password").val());
+            let reg_graph_captcha = $.trim($("#reg_graph_captcha").val());
+            if (!username){ return xtalert.alertError('请输入姓名！') }
+            if (!reg_account){ return xtalert.alertError('请输入账号！') }
+            if (!reg_password){ return xtalert.alertError('请输入密码！') }
+            if (!confirm_password){ return xtalert.alertError('请输入确认密码！') }
+            if (!reg_graph_captcha){ return xtalert.alertError('请输入验证码！') }
+            if (reg_password !== confirm_password){ return xtalert.alertError('两次密码不一致！') }
+            Swal({
+                title: false,
+                text: '数据提交中...',
+                showCloseButton: false,
+                showCancelButton: false,
+                showconfirmButton: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            xtajax.post({
+                'data': {'action': 'regist_data', 'username': username, 'reg_account': reg_account, 'reg_password': reg_password, 'reg_graph_captcha': reg_graph_captcha,},
+                'success': function (data) {
+                    if (data.code === 200){
+                        xtalert.alertSuccessToast('注册成功！跳转登录...')
+                        let ttt = setTimeout(function () {
+                            $(".imgCapBtn").click();
+                            $('.loginBox').show();$('.registBox').hide();
+                        }, 1000)
+                    }else{
+                        return xtalert.alertError(data.message)
+                    }
+                }
+            })
+
+        }
+        
+    </script>
+</head>
+<body>
+
+    <div style="background: url(/static/cms/images/bjj.jpg) no-repeat center center/cover; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+
+    <div class="loginMain">
+
+        <div class="login">
+            <div class="logo">
+                <img src="/public/world/img/paylogo4.png" alt="">
+            </div>
+            <div class="loginBox">
+                <div class="form-group">
+                    <label for="login_account" class="loglable">输入账户</label>
+                    <input type="text" class="form-control" id="account" aria-label="">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="loglable">输入密码</label>
+                    <input type="password" class="form-control" id="password" aria-label="">
+                </div>
+{#                <div class="form-group">#}
+{#                    <label for="password" class="loglable">输入验证码</label>#}
+{#                    <div style="position: relative; display: flex; justify-content: space-between">#}
+{#                        <input type="text" class="form-control" id="graph_captcha" aria-label="" style="width: 74%;">#}
+{#                        <img class="input-group-text p-0 imgCapBtn" style="width: 25%; height: 32px; display: inline-block; border: none; cursor: pointer;" src="{{ img_cap }}" alt="">#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="form-group verify_code" style="position: relative">
+                    <label for="text" class="loglable">输入Google验证码</label>
+                    <input type="text" class="form-control" id="verify_code" alt="" aria-label="" style="padding-right: 39px;">
+                    <div id="showQrcode" style="position: absolute;right: 3px;top: 28px;height: 32px;width: 30px;display: flex;justify-content: center;align-items: center;cursor: pointer;"><i class="iconfont icon-saomiaoshibie"></i></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; position: relative; overflow: hidden; box-sizing: border-box; ">
+                    <button type="button" class="loginBtn" onclick="psot_login()" style="width: 70%;">登录</button>
+                    <button class="lzc ant-btn" style="width: 25%; height: 40px; margin-top: 25px;" onclick="$('.loginBox').hide();$('.registBox').show();">注册</button>
+                </div>
+            </div>
+            <div class="registBox" style="display: none;">
+                <div class="form-group">
+                    <label for="password" class="loglable">输入商户名称</label>
+                    <input type="text" class="form-control" id="username" aria-label="">
+                </div>
+                <div class="form-group">
+                    <label for="login_account" class="loglable">输入账户</label>
+                    <input type="text" class="form-control" id="reg_account" aria-label="">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="loglable">输入密码</label>
+                    <input type="password" class="form-control" id="reg_password" aria-label="">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="loglable">输入确认密码</label>
+                    <input type="password" class="form-control" id="confirm_password" aria-label="">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="loglable">输入验证码</label>
+                    <div style="position: relative; display: flex; justify-content: space-between">
+                        <input type="text" class="form-control" id="reg_graph_captcha" aria-label="" style="width: 74%;">
+                        <img class="input-group-text p-0 imgCapBtn" style="width: 25%; height: 32px; display: inline-block; border: none; cursor: pointer;" src="{{ img_cap }}" alt="">
+                    </div>
+                </div>
+                <button type="button" class="loginBtn" onclick="post_regist()" style="margin-bottom: 15px;">注册</button>
+                <button class="lzc ant-btn" onclick="$('.loginBox').show();$('.registBox').hide();" style="height: 40px;">返回</button>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

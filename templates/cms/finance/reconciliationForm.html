@@ -1,0 +1,73 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+{% endblock %}
+
+{% block searchInput %}
+    <input type="text" class="form-control mb-2 mr-sm-2" name="merchant" value="{{ search_res.merchant or '' }}" placeholder="商户名或商户ID" aria-label="">
+    <input type="text" class="form-control mb-2 mr-sm-2 pickerdate" name="orderDate" value="{{ search_res.orderDate }}" placeholder="日期" aria-label="">
+{% endblock %}
+
+{% block table_con %}
+    <table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+        <tbody>
+            <tr style="background-color: #f7f7f7;">
+                <td>商户ID</td>
+                <td>商户名称</td>
+                <td>代收申请单数</td>
+                <td>代收成功单数</td>
+                <td>代收成功金额</td>
+
+                <td>代收成功手续费</td>
+                <td>代付成功单数</td>
+                <td>代付成功总金额</td>
+
+                <td>代付总手续费</td>
+                <td>下发申请单数</td>
+                <td>下发申请金额</td>
+                <td>下发成功金额</td>
+                <td>下发总手续费</td>
+                <td>内充增加金额</td>
+                <td>内充总手续费</td>
+            </tr>
+            {% for data in all_datas %}
+                <tr>
+                    <td>{{ data.merchant_id }}</td>
+                    <td>{{ data.merchant_name }}</td>
+                    <td>{{ data.ds_order_count }}</td>
+                    <td>{{ data.ds_success_count }}</td>
+                    <td>{{ data.ds_success_money }}</td>
+                    <td>{{ data.ds_success_repay }}</td>
+
+                    <td>{{ data.dfsuccess_total }}</td>
+                    <td>{{ format_money(data.dfsuccess_amount) }}</td>
+                    <td>{{ format_money(data.df_repay_amount_total) }}</td>
+
+                    <td>{{ data.xf_count }}</td>
+                    <td>{{ data.xf_money }}</td>
+                    <td>{{ data.xf_success_money }}</td>
+                    <td>{{ data.xf_total_repay }}</td>
+                    <td>{{ format_money(data.cz_amount) or 0 }}</td>
+                    <td>{{ format_money(data.cz_amount_sxf) or 0 }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>总计：</td>
+                <td></td>
+                <td>{{ total_data.total_ds_sqds }}</td>
+                <td>{{ total_data.total_ds_cgds }}</td>
+                <td>{{ total_data.total_ds_cgje }}</td>
+                <td>{{ total_data.total_ds_cgsxf }}</td>
+                <td>{{ total_data.total_df_cgds }}</td>
+                <td>{{ total_data.total_df_cgje }}</td>
+                <td>{{ total_data.total_df_zsxf }}</td>
+                <td>{{ total_data.total_xf_sqds }}</td>
+                <td>{{ total_data.total_xf_sqje }}</td>
+                <td>{{ total_data.total_xf_cgje }}</td>
+                <td>{{ total_data.total_xf_sxf }}</td>
+                <td>{{ total_data.total_cz or 0 }}</td>
+                <td>{{ total_data.total_cz_sxf or 0 }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

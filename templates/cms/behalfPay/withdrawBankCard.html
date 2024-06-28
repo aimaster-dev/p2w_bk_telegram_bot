@@ -1,0 +1,1097 @@
+{% extends 'cms/table_base.html' %}
+
+{% block other_head %}
+<style>
+    .detail_info {
+        display: none;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 640px;
+        padding: 12px;
+        z-index: 1;
+    }
+
+    .proc_detail_info {
+        display: none;
+        position: absolute;
+        top: -19px;
+        left: 0px;
+        width: 600px;
+        padding: 12px;
+        z-index: 1;
+    }
+</style>
+<script>
+    var checked_uuid = ''
+    $(document).ready(function () {
+        $('.detail_info').mouseleave(
+            function () {
+                $(this).hide();
+            },
+        );
+        $('.log_info').mouseenter(
+            function () {
+                let uuid = $(this).attr("log_info");
+                $(`table[detail_info=${uuid}]`).show()
+            },
+        );
+        $('.proc_detail_info').mouseleave(
+            function () {
+                $(this).hide();
+            },
+        );
+        $('.proc_info').mouseenter(
+            function () {
+                let uuid = $(this).attr("proc_info");
+                $(`table[proc_detail_info=${uuid}]`).show()
+            },
+        );
+    });
+
+    function post_update_balance(action, data_uuid) {
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    $("#" + data_uuid).empty()
+                    $("#" + data_uuid).append(data.data)
+
+                    xtalert.alertSuccessToast('操作成功！')
+                    //console.log(data.data)
+                    //window.location.reload(true);
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_confirm_check(action) {
+        xtajax.post({
+            'data': { 'action': action, 'checked_uuid': checked_uuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    $("#confirmCheck").hide();
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_request_money(action, data_uuid) {
+        let request_money = $.trim($("#request_money").val());
+        let note = $.trim($("#request_note").val());
+
+        if (!request_money) { return xtalert.showValidationError('请选择请求金额!') }
+
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid, 'request_money': request_money, 'note': note },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_accept_confirm(action, data_uuid, accepted_status) {
+        xtalert.alertConfirm({
+            'msg': '确定操作？', 'confirmCallback': function () {
+                xtajax.post({
+                    'url': '{{ url_for('admin.TransactionFlow') }}',
+                    'data': { 'action': action, 'data_uuid': data_uuid, 'accepted_status': accepted_status },
+                    'success': function (data) {
+                        if (data.code === 200) {
+                            xtalert.alertSuccessToast('操作成功！')
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 800)
+                        } else {
+                            return xtalert.alertError(data.message);
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function post_transfer_in(action, data_uuid) {
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+
+        if (!bankcarduuid) { return xtalert.showValidationError('请选择银行卡！') }
+
+        xtajax.post({
+            'url': '{{ url_for('admin.TransactionFlow') }}',
+            'data': { 'action': action, 'data_uuid': data_uuid, 'bankcarduuid': bankcarduuid, 'transfer_money': transfer_money },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_userbankcard_data(action) {
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+
+        if (!bankcarduuid) { return xtalert.showValidationError('请选择银行卡！') }
+
+        xtajax.post({
+            'data': { 'action': action, 'bankcarduuid': bankcarduuid },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_bankcard_data(action, data_uuid) {
+        let location = $.trim($("#location").val());
+        if (!location) { return xtalert.showValidationError('请输入位置！') }
+
+        if (location === '{{LOCATION_TYPE.ANOTHER}}') {
+            let deposit_uuid = $.trim($("#deposit_bankcard").val());
+
+            if (!deposit_uuid) { return xtalert.showValidationError('请选择银行！') }
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid ? data_uuid : '', 'location': location, 'deposit_uuid': deposit_uuid },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        else {
+            let bank_code = $.trim($("#bank_code").val());
+            let account = $.trim($("#account").val());
+            let bank_name = $.trim($("#bank_name").val());
+            let start_money = $.trim($("#start_money").val());
+            let balance_amount = $.trim($("#balance_amount").val());
+            let note = $.trim($("#note").val());
+
+            if (!bank_code) { return xtalert.showValidationError('请选择银行！') }
+            if (!account) { return xtalert.showValidationError('请输入银行卡号！') }
+            if (!bank_name) { return xtalert.showValidationError('请输入持卡人！') }
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid ? data_uuid : '', 'bank_code': bank_code, 'account': account, 'bank_name': bank_name, 'location': location, 'start_money': start_money, 'balance_amount': balance_amount, 'note': note },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+    }
+
+    function seleBankCode_func(crrObj) {
+        let bankuid = crrObj.attr('data-bankuid');
+        let crrbankuid = $("#bank_uid").val();
+        if (!crrbankuid) {
+            crrObj.addClass('ant-tag-red');
+            $("#bank_uid").val(bankuid);
+        } else {
+            if (crrbankuid !== bankuid) {
+                crrObj.addClass('ant-tag-red');
+                $("#bank_uid").val(bankuid);
+                crrObj.siblings().removeClass('ant-tag-red');
+            }
+        }
+    }
+
+    function seleBankCard_func(crrObj) {
+        let bankuid = crrObj.attr('bankcarduuid');
+        let crrbankuid = $("#bank_card_uid").val();
+        if (!crrbankuid) {
+            crrObj.addClass('text-danger');
+            $("#bank_card_uid").val(bankuid);
+        } else {
+            if (crrbankuid !== bankuid) {
+                crrObj.addClass('text-danger');
+                $("#bank_card_uid").val(bankuid);
+                crrObj.siblings().removeClass('text-danger');
+            }
+        }
+    }
+
+    function onChangeLocation() {
+        let location = $('#location').val()
+        if (location === '{{LOCATION_TYPE.ANOTHER}}') {
+            $('#transit_withdraw').hide();
+            $('#other_card').show();
+        }
+        else {
+            $('#transit_withdraw').show();
+            $('#other_card').hide();
+        }
+    }
+
+
+    function redirect_sel_card() {
+        window.location.href = "{{ url_for('admin.WithdrawalBankCard') }}";
+    }
+
+    function other_transfer_in_out_html(action, data_uuid, behavior, title, width) {
+        if (!data_uuid) {
+            Swal({
+                title: '错误',
+                width: '500px',
+                html: '<div style="padding:20px; border:solid gray 1px; border-radius:3px"><h3 class="mb-4">首先，要选择提款卡！</h3><span class="btn btn-secondary mr-2" onclick="redirect_sel_card()">选择卡</span><div>',
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+            })
+            return;
+            //return xtalert.alertToast('首先，要选择提款卡！')
+        }
+
+        xtajax.post({
+            'data': { 'action': action, 'data_uuid': data_uuid, 'behavior': behavior },
+            'success': function (data) {
+                Swal.close();
+                if (data.code === 200) {
+                    $("#title-qr").html(title);
+                    $("#qrcodeBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#qrcodeBox .modal-dlg-content").css("width", width)
+                    $("#qrcodeBox").show();
+                } else {
+                    $("#qrcodeBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function transfer_in_out_html(postdata, title, width, url="") {
+        Swal({
+            title: false,
+            text: '数据请求中...',
+            showCloseButton: false,
+            showCancelButton: false,
+            showconfirmButton: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            }
+        });
+        xtajax.post({
+            'url': url,
+            'data': postdata,
+            'success': function (data) {
+                Swal.close();
+                if (data.code === 200) {
+                    $("#title-qr").html(title);
+                    $("#qrcodeBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#qrcodeBox .modal-dlg-content").css("width", width)
+                    $("#qrcodeBox").show();
+                } else {
+                    $("#qrcodeBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function setRequestMoney(val) {
+        $("#transfer_money").val(val)
+    }
+
+    function post_input_money(behavior, data_uuid) {
+        let transfer_money = $.trim($("#transfer_money").val());
+        let bank_code = $.trim($("#bank_code").val());
+        let bankcard_account = $.trim($("#bankcard_account").val());
+        let bank_name = $.trim($("#bank_name").val());
+        let note = $.trim($("#note").val());
+
+        if (transfer_money == 0) { return xtalert.showValidationError('请输入金额！') }
+        if (!bank_code) { return xtalert.showValidationError('请输入银行类型！') }
+        if (!bankcard_account) { return xtalert.showValidationError('请输入卡银行卡账号！') }
+        if (!bank_name) { return xtalert.showValidationError('请输入银行名字！') }
+
+        xtajax.post({
+            'data': { 'action': 'other_transfer_in_out', 'data_uuid': data_uuid, 'transfer_money': transfer_money, 'bank_code': bank_code, 'bank_name': bank_name, 'bankcard_account': bankcard_account, 'note': note, 'behavior': behavior },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function onclickCheckBox(uuid) {
+        if ($("#card" + uuid).prop("checked")) {
+            $(".defaultcard").prop("checked", false);
+            $("#card" + uuid).prop("checked", true);
+            checked_uuid = uuid
+        } else {
+            checked_uuid = ''
+        }
+        $("#confirmCheck").show();
+    }
+
+    function post_qr_code(data_uuid, behavior, url) {
+        cardcnt = $("#transfer_card_list").children().length ;
+        if(cardcnt === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+        carddatas = []
+        $('#transfer_card_list').children().each(function(index, element) {
+            var bankcarduuid = $(element).attr('bankcarduuid');
+            var transfer_money = $(element).attr('transfer_money');
+            var note = $(element).attr('note');
+
+            carddatas.push({
+                'bankcarduuid': bankcarduuid,
+                'transfer_money': transfer_money,
+                'note': note,
+            })
+        });
+
+        html = '<div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-modal swal2-loading swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" data-loading="true" aria-busy="true" style="display: flex;"><div class="swal2-header"><ul class="swal2-progresssteps" style="display: none;"></ul><div class="swal2-icon swal2-error" style="display: none;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div><div class="swal2-icon swal2-question" style="display: none;"><span class="swal2-icon-text">?</span></div><div class="swal2-icon swal2-warning" style="display: none;"><span class="swal2-icon-text">!</span></div><div class="swal2-icon swal2-info" style="display: none;"><span class="swal2-icon-text">i</span></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div><div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title"></h2><button type="button" class="swal2-close" style="display: none;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: block;">请求中...</div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validationerror" id="swal2-validationerror" style="display: none;"></div></div><div class="swal2-actions swal2-loading" style="display: flex;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" disabled="" style="border-left-color: rgb(48, 133, 214); border-right-color: rgb(48, 133, 214); display: flex;">确定</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" disabled="" style="display: none;">取消</button></div><div class="swal2-footer" style="display: none;"></div></div>'
+
+        $("#selectCardBox .close-btn").hide();
+        $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+        $("#selectCardBox .modal-dlg-content").css("width", '400px')
+        $("#selectCardBox .modal-dlg-body").css("margin-top", '0px')
+        $("#selectCardBox").css("display", "flex");
+
+        console.log({'action': 'get_pay_qrcode', 'data_uuid': data_uuid, 'behavior': behavior, 'carddatas': JSON.stringify(carddatas)})
+        xtajax.post({
+            'url': url,
+            'data': { 'action': 'get_pay_qrcode', 'data_uuid': data_uuid, 'behavior': behavior, 'carddatas': JSON.stringify(carddatas) },
+            'success': function (data) {
+                if (data.code === 200) {
+                    let xlen = '400px';
+                    if(cardcnt === 2) xlen = '650px'
+                    if(cardcnt > 2) xlen = '910px'
+                    $("#selectCardBox .close-btn").show();
+                    $("#selectCardBox .modal-dlg-body").css("margin-top", '40px')
+                    $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#selectCardBox .modal-dlg-content").css("width", xlen)
+                    $("#selectCardBox").show();
+                } else {
+                    $("#selectCardBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_qr_code2(data_uuid, behavior, url) {
+        let transfer_money = $.trim($("#transfer_money").val());
+        let bank_code = $.trim($("#bank_code").val());
+        let bankcard_account = $.trim($("#bankcard_account").val());
+        let bank_name = $.trim($("#bank_name").val());
+
+        if (transfer_money == 0) { return xtalert.alertError('请输入金额！') }
+        if (!bank_code) { return xtalert.alertError('请输入银行类型！') }
+        if (!bankcard_account) { return xtalert.alertError('请输入卡银行卡账号！') }
+        if (!bank_name) { return xtalert.alertError('请输入银行名字！') }
+
+        html = '<div aria-labelledby="swal2-title" aria-describedby="swal2-content" class="swal2-popup swal2-modal swal2-loading swal2-show" tabindex="-1" role="dialog" aria-live="assertive" aria-modal="true" data-loading="true" aria-busy="true" style="display: flex;"><div class="swal2-header"><ul class="swal2-progresssteps" style="display: none;"></ul><div class="swal2-icon swal2-error" style="display: none;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div><div class="swal2-icon swal2-question" style="display: none;"><span class="swal2-icon-text">?</span></div><div class="swal2-icon swal2-warning" style="display: none;"><span class="swal2-icon-text">!</span></div><div class="swal2-icon swal2-info" style="display: none;"><span class="swal2-icon-text">i</span></div><div class="swal2-icon swal2-success" style="display: none;"><div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div><span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span><div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div><div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div></div><img class="swal2-image" style="display: none;"><h2 class="swal2-title" id="swal2-title"></h2><button type="button" class="swal2-close" style="display: none;">×</button></div><div class="swal2-content"><div id="swal2-content" style="display: block;">请求中...</div><input class="swal2-input" style="display: none;"><input type="file" class="swal2-file" style="display: none;"><div class="swal2-range" style="display: none;"><input type="range"><output></output></div><select class="swal2-select" style="display: none;"></select><div class="swal2-radio" style="display: none;"></div><label for="swal2-checkbox" class="swal2-checkbox" style="display: none;"><input type="checkbox"></label><textarea class="swal2-textarea" style="display: none;"></textarea><div class="swal2-validationerror" id="swal2-validationerror" style="display: none;"></div></div><div class="swal2-actions swal2-loading" style="display: flex;"><button type="button" class="swal2-confirm swal2-styled" aria-label="" disabled="" style="border-left-color: rgb(48, 133, 214); border-right-color: rgb(48, 133, 214); display: flex;">确定</button><button type="button" class="swal2-cancel swal2-styled" aria-label="" disabled="" style="display: none;">取消</button></div><div class="swal2-footer" style="display: none;"></div></div>'
+
+        $("#selectCardBox .close-btn").hide();
+        $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(html);
+        $("#selectCardBox .modal-dlg-content").css("width", '400px')
+        $("#selectCardBox .modal-dlg-body").css("margin-top", '0px')
+        $("#selectCardBox").css("display", "flex");
+
+        xtajax.post({
+            'url': url,
+            'data': { 'action': 'get_pay_qrcode2', 'data_uuid': data_uuid, 'transfer_money': transfer_money, 'behavior': behavior, 'bank_name': bank_name, 'bankcard_account': bankcard_account , 'bank_code': bank_code},
+            'success': function (data) {
+                if (data.code === 200) {
+                    $("#selectCardBox .close-btn").show();
+                    $("#selectCardBox .modal-dlg-body").css("margin-top", '40px')
+                    $("#selectCardBox .modal-dlg-content .modal-dlg-body").html(data.message);
+                    $("#selectCardBox .modal-dlg-content").css("width", '400px')
+                    $("#selectCardBox").show();
+                } else {
+                    $("#selectCardBox").css("display", "none");
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    payer_uuids = []
+    function onSelectAllChange() {
+        payer_uuids = []
+        $('.checkbox').each(function () {
+            if ($('#selectAll').prop('checked') == true) {
+                payer_uuids.push($(this).attr('id'))
+                $(this).prop('checked', true);
+            }
+            else {
+                $(this).prop('checked', false);
+            }
+        });
+        console.log(payer_uuids)
+    }
+
+    function onSelectChange() {
+        payer_uuids = []
+        var allChecked = true;
+        $('.checkbox').each(function () {
+            if ($(this).prop('checked')) {
+                payer_uuids.push($(this).attr('id'))
+            } else {
+                allChecked = false;
+            }
+        });
+        $('#selectAll').prop('checked', allChecked);
+        console.log(payer_uuids)
+    }
+
+    function oninput_searchaccount() {
+        inputValue = $("#search_account").val().toLowerCase();
+        var items = $(".sub-admin-info");
+        items.each(function () {
+            var itemText = $(this).attr("id").toLowerCase();
+            if (itemText.includes(inputValue)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $(".auto-complete-items").show();
+    }
+
+    function post_sub_admins(data_uuid) {
+        xtajax.post({
+            'data': { 'action': "set_payer_uuids", 'data_uuid': data_uuid ? data_uuid : '', 'payer_uuids': JSON.stringify(payer_uuids) },
+            'success': function (data) {
+                if (data.code === 200) {
+                    xtalert.alertSuccessToast('操作成功！')
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 800)
+                } else {
+                    return xtalert.alertError(data.message);
+                }
+            }
+        })
+    }
+
+    function post_clear_card(action) {
+        xtalert.alertConfirm({
+            'msg': '确定操作？', 'confirmCallback': function () {
+                xtajax.post({
+                    'data': { 'action': action },
+                    'success': function (data) {
+                        if (data.code === 200) {
+                            xtalert.alertSuccessToast('操作成功！')
+                            setTimeout(function () {
+                                window.location.reload(true);
+                            }, 800)
+                        } else {
+                            return xtalert.alertError(data.message);
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function addtransfercardlist(){
+        let bankcarduuid = $.trim($("#bank_card_uid").val());
+        let transfer_money = $.trim($("#transfer_money").val());
+        let note = $.trim($("#note").val());
+
+        if (!bankcarduuid) { return xtalert.alertError('请选择银行卡！') }
+        if (transfer_money == 0) { return xtalert.alertError('请输入金额！') }
+
+        let element = $('div[bankcarduuid="' + bankcarduuid + '"]');
+        let account = element.attr("account");
+        let bank_code = element.attr("bank_code");
+        let bank_name = element.attr("bank_name");
+        let location = element.attr("location");
+        let locationName = element.attr("locationName");
+        let id = randomUuid();
+
+        let elehtml = `
+        <div class="card mb-2" bankcarduuid=${bankcarduuid} id=${id} transfer_money=${transfer_money} note=${note}>
+            <div class="row g-0 m-0" style = "cursor: pointer;">
+                <div class="col-2 text-center" style="display: flex; align-items: stretch; justify-content: center; padding: 0px; ">
+                    <div style=" flex: 1; background-color: #ebeaea; display: flex; align-items: center; justify-content: center; ">
+                        <h6 style="margin:0px">${bank_code}(${locationName})</h6>
+                    </div>
+                </div>
+                <div class="col-10 d-flex justify-content-between" >
+                    <div class="card-body" style="padding:10px">
+                        银行卡账号: ${account} (名字: ${bank_name}, 转账金额: ${js_format_money(transfer_money)}, 备注: ${note})
+                    </div>
+                    <button class="btn btn-danger" style="height: 30px; padding: 3px 10px; margin-top: 5px;" onclick="onClickRemovefromList('${id}')">Delete</button>
+                </div>
+            </div>
+        </div>
+        `
+        $("#transfer_card_list").append($(elehtml))
+        $('#transfer_card_cnt').html($("#transfer_card_list").children().length);
+    }
+
+    function onClickRemovefromList(id){
+        $(`#${id}`).remove();
+        $('#transfer_card_cnt').html($("#transfer_card_list").children().length);
+    }
+
+    function post_transfer_in_out(ele, action, data_uuid, behavior) {
+        if(ele === 'null'){
+            if($("#transfer_card_list").children().length === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+            carddatas = []
+            var list = $("#transfer_card_list").children();
+            list.each(function() {
+                if($(this).attr('paid') !== 'paid'){
+                    var bankcarduuid = $(this).attr('bankcarduuid');
+                    var transfer_money = $(this).attr('transfer_money');
+                    var note = $(this).attr('note');
+
+                    carddatas.push({
+                        'bankcarduuid': bankcarduuid,
+                        'transfer_money': transfer_money,
+                        'note': note,
+                    })
+                }
+            });
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'carddatas': JSON.stringify(carddatas), 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        } else if(ele === 'qrcode'){
+            if($("#transfer_card_list").children().length === 0) return xtalert.alertError("您应该首先将卡添加到下面的列表中。"); 
+            carddatas = []
+            var qrboxes = $('#qrboxlist').find('div.qrboxlist');
+            qrboxes.each(function() {
+                if($(this).attr('paid') !== 'paid'){
+                    var bankcarduuid = $(this).attr('bankcarduuid');
+                    var transfer_money = $(this).attr('transfer_money');
+                    var note = $(this).attr('note');
+
+                    carddatas.push({
+                        'bankcarduuid': bankcarduuid,
+                        'transfer_money': transfer_money,
+                        'note': note,
+                    })
+                }
+            });
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'carddatas': JSON.stringify(carddatas), 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+        else {
+            let bankcarduuid = $(ele).parent().attr("bankcarduuid")
+            let transfer_money = $(ele).parent().attr("transfer_money")
+            let note = $(ele).parent().attr("note")
+
+            xtajax.post({
+                'data': { 'action': action, 'data_uuid': data_uuid, 'bankcarduuid': bankcarduuid, 'transfer_money': transfer_money, 'note': note, 'behavior': behavior },
+                'success': function (data) {
+                    if (data.code === 200) {
+                        xtalert.alertSuccessToast('操作成功！')
+                        setTimeout(function () {
+                            $(ele).parent().attr("paid", "paid")
+
+                            var paid = true;
+                            var qrboxes = $('#qrboxlist').find('div.qrboxlist');
+                            qrboxes.each(function() {
+                                if($(this).attr('paid') !== 'paid'){
+                                    paid = false;
+                                }
+                            });
+                            if(!paid){
+                                $(ele).removeClass("btn-warning").addClass("btn-secondary");
+                                $(ele).removeAttr('onclick');
+                            } else {
+                                window.location.reload(true);
+                            }
+                        }, 800)
+                    } else {
+                        return xtalert.alertError(data.message);
+                    }
+                }
+            })
+        }
+
+    }
+
+</script>
+{% endblock %}
+{% block searchInput %}
+{% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.ADMINISTRATOR %}
+<select class="form-control mr-sm-2 mb-2" name="admin_uuid" aria-label="" style="width: 200px;">
+    <option value="">代理账号</option>
+    {% for owner_data in owner_datas %}
+    <option value="{{ owner_data.uuid }}" {% if search_res.admin_uuid==owner_data.uuid %}selected{% endif %}>{{
+        owner_data.account }}-{{owner_data.username}}</option>
+    {% endfor %}
+</select>
+{%endif%}
+<input type="text" class="form-control mb-2 mr-sm-2" name="account" value="{{ search_res.account }}" placeholder="银行卡账号"
+    aria-label="">
+<select class="form-control mr-sm-2 mb-2" name="bank_uid" aria-label="" style="width: 200px;">
+    <option value="">银行类型</option>
+    {% for back_data in bank_datas %}
+    <option value="{{ back_data.uuid }}" {% if search_res.bank_uid==back_data.uuid %}selected{% endif %}>{{
+        back_data.code }}</option>
+    {% endfor %}
+</select>
+<input type="text" class="form-control mb-2 mr-sm-2" name="bank_name" value="{{ search_res.bank_name }}"
+    placeholder="银行名字" aria-label="">
+{% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.AGENTADMIN or
+current_admin_user.role_code == ROlE_ALL.SYSTEMUSER or
+current_admin_user.role_code == ROlE_ALL.ADMINISTRATOR%}
+<select class="form-control mr-sm-2 mb-2" name="location" aria-label="" style="width: 200px;">
+    <option value="">选择位置</option>
+    <option value="{{LOCATION_TYPE.TRANSIT}}" {% if search_res.location==LOCATION_TYPE.TRANSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</option>
+    <option value="{{LOCATION_TYPE.WITHDRAW}}" {% if search_res.location==LOCATION_TYPE.WITHDRAW %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</option>
+    <option value="{{LOCATION_TYPE.DEPOSIT}}" {% if search_res.location==LOCATION_TYPE.DEPOSIT %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</option>
+    <option value="{{LOCATION_TYPE.OTHER}}" {% if search_res.location==LOCATION_TYPE.OTHER %}selected{% endif %}>{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</option>
+</select>
+{%endif%}
+<input type="text" class="form-control mb-2 mr-sm-2" name="note" value="{{ search_res.note }}"
+    placeholder="备注" aria-label="">
+
+{% endblock %}
+{% block other_function %}
+{% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.AGENTADMIN or is_addcard%}
+<span class="btn btn-primary ml-1 mb-2"
+    onclick="post_form_html({'action': 'add_bankcard_html'}, '添加银行卡', 800)">添加银行卡</span>
+{%endif%}
+{% if is_clear_deposit %}
+<span class="btn btn-outline-dark ml-1 mb-2" onclick="post_clear_card('clearDeposit')">入款卡清零</span>
+{%endif%}
+{% if is_clear_withdraw %}
+<span class="btn btn-outline-dark ml-1 mb-2" onclick="post_clear_card('clearWidrawal')">出款卡清零</span>
+{%endif%}
+{% if is_clear_transit %}
+<span class="btn btn-outline-dark ml-1 mb-2" onclick="post_clear_card('clearTransit')">中转卡清零</span>
+{%endif%}
+{% if is_clear_other %}
+<span class="btn btn-outline-dark ml-1 mb-2" onclick="post_clear_card('clearOther')">其他卡清零</span>
+{%endif%}
+{%  if current_admin_user.role_code in [ ROlE_ALL.SUPERADMIN, ROlE_ALL.ADMINISTRATOR, ROlE_ALL.SYSTEMUSER, ROlE_ALL.AGENTADMIN ] %}
+<span class="btn btn-info ml-1 mb-2" onclick="post_form_html({'action': 'transit_statistic'} , '中转卡余额总额', 500)">中转卡统计</span>
+{% endif %}
+
+{% endblock %}
+{% block table_con %}
+<table class="table table-hover text-center table-bordered" style="background-color: #ffffff;">
+    <tbody>
+        {# ********************** Super admin and agent ***************************** #}
+        {% if current_admin_user.is_superadmin or current_admin_user.role_code == ROlE_ALL.AGENTADMIN %}
+        <tr style="background-color: #f7f7f7;">
+            <td>代理账号</td>
+            <td>银行卡账号</td>
+            <td>银行类型</td>
+            <td>银行名字</td>
+            <td>位置</td>
+            <td>状态</td>
+            <td>初始余额</td>
+            <td>实时余额</td>
+            <td>订购金额</td>
+            <td>一天转入金额</td>
+            <td>一天转出金额</td>
+            <td>出款人账号</td>
+            <td>相关付款人</td>
+            <td>备注</td>
+            <td width="260">操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td style="position: relative;">
+                <div class="log_info" log_info="{{data.uuid}}">
+                    {% if data.new_request %}
+                    <span style="color: red;">{{data.owner.get("account") or ''}}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                        style="width: 14px; height: 14px; fill: red;">
+                        <path
+                            d="M439.4 362.3c-19.3-20.8-55.5-52-55.5-154.3 0-77.7-54.5-139.9-127.9-155.2V32c0-17.7-14.3-32-32-32s-32 14.3-32 32v20.8C118.6 68.1 64.1 130.3 64.1 208c0 102.3-36.2 133.5-55.5 154.3-6 6.5-8.7 14.2-8.6 21.7 .1 16.4 13 32 32.1 32h383.8c19.1 0 32-15.6 32.1-32 .1-7.6-2.6-15.3-8.6-21.7zM67.5 368c21.2-28 44.4-74.3 44.5-159.4 0-.2-.1-.4-.1-.6 0-61.9 50.1-112 112-112s112 50.1 112 112c0 .2-.1 .4-.1 .6 .1 85.1 23.3 131.5 44.5 159.4H67.5zM224 512c35.3 0 64-28.7 64-64H160c0 35.4 28.7 64 64 64z" />
+                    </svg>
+                    {% else %}
+                    {{data.owner.get("account") or ''}}
+                   
+                    {% endif %}
+                </div>
+            </td>
+
+            <td>{{data.account}}</td>
+            <td>{{data.bank_data.get("code")}}</td>
+            <td>{{data.bank_name}}</td>
+            <td>
+                {% if data.location == LOCATION_TYPE.WITHDRAW %}
+                <span style="color: blue;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</span>
+                {% elif data.location == LOCATION_TYPE.TRANSIT %}
+                <span style="color: red;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</span>
+                {% elif data.location == LOCATION_TYPE.DEPOSIT %}
+                <span style="color: green;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</span>
+                {% elif data.location == LOCATION_TYPE.OTHER %}
+                <span style="color:chocolate;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</span>
+                {%endif%}
+            </td>
+            <td>
+                {% if data.is_Disabled %}
+                <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已关闭</span>
+                {% else %}
+                <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>已开启</span>                
+                {% endif %}
+            </td>
+            <td>{{format_money(data.start_money)}}</td>
+            <td id="{{data.uuid}}">{{format_money(data.balance_amount)}}</td>
+            <td {% if data.withdraw_money> 0 %}
+                class="text-danger"
+                {% endif%}>
+                {{format_money(data.withdraw_money)}}</td>
+            <td> {{format_money((data.total_transfer_in or 0) + (data.total_other_transfer_in or 0))}}</td>
+            <td> {{format_money((data.total_transfer_out or 0) + (data.total_other_transfer_out or 0) + (data.total_issue or 0))}}</td>
+            <td>
+                <a class="to_cursor"
+                    onclick="post_form_html({'action': 'select_subadmin_html', 'data_uuid': '{{ data.uuid }}'}, '选择子管理员', 600)">
+                    {% if data.sub_admins %}
+                    {{data.sub_admins[0]}}
+                    {% for sub_admin in data.sub_admins[1:] %}
+                    ,{{sub_admin}}
+                    {% endfor%}
+                    {% else %}
+                    没有人被选中
+                    {% endif %}
+                </a>
+            </td>
+            <td>
+                {% if data.location == LOCATION_TYPE.WITHDRAW %}
+                    {% if data.outpayer_account %}
+                    {{data.outpayer_account}}
+                    {% else %}
+                    没有人被选中
+                    {% endif %}
+                    {% endif %}
+            </td>
+            <td>{{data.note}}</td>
+            <td>
+                {% if data.admin_uuid == admin_uuid%}
+                <span class="ant-tag to_cursor ant-tag-blue-inverse mr-0"
+                    onclick="post_form_html({'action': 'edit_bankcard_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行卡信息', 800)">编辑</span>
+
+                {% if data.location == "出款卡1" %}
+                <span {% if data.outpayer %} class="ant-tag to_cursor ant-tag-cyan mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_IN}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转入</span>
+                {%else%}
+                <span {% if data.sub_admins and not data.is_Disabled %} class="ant-tag to_cursor ant-tag-cyan mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_IN}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转入</span>
+                {%endif%}
+
+                {% if data.location == "出款卡1" %}
+                <span {% if data.outpayer %} class="ant-tag to_cursor ant-tag-orange mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.ISSUED}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>下发</span>
+                {%else%}
+                <span {% if data.sub_admins  and not data.is_Disabled %} class="ant-tag to_cursor ant-tag-orange mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_OUT}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转出</span>
+                {%endif%}
+
+                <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false">更多</span>
+                <div class="dropdown-menu">
+                    {% if data.location == "出款卡1" %}
+                    <span class="dropdown-item" {% if data.outpayer %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_IN}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转入</span>
+                    <span class="dropdown-item" {% if data.outpayer %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% elif data.location == LOCATION_TYPE.TRANSIT or data.location == LOCATION_TYPE.OTHER or data.location == LOCATION_TYPE.WITHDRAW %}
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_IN}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转入</span>
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% elif data.location == LOCATION_TYPE.DEPOSIT %}
+                    <span class="dropdown-item">未提交</span>
+                    <span class="dropdown-item">补提交</span>
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% endif %}
+                    <span class="dropdown-item"
+                        onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除</span>
+                    {% if data.is_Disabled %}
+                    <span class="dropdown-item" onclick="post_update_statu('update_status', '{{ data.uuid }}', '确认开启？')">开启</span>
+                    {% else %}
+                    <span class="dropdown-item" onclick="post_update_statu('update_status', '{{ data.uuid }}', '确认关闭？')">关闭</span>
+                    {%endif%}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {%endif%}
+
+        {# ************************* sub-admin and sub-agent ****************************** #}
+        {% if current_admin_user.role_code == ROlE_ALL.ADMINISTRATOR or current_admin_user.role_code ==
+        ROlE_ALL.SYSTEMUSER %}
+        <tr style="background-color: #f7f7f7;">
+            <td>代理账号</td>
+            <td>银行卡账号</td>
+            <td>银行类型</td>
+            <td>银行名字</td>
+            <td>位置</td>
+            <td>状态</td>
+            <td>初始余额</td>
+            <td>实时余额</td>
+            <td>订购金额</td>
+            <td>一天转入金额</td>
+            <td>一天转出金额</td>
+            <td>相关付款人</td>
+            <td>注解</td>
+            <td width="260">操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td style="position: relative;">
+                <div class="log_info" log_info="{{data.uuid}}">
+                    {% if data.new_request %}
+                    <span style="color: red;">{{data.owner.get("account") or ''}}</span>
+                    {% else %}
+                    {{data.owner.get("account") or ''}}
+                    {% endif %}
+                </div>
+            </td>
+
+            <td>{{data.account}}</td>
+            <td>{{data.bank_data.get("code")}}</td>
+            <td>{{data.bank_name}}</td>
+            <td>
+                {% if data.location == LOCATION_TYPE.WITHDRAW %}
+                <span style="color: blue;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.WITHDRAW]}}</span>
+                {% elif data.location == LOCATION_TYPE.TRANSIT %}
+                <span style="color: red;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.TRANSIT]}}</span>
+                {% elif data.location == LOCATION_TYPE.DEPOSIT %}
+                <span style="color: green;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.DEPOSIT]}}</span>
+                {% elif data.location == LOCATION_TYPE.OTHER %}
+                <span style="color:chocolate;">{{LOCATION_TYPE.name_dict[LOCATION_TYPE.OTHER]}}</span>
+                {%endif%}
+            </td>
+            <td>
+                {% if data.is_Disabled %}
+                <span style="color:#f04134;"><span class="iconfont icon-lianjieshibai" style="vertical-align: -2px;"></span>已关闭</span>
+                {% else %}
+                <span style="color:#00a854;"><span class="iconfont icon-chenggong" style="vertical-align: -2px; margin: 0px 6px;"></span>已开启</span>                
+                {% endif %}
+            </td>
+            <td>{{format_money(data.start_money)}}</td>
+            <td id="{{data.uuid}}">{{format_money(data.balance_amount)}}</td>
+            <td {% if data.withdraw_money> 0 %}
+                class="text-danger"
+                {% endif%}>
+                {{format_money(data.withdraw_money)}}</td>
+            <td> {{format_money((data.total_transfer_in or 0) + (data.total_other_transfer_in or 0))}}</td>
+            <td> {{format_money((data.total_transfer_out or 0) + (data.total_other_transfer_out or 0) + (data.total_issue or 0))}}</td>
+
+            <td>
+                {% if data.location == LOCATION_TYPE.WITHDRAW %}
+                    {% if data.outpayer_account %}
+                    {{data.outpayer_account}}
+                    {% else %}
+                    没有人被选中
+                    {% endif %}
+                    {% endif %}
+            </td>
+
+            <td>{{data.note}}</td>
+            <td>
+                {% if data.admin_uuid == admin_uuid%}
+                <span class="ant-tag to_cursor ant-tag-blue-inverse mr-0"
+                    onclick="post_form_html({'action': 'edit_bankcard_html', 'data_uuid': '{{ data.uuid }}'}, '编辑银行卡信息', 800)">编辑</span>
+
+                {% if data.location == "出款卡1" %}
+                <span {% if data.outpayer %} class="ant-tag to_cursor ant-tag-cyan mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_IN}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转入</span>
+                {%else%}
+                <span {% if data.sub_admins and not data.is_Disabled %} class="ant-tag to_cursor ant-tag-cyan mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_IN}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转入</span>
+                {%endif%}
+
+                {% if data.location == "出款卡1" %}
+                <span {% if data.outpayer %} class="ant-tag to_cursor ant-tag-orange mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.ISSUED}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>下发</span>
+                {%else%}
+                <span {% if data.sub_admins and not data.is_Disabled %} class="ant-tag to_cursor ant-tag-orange mr-0"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.TRANSFER_OUT}}'} , '请选择卡', 800)"
+                    {% else %} class="ant-tag to_cursor ant-tag-gray-inverse mr-0" {%endif%}>转出</span>
+                {%endif%}
+
+                <span class="ant-tag to_cursor mr-0 dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false">更多</span>
+                <div class="dropdown-menu">
+                    {% if data.location == "出款卡1" %}
+                    <span class="dropdown-item" {% if data.outpayer %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_IN}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转入</span>
+                    <span class="dropdown-item" {% if data.outpayer and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% elif data.location == LOCATION_TYPE.TRANSIT or data.location == LOCATION_TYPE.OTHER or data.location == LOCATION_TYPE.WITHDRAW%}
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_IN}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转入</span>
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% elif data.location == LOCATION_TYPE.DEPOSIT %}
+                    <span class="dropdown-item">未提交</span>
+                    <span class="dropdown-item">补提交</span>
+                    <span class="dropdown-item" {% if data.sub_admins and not data.is_Disabled %}
+                        onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)"
+                        {%endif%}>其他转出</span>
+                    {% endif %}
+                    <span class="dropdown-item"
+                        onclick="post_update_statu('del', '{{ data.uuid }}', '确认删除该数据？')">删除</span>
+                    {% if data.is_Disabled %}
+                    <span class="dropdown-item" onclick="post_update_statu('update_status', '{{ data.uuid }}', '确认开启？')">开启</span>
+                    {% else %}
+                    <span class="dropdown-item" onclick="post_update_statu('update_status', '{{ data.uuid }}', '确认关闭？')">关闭</span>
+                    {%endif%}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {%endif%}
+
+        {# ************************** sys-outpayer and out-payer *************************** #}
+        {% if current_admin_user.role_code == ROlE_ALL.SYS_OUT_MONEY_USER or current_admin_user.role_code ==
+        ROlE_ALL.OUT_MONEY_USER %}
+        <tr style="background-color: #f7f7f7;">
+            <td width="70px"><span class="ant-tag to_cursor ant-tag-blue-inverse mr-1"
+                    onclick="post_confirm_check('confirmCheck')" id="confirmCheck" style="display: none;">确认</span></td>
+            <td>银行卡账号</td>
+            <td>银行类型</td>
+            <td>银行名字</td>
+            <td>初始余额</td>
+            <td>实时余额</td>
+            <td>一天订单量</td>
+            <td>一天转入金额</td>
+            <td>一天转出金额</td>
+            <td>其他一天转入金额</td>
+            <td>其他一天转出金额</td>
+            <td>一天下发金额</td>
+            <td>日误差值</td>
+            <td>注解</td>
+            <td>操作</td>
+        </tr>
+        {% for data in all_datas %}
+        <tr>
+            <td>
+                {% if not data.isDisabled%}
+                <input type="checkbox" class="defaultcard" id="card{{data.uuid}}"
+                    onclick="onclickCheckBox('{{data.uuid}}')" {% if data.isSelected %} checked {%endif%}>
+                {% endif %}
+            </td>
+            <td>{{data.account}}</td>
+            <td>{{data.bank_data.get("code")}}</td>
+            <td>{{data.bank_name}}</td>
+            {% if data.isDisabled%}
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            <td>- - -</td>
+            {% else %}
+            <td>{{format_money(data.start_money)}}</td>
+            <td id="{{data.uuid}}">
+                <span style="position: relative;">{{format_money(data.balance_amount)}}
+                    
+                </span>
+            </td>
+            <td>{{format_money(data.total_request or 0)}}</td>
+            <td>{{format_money(data.total_transfer_in or 0)}}</td>
+            <td>{{format_money(data.total_transfer_out or 0)}}</td>
+            <td>{{format_money(data.total_other_transfer_in or 0)}}</td>
+            <td>{{format_money(data.total_other_transfer_out or 0)}}</td>
+            <td>{{format_money(data.total_issue or 0)}}</td>
+            <td>{{format_money(data.error or 0)}}</td>
+            <td>{{data.note}}</td>
+            {% endif %}
+            <td>
+                {% if data.isSelected %}
+                <span class="ant-tag to_cursor ant-tag-orange mr-1 mb-1"
+                    onclick="other_transfer_in_out_html('request_money_html','{{ data.uuid }}', '{{BEHAVIOR_TYPE.OTHER_TRANSFER_OUT}}', '你想转多少钱？', 600)">其他转出</span>
+                {#<span class="ant-tag to_cursor ant-tag-blue mr-1 mb-1"
+                    onclick="transfer_in_out_html({'action': 'transfer_in_out_html', 'data_uuid':'{{ data.uuid }}', 'behavior': '{{BEHAVIOR_TYPE.ISSUED}}'} , '请选择卡', 800)" >下发</span>#}
+                {%endif%}
+            </td>
+        </tr>
+        {% endfor %}
+        {%endif%}
+    </tbody>
+</table>
+
+{% endblock %}
