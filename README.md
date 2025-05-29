@@ -81,9 +81,3 @@
 This project is licensed under the MIT License.
 
 ---
-
-## 🔗 Repository Summary
-
-**Description:** A Flask-based Telegram bot integrating real-time communication and MongoDB for the Pay2World project.
-
-**Keywords:** telegram, bot, flask, mongodb, socket.io, webapp, real-time, backend, pay2world, python, html5, flask-socketio, telegram-bot, api, microservice, automation, notifications, chat, integration, deployment
